@@ -5,5 +5,5 @@ struct Board {
   Trigger blue;
   Trigger yellow;
   Trigger green;
-  int tolerance;
+  byte tolerance;
 };
