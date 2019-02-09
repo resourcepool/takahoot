@@ -17,6 +17,15 @@ void LedController::reset() {
 void LedController::setConnected(bool connected) {
   reset();
   if (connected) {
+    digitalWrite(LED_RED_PIN, HIGH);
+    digitalWrite(LED_YELLOW_PIN, HIGH);
+    digitalWrite(LED_GREEN_PIN, HIGH);
+  }
+}
+
+void LedController::setPaired(bool paired) {
+  reset();
+  if (paired) {
     isBlinking = false;
     digitalWrite(LED_RED_PIN, HIGH);
     #ifdef DEBUG_MODE

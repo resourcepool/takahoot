@@ -10,10 +10,12 @@ class LedController {
 public:
   LedController();
   void setConnected(bool connected);
+  void setPaired(bool paired);
   void setReady(bool ready);
   void setHit(bool hit);
   void tick();
 private:
+  bool isConnected;
   bool isBlinking;
   long lastBlink;
   bool lastBlinkValue;

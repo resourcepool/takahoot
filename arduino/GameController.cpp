@@ -44,6 +44,19 @@ void GameController::setConnected(bool connected) {
   }
 }
 
+
+bool GameController::isPaired() {
+  return paired;
+}
+
+void GameController::setPaired(bool paired) {
+  this->paired = paired;
+  this->ledController->setPaired(paired);
+  if (!paired) {
+    reset();
+  }
+}
+
 void GameController::pause() {
   if (!connected) {
     return;

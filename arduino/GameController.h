@@ -16,8 +16,11 @@ public:
   void tick();
   bool isConnected();
   void setConnected(bool connected);
+  bool isPaired();
+  void setPaired(bool paired);
 private:
   bool connected;
+  bool paired;
   bool ready;
   bool hit;
   Board* board;
