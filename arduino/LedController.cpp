@@ -3,7 +3,7 @@
 #include "configuration.h"
 
 LedController::LedController() {
-  this->isBlinking = true;
+  this->isBlinking = false;
   this->lastBlink = millis();
   this->lastBlinkValue = false;
 }
@@ -23,19 +23,23 @@ void LedController::setConnected(bool connected) {
   }
 }
 
-void LedController::setPaired(bool paired) {
+void LedController::setPairingStarted() {
   reset();
-  if (paired) {
-    isBlinking = false;
-    digitalWrite(LED_RED_PIN, HIGH);
-    #ifdef DEBUG_MODE
-      Serial.println("Led Red is high");
-    #endif
-  } else {
-    isBlinking = true;
-    lastBlink = millis();
-    lastBlinkValue = false;
-  }
+  isBlinking = true;
+  lastBlink = millis();
+  lastBlinkValue = false;
+  #ifdef DEBUG_MODE
+    Serial.println("Pairing started");
+  #endif
+}
+
+void LedController::setPairingFinished() {
+  reset();
+  isBlinking = false;
+  digitalWrite(LED_RED_PIN, HIGH);
+  #ifdef DEBUG_MODE
+    Serial.println("Led Red is high");
+  #endif
 }
 
 void LedController::setReady(bool ready) {

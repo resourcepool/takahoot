@@ -27,7 +27,7 @@ void loop()
     // First Priority is checking incoming serial commands
     serialService.tick();
     // If the computer program has not started, no need to go further
-    if (!gameController.isConnected()) {
+    if (!gameController.isConnected() || !gameController.isPaired()) {
       gameController.tick();
       return;
     }

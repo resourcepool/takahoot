@@ -10,7 +10,8 @@ class LedController {
 public:
   LedController();
   void setConnected(bool connected);
-  void setPaired(bool paired);
+  void setPairingStarted();
+  void setPairingFinished();
   void setReady(bool ready);
   void setHit(bool hit);
   void tick();

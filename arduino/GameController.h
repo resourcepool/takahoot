@@ -17,7 +17,8 @@ public:
   bool isConnected();
   void setConnected(bool connected);
   bool isPaired();
-  void setPaired(bool paired);
+  void setPairingStarted();
+  void setPairingFinished();
 private:
   bool connected;
   bool paired;

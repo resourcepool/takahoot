@@ -7,11 +7,11 @@ CalibrationController::CalibrationController(Board* board) {
   this->board = board;
   this->calibrated = false;
   this->serialService = new SerialOutboundService(board);
+  pinMode(BTN_CALIBRATE, INPUT);
 }
 
 bool CalibrationController::shouldCalibrate() {
-  return !this->calibrated; // FIXME should be button
-  // shouldCalibrate = digitalRead(BTN_CALIBRATE);
+  return !digitalRead(BTN_CALIBRATE);
 }
 
 bool CalibrationController::isCalibrated() {

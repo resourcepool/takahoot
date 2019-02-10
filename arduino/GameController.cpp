@@ -49,16 +49,19 @@ bool GameController::isPaired() {
   return paired;
 }
 
-void GameController::setPaired(bool paired) {
-  this->paired = paired;
-  this->ledController->setPaired(paired);
-  if (!paired) {
-    reset();
-  }
+void GameController::setPairingStarted() {
+  this->paired = false;
+  this->ledController->setPairingStarted();
+}
+
+void GameController::setPairingFinished() {
+  this->paired = true;
+  this->ledController->setPairingFinished();
+  reset();
 }
 
 void GameController::pause() {
-  if (!connected) {
+  if (!connected || !paired) {
     return;
   }
   this->ready = false;
@@ -69,7 +72,7 @@ void GameController::pause() {
 }
 
 void GameController::reset() {
-  if (!connected) {
+  if (!connected || !paired) {
     return;
   }
   this->boardStateHandler->refreshState();
@@ -81,19 +84,22 @@ void GameController::reset() {
 }
 
 void GameController::resume() {
-  if (!connected) {
+  if (!connected || !paired) {
     return;
   }
   this->boardStateHandler->refreshState();
   this->ready = true;
   this->ledController->setReady(true);
+  if (hit) {
+    this->ledController->setHit(true);
+  }
   #ifdef DEBUG_MODE
     Serial.println("Game resumed");
   #endif
 }
 
 void GameController::confirmHit() {
-  if (!connected) {
+  if (!connected || !paired) {
     return;
   }
   hit = true;

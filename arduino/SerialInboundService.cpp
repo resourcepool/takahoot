@@ -14,11 +14,11 @@ void SerialInboundService::tick() {
       case IN_COMPUTER_CONNECTED:
         this->gameController->setConnected(true);
         break;
-      case IN_COMPUTER_PAIRED:
-        this->gameController->setPaired(true);
+      case IN_COMPUTER_START_PAIRING:
+        this->gameController->setPairingStarted();
         break;
-      case IN_COMPUTER_UNPAIRED:
-        this->gameController->setPaired(false);
+      case IN_COMPUTER_FINISH_PAIRING:
+        this->gameController->setPairingFinished();
         break;
       case IN_GAME_RESET:
         this->gameController->reset();
