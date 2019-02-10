@@ -6,6 +6,9 @@ LedController::LedController() {
   this->isBlinking = false;
   this->lastBlink = millis();
   this->lastBlinkValue = false;
+  pinMode(LED_RED_PIN, OUTPUT);
+  pinMode(LED_YELLOW_PIN, OUTPUT);
+  pinMode(LED_GREEN_PIN, OUTPUT);
 }
 
 void LedController::reset() {

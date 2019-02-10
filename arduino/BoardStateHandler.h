@@ -1,5 +1,7 @@
 #include <Arduino.h>
 
+#define SENSOR_MIN_VALUE 100
+
 struct Board;
 struct Trigger;
 

@@ -106,6 +106,6 @@ void GameController::confirmHit() {
   ledController->setHit(true);
   serialService->sendTargetHitMessage();
   #ifdef DEBUG_MODE
-    Serial.println("HIT!");
+    Serial.println("HIT Confirmed");
   #endif
 }

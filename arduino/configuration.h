@@ -2,15 +2,15 @@
 #define BAUD_RATE 115200
 #endif
 
-//#define DEBUG_MODE
+#define DEBUG_MODE
 
 #define BTN_RED A0
 #define BTN_BLUE A1
 #define BTN_YELLOW A2
 #define BTN_GREEN A3
 #define POT_THRESHOLD A4
-#define BTN_CALIBRATE 5
 
+#define BTN_CALIBRATE 5
 #define LED_RED_PIN 6
 #define LED_YELLOW_PIN 7
 #define LED_GREEN_PIN 8
