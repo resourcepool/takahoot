@@ -1,0 +1,8 @@
+<app-game-pin [game]="game$ | async"
+             (gameSetted)="addGame($event)"></app-game-pin>
+<app-players *ngIf="game$ | async"
+             [players]="players$ | async"
+             (playerAdded)="addPlayer($event)"
+             (playerDeleted)="deletePlayer($event)"></app-players>
+
+<button *ngIf="game$ | async" (click)="startGame()">Lancer le jeu</button>

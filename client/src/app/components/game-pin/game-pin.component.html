@@ -1,0 +1,4 @@
+<h2>Pin du jeu :
+  <input *ngIf="!game" #newGamePin (keydown.enter)="addGame(newGamePin.value)" placeholder="Game PIN">
+  <span *ngIf="game">{{game.pin}}</span>
+</h2>

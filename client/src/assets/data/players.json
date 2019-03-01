@@ -1,0 +1,12 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "name": "Toto"
+    },
+    {
+      "id": 2,
+      "name": "Tata"
+    }
+  ]
+}
