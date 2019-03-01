@@ -2,6 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const Logger = require('./lib/log/Logger');
+
+require('./index');
+
+Logger.info('Starting takahoot server');
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
