@@ -7,7 +7,7 @@ import { GameHttp } from '../models/http-models/game-http.interface';
 
 @Injectable()
 export class GameService {
-  gamesUrl = `${environment.apiUrl}game`;
+  gameUrl = `${environment.apiUrl}game`;
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -17,8 +17,12 @@ export class GameService {
 
   constructor(private _http: HttpClient) { }
 
+  getGame(): Observable<GameHttp> {
+    return this._http.get<GameHttp>(this.gameUrl);
+  }
+
   addGame(game): Observable<GameHttp> {
-    return this._http.post<GameHttp>(this.gamesUrl, game.payload, this.httpOptions);
+    return this._http.post<GameHttp>(this.gameUrl, game.game, this.httpOptions);
   }
   
 }

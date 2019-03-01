@@ -11,6 +11,11 @@ app.use(cors());
 let game = null;
 app.post('/game', function (req, res) {
   game = req.body;
+  game.id = 1;
+  res.send({game});
+});
+app.get('/game', function (req, res) {
+  console.log('start the game');
   res.send({game});
 });
 

@@ -24,13 +24,6 @@ export class DashboardComponent implements OnInit {
     this._store.dispatch(new GetPlayers());
   }
 
-  // players$: Observable<PlayerState>;
-  // game$: Observable<Game>;
-  // constructor(private _store: Store<IAppState>) {
-  //   this.players$ = this._store.select(selectPlayerList);
-  //   this.game$ = this._store.select(selectGame);
-  // }
-
   addGame(game: Game) {
     this._store.dispatch(new AddGame(game));
   }

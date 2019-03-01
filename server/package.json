@@ -7,7 +7,10 @@
   "author": "loic ortola <contact@loicortola.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "child_process": "^1.0.2",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
     "hashmap": "^2.3.0",
     "inquirer": "^6.2.2",
     "redux": "^4.0.1",
