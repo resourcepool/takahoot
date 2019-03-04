@@ -11,9 +11,9 @@
 #define POT_THRESHOLD A4
 
 #define BTN_CALIBRATE 5
-#define LED_RED_PIN 6
+#define LED_RED_PIN 8
 #define LED_YELLOW_PIN 7
-#define LED_GREEN_PIN 8
+#define LED_GREEN_PIN 6
 
 const float MAX_TOLERANCE_FLOAT = 20.0;
 const float TOLERANCE_RATIO = MAX_TOLERANCE_FLOAT / 1023.0;

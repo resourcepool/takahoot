@@ -14,7 +14,7 @@ Board board = {
 
 CalibrationController calibrationController = CalibrationController(&board);
 GameController gameController = GameController(&board);
-SerialInboundService serialService = SerialInboundService(&gameController);
+SerialInboundService serialService = SerialInboundService(&gameController, &calibrationController);
 
 void setup()
 {
