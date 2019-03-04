@@ -1,4 +1,4 @@
-const SerialPort = require('serialport');
+const SerialPort = window.require('serialport');
 const {promisify} = require('util');
 
 const list = promisify(SerialPort.list);

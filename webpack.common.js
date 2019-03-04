@@ -39,6 +39,12 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: 'file-loader'
+      },
+      {
+        test: /node_modules[\/\\](iconv-lite)[\/\\].+/,
+        resolve: {
+          aliasFields: ['main']
+        }
       }
     ]
   },
@@ -51,6 +57,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.scss'],
     alias: {
       '@/app': path.resolve(__dirname, 'src/app/'),
+      '@/target-business': path.resolve(__dirname, 'src/target-business/'),
       '@/assets': path.resolve(__dirname, 'src/assets/'),
       vue: 'vue/dist/vue.js'
     }

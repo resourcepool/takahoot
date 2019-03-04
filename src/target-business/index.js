@@ -51,5 +51,4 @@ const getDeviceToPlayerMappingPrompt = async (possiblePlayers, d) => {
   });
 };
 
-
-(async () => await init(process.env))();
+module.exports = {init};

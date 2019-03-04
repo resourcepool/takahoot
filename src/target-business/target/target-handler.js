@@ -1,6 +1,6 @@
 const logger = require('../lib/log/Logger').child({service: 'Target-Handler'});
 const Actions = require('../actions');
-const SerialPort = require('serialport');
+const SerialPort = window.require('serialport');
 const SerialUtils = require('../lib/serialports');
 const {promisify} = require('util');
 
