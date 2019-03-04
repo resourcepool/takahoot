@@ -1,5 +1,4 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
@@ -8,7 +7,6 @@ const SRC_DIR = path.resolve(__dirname, 'src');
 
 module.exports = {
   watch: false,
-  mode: 'production',
   entry: SRC_DIR + '/index.js',
   output: {
     filename: 'bundle.js'
@@ -17,13 +15,12 @@ module.exports = {
     rules: [
       {
         test: /\.vue$/,
-        use: 'vue-loader',
-        include: SRC_DIR
+        use: 'vue-loader'
       },
       {
         test: /\.js$/,
         use: 'babel-loader',
-        include: SRC_DIR
+        exclude: /node_modules/
       },
       {
         // this will apply to both plain `.scss` files
@@ -33,34 +30,28 @@ module.exports = {
           'vue-style-loader',
           'css-loader',
           'sass-loader'
-        ],
-        include: SRC_DIR
+        ]
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: [
-          'file-loader'
-        ],
-        include: SRC_DIR
+        use: 'file-loader'
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
-        use: [
-          'file-loader'
-        ],
-        include: SRC_DIR
+        use: 'file-loader'
       }
     ]
   },
   target: 'electron-renderer',
   plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({template: 'src/index.html'}),
     new VueLoaderPlugin()
   ],
   resolve: {
-    extensions: ['.js', 'vue'],
+    extensions: ['.js', '.vue', '.scss'],
     alias: {
+      '@/app': path.resolve(__dirname, 'src/app/'),
+      '@/assets': path.resolve(__dirname, 'src/assets/'),
       vue: 'vue/dist/vue.js'
     }
   }

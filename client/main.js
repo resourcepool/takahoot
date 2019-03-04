@@ -1,27 +1,27 @@
-'use strict'
+'use strict';
 
 // Require electron
-const electron = require('electron')
+const electron = require('electron');
 
 // Module to control application life.
-const app = electron.app
+const app = electron.app;
 
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 
-const path = require('path')
-const url = require('url')
+const path = require('path');
+const url = require('url');
 
 // Module to check for platform
-const platform = require('os').platform()
+const platform = require('os').platform();
 
 // Modules to create app tray icon and context menu
-const Menu = electron.Menu
-const Tray = electron.Tray
+const Menu = electron.Menu;
+const Tray = electron.Tray;
 
 // Create variables for icons to prevent disappearing icon when the JavaScript object is garbage collected.
-let trayIcon = null
-let appIcon = null
+let trayIcon = null;
+let appIcon = null;
 
 // Determine appropriate icon for platform
 // if (platform == 'darwin') {
@@ -32,10 +32,10 @@ let appIcon = null
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 // Keep a reference for dev mode
-let dev = false
+let dev = false;
 
 if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath)) {
   dev = true
@@ -53,11 +53,11 @@ function createWindow() {
   // with specific icon and don't show it until it is ready (show: false)
   mainWindow = new BrowserWindow({
     // icon: trayIcon,
-    height: 667,
+    height: 600,
     show: false,
-    title: 'Grease the Groove',
-    width: 375
-  })
+    title: 'Takahoot',
+    width: 800
+  });
 
   // Create tray icon
   // appIcon = new Tray(trayIcon)
@@ -77,7 +77,7 @@ function createWindow() {
         mainWindow.close()
       }
     }
-  ])
+  ]);
 
   // Set title for tray icon
   // appIcon.setTitle('Grease the Groove')
@@ -95,7 +95,7 @@ function createWindow() {
   // })
 
   // and load the index.html of the app.
-  let indexPath
+  let indexPath;
 
   // Setup for Webpack
   if (dev && process.argv.indexOf('--noDevServer') === -1) {
@@ -123,7 +123,7 @@ function createWindow() {
     if (dev) {
       mainWindow.webContents.openDevTools()
     }
-  })
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
@@ -131,7 +131,7 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  });
 
   // Minimize window to system tray
   mainWindow.on('minimize',function(event){
@@ -152,7 +152,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
-})
+});
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
@@ -160,4 +160,4 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
-})
+});
