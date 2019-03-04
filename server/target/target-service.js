@@ -11,7 +11,7 @@ let arduinoDevices;
 
 
 const isValidPort = (port) =>
-    port.manufacturer === 'Arduino (www.arduino.cc)'
+    (port.manufacturer === 'Arduino (www.arduino.cc)' || port.manufacturer === 'Arduino LLC (www.arduino.cc)')
     && port.vendorId === '2341'
     && port.productId === '0043';
 
