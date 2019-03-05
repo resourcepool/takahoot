@@ -5,8 +5,7 @@ import Play from '@/app/Play';
 import Configuration from '@/app/Configuration';
 import '@/assets/style';
 import 'ant-design-vue/dist/antd.css';
-import { Button, Input, Steps, List, Spin } from 'ant-design-vue';
-import {init} from "@/target-business/index";
+import { Button, Input, Steps, List, Spin, Tooltip } from 'ant-design-vue';
 
 Vue.use(VueRouter);
 Vue.use(Button);
@@ -14,6 +13,7 @@ Vue.use(Input);
 Vue.use(Steps);
 Vue.use(List);
 Vue.use(Spin);
+Vue.use(Tooltip);
 
 const routes = {
   routes: [
@@ -27,7 +27,3 @@ const routes = {
 const router = new VueRouter(routes);
 
 new Vue({router}).$mount('#app');
-
-init(process.env).then((a) => {
-  console.log(a)
-});

@@ -1,7 +1,9 @@
 const logger = require('../lib/log/Logger').child({service: 'Target-Service'});
-const {fork} = require('child_process');
+// const {fork} = require('child_process');
 const Actions = require('../actions');
 const SerialPortUtils = require('../lib/serialports');
+// const path = require('path');
+import Worker from './target-handler.worker'
 
 let enabled = false;
 
@@ -26,8 +28,10 @@ const init = async (conf, store) => {
   
   // Create a process dedicated to the Arduino handle
   arduinoDevices.forEach(arduinoDevice => {
-    let handler = fork(`${__dirname}/target-handler.js`);
-    handler.send({
+    let handler = new Worker();
+// handler.postMessage()
+    // let handler = fork('./target-handler.js');
+    handler.postMessage({
       type: Actions.OPEN_CONNECTION,
       data: {
         deviceConfig: arduinoDevice,
@@ -42,9 +46,15 @@ const getDevices = () => {
   return arduinoDevices;
 };
 
-const connectToDevice = (data) => {
+const connectToDevice = data => {
   handlers[data.index].send({
     type: Actions.CONNECT_TO_DEVICE
+  });
+};
+
+const mapDevice = data => {
+  handlers[data.index].send({
+    type: Actions.MAPPING_DEVICE
   });
 };
 

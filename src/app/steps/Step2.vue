@@ -10,6 +10,9 @@
 
    @Component
    export default class Step2 extends Vue {
+     mounted() {
+
+     }
    }
 </script>
 

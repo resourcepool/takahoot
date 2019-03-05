@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Config directories
 const SRC_DIR = path.resolve(__dirname, 'src');
@@ -45,13 +46,20 @@ module.exports = {
         resolve: {
           aliasFields: ['main']
         }
+      },
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' }
       }
     ]
   },
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({template: 'src/index.html'}),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new CopyWebpackPlugin([
+      { from: 'src/target-business/target/target-handler.js', to: 'workers/' },
+    ])
   ],
   resolve: {
     extensions: ['.js', '.vue', '.scss'],
@@ -61,5 +69,8 @@ module.exports = {
       '@/assets': path.resolve(__dirname, 'src/assets/'),
       vue: 'vue/dist/vue.js'
     }
-  }
+  },
+  externals: [
+    'child_process'
+  ]
 };

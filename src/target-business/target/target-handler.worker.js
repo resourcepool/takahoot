@@ -22,6 +22,9 @@ const connect = async () => {
   await port.write(Buffer.from([0x30]));
 };
 
+const map = async () => {
+  await port.write(Buffer.from([0x31]));
+};
 
 /**
  * IPC messages go here
@@ -39,5 +42,8 @@ process.on('message', async function (action) {
     case Actions.CONNECT_TO_DEVICE:
       logger.debug("Connect to device");
       await connect();
+    case Actions.MAPPING_DEVICE:
+      logger.debug("Mapping device");
+      await map();
   }
 });

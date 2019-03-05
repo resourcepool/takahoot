@@ -56,7 +56,10 @@ function createWindow() {
     height: 600,
     show: false,
     title: 'Takahoot',
-    width: 800
+    width: 800,
+    webPreferences: {
+      nodeIntegrationInWorker: true
+    }
   });
 
   // Create tray icon
