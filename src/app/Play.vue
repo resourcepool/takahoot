@@ -17,7 +17,7 @@
                 </a-list>
                 <a-input v-if="players.length < 4" v-model="playerNameInput" placeholder="Add a player" @keyup.enter="addPlayer"/>
             </div>
-            <a-button type="primary" class="button" size="large" block>START</a-button>
+            <a-button type="primary" class="button" size="large" block v-on:click="start">START</a-button>
         </div>
     </div>
 </template>
@@ -26,6 +26,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import uuid from 'uuid';
+  import KahootSession from './kahoot/KahootSession';
 
   @Component
   export default class Play extends Vue {
@@ -38,18 +39,27 @@
     }
 
     setGamePin() {
-      console.log(this.gamePinInput)
+      console.log(this.gamePinInput);
       this.gamePin = this.gamePinInput;
       this.gamePinInput = '';
     }
 
     addPlayer() {
-      this.players.push({name: this.playerNameInput, id: uuid.v1()});
+      this.players.push({
+          name: this.playerNameInput,
+          id: uuid.v1()
+      });
       this.playerNameInput = '';
     }
 
     deletePlayer(id) {
       this.players = this.players.filter(player => player.id !== id);
+    }
+
+    start() {
+      this.players.forEach(p => {
+          new KahootSession(this.gamePin, p.name)
+      })
     }
   }
 </script>
