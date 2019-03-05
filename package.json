@@ -7,10 +7,10 @@
   "scripts": {
     "build": "webpack --config webpack.build.js",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.js",
+    "postinstall": "electron-rebuild",
     "package": "webpack --config webpack.build.js",
     "postpackage": "electron-packager ./ --out=./builds",
-    "prod": "webpack --config webpack.build.js && electron --noDevServer .",
-    "rebuild": "electron-rebuild -f -w serialport"
+    "prod": "webpack --config webpack.build.js && electron --noDevServer ."
   },
   "keywords": [],
   "author": "loic ortola <contact@loicortola.com>",
