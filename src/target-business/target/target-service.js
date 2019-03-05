@@ -3,7 +3,7 @@ const logger = require('../lib/log/Logger').child({service: 'Target-Service'});
 const Actions = require('../actions');
 const SerialPortUtils = require('../lib/serialports');
 // const path = require('path');
-import Worker from './target-handler.worker'
+const Worker = require('./target-handler.worker.js');
 
 let enabled = false;
 
@@ -31,13 +31,13 @@ const init = async (conf, store) => {
     let handler = new Worker();
 // handler.postMessage()
     // let handler = fork('./target-handler.js');
-    handler.postMessage({
-      type: Actions.OPEN_CONNECTION,
-      data: {
-        deviceConfig: arduinoDevice,
-        enabled: enabled
-      }
-    });
+    // handler.postMessage({
+    //   type: Actions.OPEN_CONNECTION,
+    //   data: {
+    //     deviceConfig: arduinoDevice,
+    //     enabled: enabled
+    //   }
+    // });
     handlers.push(handler);
   });
 };

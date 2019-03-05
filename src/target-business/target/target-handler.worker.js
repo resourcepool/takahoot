@@ -29,15 +29,15 @@ const map = async () => {
 /**
  * IPC messages go here
  */
-process.on('message', async function (action) {
-  if (!action || !action.type) {
+self.onmessage = async ({type, data}) => {
+  if (!type) {
     return;
   }
-  switch (action.type) {
+  switch (type) {
 
     case Actions.OPEN_CONNECTION:
       logger.debug("Open Serial Connection");
-      await init(action.data);
+      await init(data);
       break;
     case Actions.CONNECT_TO_DEVICE:
       logger.debug("Connect to device");
@@ -46,4 +46,26 @@ process.on('message', async function (action) {
       logger.debug("Mapping device");
       await map();
   }
-});
+};
+
+// /**
+//  * IPC messages go here
+//  */
+// process.on('message', async function (action) {
+//   if (!action || !action.type) {
+//     return;
+//   }
+//   switch (action.type) {
+//
+//     case Actions.OPEN_CONNECTION:
+//       logger.debug("Open Serial Connection");
+//       await init(action.data);
+//       break;
+//     case Actions.CONNECT_TO_DEVICE:
+//       logger.debug("Connect to device");
+//       await connect();
+//     case Actions.MAPPING_DEVICE:
+//       logger.debug("Mapping device");
+//       await map();
+//   }
+// });

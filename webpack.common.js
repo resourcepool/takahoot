@@ -56,10 +56,7 @@ module.exports = {
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({template: 'src/index.html'}),
-    new VueLoaderPlugin(),
-    new CopyWebpackPlugin([
-      { from: 'src/target-business/target/target-handler.js', to: 'workers/' },
-    ])
+    new VueLoaderPlugin()
   ],
   resolve: {
     extensions: ['.js', '.vue', '.scss'],
