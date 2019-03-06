@@ -1,9 +1,11 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Config directories
 const SRC_DIR = path.resolve(__dirname, 'src');
+const BRIDGE_DIR = path.resolve(__dirname, 'bridge');
 
 module.exports = {
   watch: false,
@@ -46,17 +48,17 @@ module.exports = {
         resolve: {
           aliasFields: ['main']
         }
-      },
-      {
-        test: /\.worker\.js$/,
-        use: { loader: 'worker-loader' }
       }
     ]
   },
   target: 'electron-renderer',
   plugins: [
     new HtmlWebpackPlugin({template: 'src/index.html'}),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new CopyWebpackPlugin([
+      { from: SRC_DIR + '/target-business/lib/log/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
+      { from: SRC_DIR + '/target-business/actions.js', to: BRIDGE_DIR + '/actions.js' },
+    ]),
   ],
   resolve: {
     extensions: ['.js', '.vue', '.scss'],
