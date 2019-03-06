@@ -1,7 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Config directories
 const SRC_DIR = path.resolve(__dirname, 'src');
@@ -10,7 +9,8 @@ module.exports = {
   watch: false,
   entry: SRC_DIR + '/index.js',
   output: {
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    globalObject: 'this'
   },
   module: {
     rules: [
@@ -66,8 +66,5 @@ module.exports = {
       '@/assets': path.resolve(__dirname, 'src/assets/'),
       vue: 'vue/dist/vue.js'
     }
-  },
-  externals: [
-    'child_process'
-  ]
+  }
 };

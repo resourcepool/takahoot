@@ -1,4 +1,5 @@
-const SerialPort = window.require('serialport');
+const SerialPort = require('@serialport/stream');
+SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');
 
 const list = promisify(SerialPort.list);

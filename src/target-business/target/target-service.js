@@ -3,7 +3,7 @@ const logger = require('../lib/log/Logger').child({service: 'Target-Service'});
 const Actions = require('../actions');
 const SerialPortUtils = require('../lib/serialports');
 // const path = require('path');
-const Worker = require('./target-handler.worker.js');
+const TargetWorker = require('./target-handler.worker.js');
 
 let enabled = false;
 
@@ -28,17 +28,16 @@ const init = async (conf, store) => {
   
   // Create a process dedicated to the Arduino handle
   arduinoDevices.forEach(arduinoDevice => {
-    let handler = new Worker();
-// handler.postMessage()
-    // let handler = fork('./target-handler.js');
-    // handler.postMessage({
-    //   type: Actions.OPEN_CONNECTION,
-    //   data: {
-    //     deviceConfig: arduinoDevice,
-    //     enabled: enabled
-    //   }
-    // });
-    handlers.push(handler);
+    // let handler = fork(`${__dirname}/target-handler.js`);
+    let worker = new TargetWorker();
+    worker.postMessage({
+      type: Actions.OPEN_CONNECTION,
+      data: {
+        deviceConfig: arduinoDevice,
+        enabled: enabled
+      }
+    });
+    handlers.push(worker);
   });
 };
 
@@ -47,15 +46,15 @@ const getDevices = () => {
 };
 
 const connectToDevice = data => {
-  handlers[data.index].send({
-    type: Actions.CONNECT_TO_DEVICE
-  });
+  // handlers[data.index].execute({
+  //   type: Actions.CONNECT_TO_DEVICE
+  // }, ()=>{});
 };
 
 const mapDevice = data => {
-  handlers[data.index].send({
-    type: Actions.MAPPING_DEVICE
-  });
+  // handlers[data.index].execute({
+  //   type: Actions.MAPPING_DEVICE
+  // }, ()=>{});
 };
 
 module.exports = {
