@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/app/Home';
 import Play from '@/app/Play';
 import Configuration from '@/app/Configuration';
+import {createAppStore} from "@/common/store";
 import '@/assets/style';
 import 'ant-design-vue/dist/antd.css';
 import { Button, Input, Steps, List, Spin, Tooltip } from 'ant-design-vue';
@@ -25,5 +26,7 @@ const routes = {
 };
 
 const router = new VueRouter(routes);
+
+Vue.prototype.$store = createAppStore();
 
 new Vue({router}).$mount('#app');

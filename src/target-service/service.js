@@ -1,13 +1,12 @@
-const logger = require('../lib/log/Logger').child({service: 'Target-Service'});
-const Actions = require('../actions');
-const {fork} = require('child_process');
-const path = require('path');
+import Logger from '@/common/Logger';
+const logger = Logger.child({service: 'Target-Service'});
+import {OPEN_CONNECTION, PORT_FIND, CONNECT_TO_DEVICE} from './actions.json';
+import {openSerialConnectionSuccess} from './actions';
+import {fork} from 'child_process';
 
 let enabled = false;
 
 let handlers = [];
-
-let arduinoDevices;
 
 const arduinoSignature = {
   manufacturer: ['Arduino (www.arduino.cc)', 'Arduino LLC (www.arduino.cc)'],
@@ -15,12 +14,11 @@ const arduinoSignature = {
   productId: ['0043']
 };
 
-const init = async (conf, store) => {
+export async function openConnection(store) {
   const serialPortUtils = fork('bridge/serial-port-utils.js');
 
   const initFinishedPromise = new Promise(resolve => {
-    serialPortUtils.on('message', _arduinoDevices => {
-      arduinoDevices = _arduinoDevices;
+    serialPortUtils.on('message', arduinoDevices => {
       if (!arduinoDevices) {
         logger.error('NO Arduino Controller Device was found. Arduino-related features will behave as no-op.');
       } else {
@@ -33,7 +31,7 @@ const init = async (conf, store) => {
         const handler = fork('bridge/target-handler.js');
         // let worker = new TargetWorker();
         handler.send({
-          type: Actions.OPEN_CONNECTION,
+          type: OPEN_CONNECTION,
           data: {
             deviceConfig: arduinoDevice,
             enabled: enabled
@@ -42,36 +40,31 @@ const init = async (conf, store) => {
         handlers.push(handler);
       });
       serialPortUtils.kill('SIGINT');
+      store.dispatch(openSerialConnectionSuccess(arduinoDevices));
       resolve();
     });
   });
 
   serialPortUtils.send({
-    type: Actions.PORT_FIND,
+    type: PORT_FIND,
     data: arduinoSignature
   });
 
   await initFinishedPromise;
-};
+}
 
-const getDevices = () => {
-  return arduinoDevices;
-};
-
-const connectToDevice = data => {
+export async function connectToDevice(data) {
   handlers[data.index].send({
-    type: Actions.CONNECT_TO_DEVICE
+    type: CONNECT_TO_DEVICE
   });
-};
+}
+
+export async function getDevices() {
+  // return arduinoDevices;
+}
 
 const mapDevice = data => {
   // handlers[data.index].execute({
   //   type: Actions.MAPPING_DEVICE
   // });
-};
-
-module.exports = {
-  init,
-  getDevices,
-  connectToDevice
 };

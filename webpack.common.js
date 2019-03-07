@@ -11,8 +11,7 @@ module.exports = {
   watch: false,
   entry: SRC_DIR + '/index.js',
   output: {
-    filename: 'bundle.js',
-    globalObject: 'this'
+    filename: 'bundle.js'
   },
   module: {
     rules: [
@@ -56,16 +55,17 @@ module.exports = {
     new HtmlWebpackPlugin({template: 'src/index.html'}),
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([
-      { from: SRC_DIR + '/target-business/lib/log/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
-      { from: SRC_DIR + '/target-business/actions.js', to: BRIDGE_DIR + '/actions.js' },
+      { from: SRC_DIR + '/common/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
+      { from: SRC_DIR + '/target-service/actions.js', to: BRIDGE_DIR + '/actions.js' },
     ]),
   ],
   resolve: {
-    extensions: ['.js', '.vue', '.scss'],
+    extensions: ['.js', '.vue', '.scss', '.json'],
     alias: {
       '@/app': path.resolve(__dirname, 'src/app/'),
-      '@/target-business': path.resolve(__dirname, 'src/target-business/'),
+      '@/target-service': path.resolve(__dirname, 'src/target-service/'),
       '@/assets': path.resolve(__dirname, 'src/assets/'),
+      '@/common': path.resolve(__dirname, 'src/common/'),
       vue: 'vue/dist/vue.js'
     }
   }

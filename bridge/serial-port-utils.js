@@ -1,5 +1,5 @@
 const logger = require('./Logger.js').child({service: 'Serial-Port-Utils'});
-const Actions = require('./actions.js');
+const Actions = require('./actions.json');
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');
