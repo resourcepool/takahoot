@@ -56,7 +56,7 @@ function createWindow() {
     height: 600,
     show: false,
     title: 'Takahoot',
-    width: 800,
+    width: 1000,
     webPreferences: {
       nodeIntegrationInWorker: true
     }

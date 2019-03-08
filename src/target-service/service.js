@@ -1,7 +1,8 @@
 import Logger from '@/common/Logger';
+import {store} from '@/common/store';
 const logger = Logger.child({service: 'Target-Service'});
-import {OPEN_CONNECTION, PORT_FIND, CONNECT_TO_DEVICE} from './actions.json';
-import {openSerialConnectionSuccess} from './actions';
+import {TARGET_FIND_ALL, TARGET_INIT, TARGET_CONNECT, TARGET_START_PAIRING, TARGET_FINISH_PAIRING} from './actions.json';
+import {initSuccess, connectSuccess} from './actions';
 import {fork} from 'child_process';
 
 let enabled = false;
@@ -14,11 +15,11 @@ const arduinoSignature = {
   productId: ['0043']
 };
 
-export async function openConnection(store) {
-  const serialPortUtils = fork('bridge/serial-port-utils.js');
+export async function initTargets() {
+  const targetsHandler = fork('bridge/targets-handler.js');
 
   const initFinishedPromise = new Promise(resolve => {
-    serialPortUtils.on('message', arduinoDevices => {
+    targetsHandler.on('message', arduinoDevices => {
       if (!arduinoDevices) {
         logger.error('NO Arduino Controller Device was found. Arduino-related features will behave as no-op.');
       } else {
@@ -28,43 +29,50 @@ export async function openConnection(store) {
 
       // Create a process dedicated to the Arduino handle
       arduinoDevices.forEach(arduinoDevice => {
-        const handler = fork('bridge/target-handler.js');
+        const target = fork('bridge/target-handler.js');
         // let worker = new TargetWorker();
-        handler.send({
-          type: OPEN_CONNECTION,
+        target.send({
+          type: TARGET_INIT,
           data: {
             deviceConfig: arduinoDevice,
             enabled: enabled
           }
         });
-        handlers.push(handler);
+        handlers.push(target);
+        arduinoDevice.targetIndex = handlers.length - 1;
       });
-      serialPortUtils.kill('SIGINT');
-      store.dispatch(openSerialConnectionSuccess(arduinoDevices));
+
+      targetsHandler.kill('SIGINT');
+      store.dispatch(initSuccess(arduinoDevices));
       resolve();
     });
   });
 
-  serialPortUtils.send({
-    type: PORT_FIND,
+  targetsHandler.send({
+    type: TARGET_FIND_ALL,
     data: arduinoSignature
   });
 
   await initFinishedPromise;
 }
 
-export async function connectToDevice(data) {
-  handlers[data.index].send({
-    type: CONNECT_TO_DEVICE
+export async function connectTargets() {
+  store.getState().devices.forEach(device => {
+    handlers[device.data.targetIndex].send({
+      type: TARGET_CONNECT
+    });
+  });
+  store.dispatch(connectSuccess());
+}
+
+export async function pairingStartTarget(device) {
+  handlers[device.data.targetIndex].send({
+    type: TARGET_START_PAIRING
   });
 }
 
-export async function getDevices() {
-  // return arduinoDevices;
+export async function pairingFinishTarget(device) {
+  handlers[device.data.targetIndex].send({
+    type: TARGET_FINISH_PAIRING
+  });
 }
-
-const mapDevice = data => {
-  // handlers[data.index].execute({
-  //   type: Actions.MAPPING_DEVICE
-  // });
-};

@@ -1,9 +1,8 @@
 import Device from '@/common/entities/Device';
-import {OPEN_CONNECTION_SUCCESS} from './actions.json';
-
+import {TARGET_CONNECT_SUCCESS, TARGET_INIT_SUCCESS} from './actions.json';
 
 const initialState = {
-    messages: [],
+    lastAction: '',
     devices: []
 };
 
@@ -14,11 +13,13 @@ const initialState = {
  */
 export default function target(state = initialState, action) {
     switch (action.type) {
-        case OPEN_CONNECTION_SUCCESS: {
-            state.devices = action.data.devices.map(data => new Device(data, Device.states.TO_IDENFITY));
+        case TARGET_INIT_SUCCESS:
+            state.devices = action.data.devices.map(data => new Device(data, Device.states.INITIALIZED));
+            state.lastAction = TARGET_INIT_SUCCESS;
             return state;
-        }
-        default:
+        case TARGET_CONNECT_SUCCESS:
+            state.devices.forEach(device => device.state = Device.states.CONNECTED);
+            state.lastAction = TARGET_CONNECT_SUCCESS;
             return state;
     }
 }

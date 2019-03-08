@@ -4,34 +4,22 @@ import * as Actions from './actions.json'
  * Action creator dispatched when a serial connection should be open
  * @return {Object} A poll messages action
  */
-export function openSerialConnection() {
+export function initSuccess(devices) {
     return {
-        type: Actions.OPEN_CONNECTION,
-        data: {}
-    };
-}
-
-export function openSerialConnectionSuccess(devices) {
-    return {
-        type: Actions.OPEN_CONNECTION_SUCCESS,
+        type: Actions.TARGET_INIT_SUCCESS,
         data: { devices }
     };
 }
 
-/**
- * Action creator dispatched when we should connect to a remote device
- * @return {Object} A poll messages action
- */
-export function connectToDevice(device, index) {
+export function connectSuccess() {
     return {
-        type: Actions.CONNECT_TO_DEVICE,
-        data: { device, index }
+        type: Actions.TARGET_CONNECT_SUCCESS
     };
 }
 
-export function connectToDeviceSuccess(device, index) {
+export function calibrationSuccess(index) {
     return {
-        type: Actions.CONNECT_TO_DEVICE_SUCCESS,
-        data: { device, index }
+        type: Actions.TARGET_CALIBRATION_SUCCESS,
+        data: { index }
     };
 }
