@@ -10,13 +10,10 @@
                     <template slot="title">
                         <!--<span>{{disabledPlayButtonMessage()}}</span>-->
                     </template>
-                    <a-button type="primary" :disabled="true" size="large" block @click="$router.push('/play')">
+                    <a-button type="primary" size="large" block @click="$router.push('/play')">
                         LET'S PLAY
                     </a-button>
                 </a-tooltip>
-                <a-button v-if="!disabledPlayButton" class="button" type="primary" size="large" block @click="$router.push('/play')">
-                    LET'S PLAY
-                </a-button>
                 <a-button type="primary" class="button" size="large" block @click="$router.push('/configuration')">
                     CONFIGURATION
                 </a-button>

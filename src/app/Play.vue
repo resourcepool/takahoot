@@ -17,7 +17,8 @@
                 </a-list>
                 <a-input v-if="players.length < 4" v-model="playerNameInput" placeholder="Add a player" @keyup.enter="addPlayer"/>
             </div>
-            <a-button type="primary" class="button" size="large" block v-on:click="start">START</a-button>
+            <a-button :disabled="gameStarting || !gamePin && players.length < 1" type="primary" class="button"
+                      size="large" block v-on:click="start">START</a-button>
         </div>
     </div>
 </template>
@@ -26,7 +27,7 @@
   import Vue from 'vue';
   import Component from 'vue-class-component';
   import uuid from 'uuid';
-  import KahootSession from './kahoot/KahootSession';
+  import KahootSession from '../kahoot-service/KahootSession';
 
   @Component
   export default class Play extends Vue {
@@ -34,14 +35,15 @@
     players = [];
     playerNameInput = '';
     gamePinInput = '';
+    gameStarting = false;
 
     mounted() {
     }
 
     setGamePin() {
-      console.log(this.gamePinInput);
-      this.gamePin = this.gamePinInput;
-      this.gamePinInput = '';
+        console.log(this.gamePinInput);
+        this.gamePin = this.gamePinInput;
+        this.gamePinInput = '';
     }
 
     addPlayer() {
@@ -57,9 +59,15 @@
     }
 
     start() {
-      this.players.forEach(p => {
-          new KahootSession(this.gamePin, p.name)
-      })
+        this.gameStarting = true;
+        let kahootSessions = [];
+        this.players.forEach(p => {
+            kahootSessions.push(new KahootSession(this.gamePin, p.name));
+        });
+        Promise.all(kahootSessions).then(() => {
+            console.info('All players joined');
+            this.gameStarting = false;
+        });
     }
   }
 </script>
