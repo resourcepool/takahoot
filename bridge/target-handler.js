@@ -10,6 +10,23 @@ const OUT_START_PAIRING = 0x31; // <=> 0011 0001
 const OUT_FINISH_PAIRING = 0x32; // <=> 0011 0002
 const OUT_START_CALIBRATION = 0x33; // <=> 0011 0003
 const OUT_GAME_RESET = 0x34; // <=> 0011 0004
+
+const IN_CONNECTED = 0xC0; // <=> 1100 0000
+const IN_CALIBRATION_STARTED = 0xC1; // <=> 1100 0001
+const IN_CALIBRATION_FINISHED = 0xC2; // <=> 1100 0002
+const IN_HIT = 0xC3; // <=> 1100 0003
+const IN_TOLERANCE_CHANGED = 0xC4; // <=> 1100 0004
+const IN_END_MESSAGE = [0x0D, 0x0A];
+
+const resolveIfEnd = (data, message, resolve) => {
+  if (data.length >= 3
+    && IN_END_MESSAGE[1] === data[data.length - 1]
+    && IN_END_MESSAGE[0] === data[data.length - 2]
+    && message === data[data.length - 3]) {
+    resolve();
+  }
+};
+
 let port;
 
 const init = async ({deviceConfig, enabled}) => {
@@ -24,20 +41,26 @@ const init = async ({deviceConfig, enabled}) => {
   logger.debug(`Port ${deviceConfig.comName} open`);
 };
 
-const connected = async () => {
-  await port.write(Buffer.from([OUT_CONNECTED]));
+const connected = () => {
+  return new Promise(resolve => {
+    port.on('data', data => resolveIfEnd(data, IN_CONNECTED, resolve));
+    port.write(Buffer.from([OUT_CONNECTED]));
+  })
 };
 
 const startPairing = async () => {
   await port.write(Buffer.from([OUT_START_PAIRING]));
 };
 
-const finishPairing = async () => {
+const stopPairing = async () => {
   await port.write(Buffer.from([OUT_FINISH_PAIRING]));
 };
 
-const startCalibration = async () => {
-  await port.write(Buffer.from([OUT_START_CALIBRATION]));
+const startCalibration = () => {
+  return new Promise(resolve => {
+    port.on('data', data => resolveIfEnd(data, IN_CALIBRATION_FINISHED, resolve));
+    port.write(Buffer.from([OUT_START_CALIBRATION]));
+  })
 };
 
 const gameReset = async () => {
@@ -59,18 +82,21 @@ process.on('message', async ({type, data}) => {
     case Actions.TARGET_CONNECT:
       logger.debug("Connect to device");
       await connected();
+      logger.debug("Connected");
       break;
     case Actions.TARGET_START_PAIRING:
       logger.debug("Start pairing");
       await startPairing();
       break;
-    case Actions.TARGET_FINISH_PAIRING:
-      logger.debug("Finish pairing");
-      await finishPairing();
+    case Actions.TARGET_STOP_PAIRING:
+      logger.debug("Stop pairing");
+      await stopPairing();
       break;
-    case Actions.TARGET_CALIBRATION:
+    case Actions.TARGET_START_CALIBRATING:
       logger.debug("Start calibration");
       await startCalibration();
+      logger.debug("Calibrated");
+      process.send({type: Actions.TARGET_END_CALIBRATING});
       break;
     case Actions.TARGET_GAME_RESET:
       logger.debug("Reset the game");

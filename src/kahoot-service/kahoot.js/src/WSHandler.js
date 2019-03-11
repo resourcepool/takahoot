@@ -1,5 +1,4 @@
 const EventEmitter = require('events');
-var Promise = require('promise');
 // var WebSocket = require('ws'); using browser WS
 var consts = require('./consts.js');
 

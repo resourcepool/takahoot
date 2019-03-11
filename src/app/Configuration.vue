@@ -23,19 +23,21 @@
    import Connection from './steps/Connection';
    import Pairing from './steps/Pairing';
    import Calibration from './steps/Calibration';
-   import Finish from './steps/Finish';
+   import Done from './steps/Done';
 
-   import {TARGET_INIT_SUCCESS, TARGET_CONNECT_SUCCESS} from '@/target-service/actions.json';
+   import {TARGET_INIT_SUCCESS, TARGET_CONNECT_SUCCESS, TARGET_PAIRING_SUCCESS, TARGET_CALIBRATING_SUCCESS} from '@/target-service/actions.json';
    import {cloneDeep} from 'lodash';
 
    @Component({
-      components: { Connection, Pairing, Calibration}
+      components: { Connection, Pairing, Calibration, Done}
    })
    export default class Configuration extends Vue {
 
       devices = [];
       step = 0;
       connectionStep = 0;
+      SHORT_TIMER = 400;
+      LONG_TIMER = 1100;
       steps = [{
          title: 'Connection',
          content: Connection
@@ -46,8 +48,8 @@
          title: 'Calibration',
          content: Calibration
       },  {
-         title: 'Finish',
-         content: Finish
+         title: 'Done',
+         content: Done
       }];
 
       beforeCreate() {
@@ -60,19 +62,32 @@
          this.devices = cloneDeep(this.$store.getState().devices);
          switch (newState.lastAction) {
             case TARGET_INIT_SUCCESS:
-               setTimeout(() => {
-                  this.connectionStep = 1;
-               }, 750);
+               this.goToConnectionStep(1);
                break;
             case TARGET_CONNECT_SUCCESS:
-               setTimeout(() => {
-                  this.connectionStep = 2;
-                  setTimeout(() => {
-                     this.step = 1;
-                  }, 1250);
-               }, 750);
+               this.goToConnectionStep(2, () => this.goToStep(1));
+               break;
+            case TARGET_PAIRING_SUCCESS:
+               this.goToStep(2);
+               break;
+            case TARGET_CALIBRATING_SUCCESS:
+               this.goToStep(3);
                break;
          }
+      }
+
+      goToConnectionStep(index, cb = () => {}) {
+         setTimeout(() => {
+            this.connectionStep = index;
+            cb();
+         }, this.SHORT_TIMER);
+      }
+
+      goToStep(index, cb = () => {}) {
+         setTimeout(() => {
+            this.step = index;
+            cb();
+         }, this.LONG_TIMER);
       }
    }
 </script>

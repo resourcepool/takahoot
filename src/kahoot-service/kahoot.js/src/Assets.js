@@ -1,5 +1,3 @@
-var Promise = require('promise');
-
 class Quiz {
 	constructor(name, type, answerCount, client) {
 		this.client = client;

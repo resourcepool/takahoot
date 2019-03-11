@@ -1,5 +1,4 @@
 const EventEmitter = require('events');
-var Promise = require('promise');
 var Assets = require('./Assets.js');
 var WSHandler = require('./WSHandler.js');
 var token = require('./token.js');

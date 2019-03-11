@@ -17,9 +17,28 @@ export function connectSuccess() {
     };
 }
 
-export function calibrationSuccess(index) {
+export function stopPairing(index) {
     return {
-        type: Actions.TARGET_CALIBRATION_SUCCESS,
+        type: Actions.TARGET_STOP_PAIRING,
         data: { index }
+    };
+}
+
+export function pairingSuccess() {
+    return {
+        type: Actions.TARGET_PAIRING_SUCCESS
+    };
+}
+
+export function endCalibrating(index) {
+    return {
+        type: Actions.TARGET_END_CALIBRATING,
+        data: { index }
+    };
+}
+
+export function calibratingSuccess() {
+    return {
+        type: Actions.TARGET_CALIBRATING_SUCCESS
     };
 }

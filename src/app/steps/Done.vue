@@ -10,7 +10,7 @@
   import {initTargets} from '@/target-service/service';
 
   @Component
-  export default class Finish extends Vue {
+  export default class Done extends Vue {
 
     created() {
     }
