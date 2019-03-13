@@ -2,7 +2,7 @@
    <div class="container">
 
       <div class="steps-content">
-         <Connection v-if="step === 0" :devices="devices" :step="connectionStep"></Connection>
+         <Connection v-if="step === 0" :devices="devices" :initialized="initialized"></Connection>
          <Pairing v-if="step === 1" :devices="devices"></Pairing>
          <Calibration v-if="step === 2" :devices="devices"></Calibration>
          <Finish v-if="step === 3"></Finish>
@@ -23,21 +23,20 @@
    import Connection from './steps/Connection';
    import Pairing from './steps/Pairing';
    import Calibration from './steps/Calibration';
-   import Done from './steps/Done';
 
-   import {TARGET_INIT_SUCCESS, TARGET_CONNECT_SUCCESS, TARGET_PAIRING_SUCCESS, TARGET_CALIBRATING_SUCCESS} from '@/target-service/actions.json';
+   import * as actions from '@/target-service/actions.js';
    import {cloneDeep} from 'lodash';
 
    @Component({
-      components: { Connection, Pairing, Calibration, Done}
+      components: { Connection, Pairing, Calibration}
    })
    export default class Configuration extends Vue {
 
       devices = [];
       step = 0;
-      connectionStep = 0;
-      SHORT_TIMER = 400;
-      LONG_TIMER = 1100;
+      initialized = false;
+      SHORT_TIMER = 600;
+      LONG_TIMER = 1500;
       steps = [{
          title: 'Connection',
          content: Connection
@@ -47,47 +46,36 @@
       }, {
          title: 'Calibration',
          content: Calibration
-      },  {
-         title: 'Done',
-         content: Done
       }];
+
+      sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
       beforeCreate() {
          this.$store.subscribe(() => this.storeChanged())
       }
 
-      storeChanged() {
+      async storeChanged() {
          const newState = this.$store.getState();
          if (!newState || !newState.lastAction) return;
          this.devices = cloneDeep(this.$store.getState().devices);
          switch (newState.lastAction) {
-            case TARGET_INIT_SUCCESS:
-               this.goToConnectionStep(1);
+            case actions.msg.TARGET_INIT_SUCCESS:
+               await this.sleep(this.SHORT_TIMER);
+               this.initialized = true;
                break;
-            case TARGET_CONNECT_SUCCESS:
-               this.goToConnectionStep(2, () => this.goToStep(1));
+            case actions.msg.TARGET_CONNECT_SUCCESS:
+               await this.sleep(this.LONG_TIMER);
+               this.step = 1;
                break;
-            case TARGET_PAIRING_SUCCESS:
-               this.goToStep(2);
+            case actions.msg.TARGET_PAIRING_SUCCESS:
+               await this.sleep(this.LONG_TIMER);
+               this.step = 2;
                break;
-            case TARGET_CALIBRATING_SUCCESS:
-               this.goToStep(3);
+            case actions.msg.TARGET_CALIBRATING_SUCCESS:
+               await this.sleep(this.LONG_TIMER);
+               this.$router.push({ path: '/'});
                break;
          }
-      }
-
-      goToConnectionStep(index, cb = () => {}) {
-         setTimeout(() => {
-            this.connectionStep = index;
-            cb();
-         }, this.SHORT_TIMER);
-      }
-
-      goToStep(index, cb = () => {}) {
-         setTimeout(() => {
-            this.step = index;
-            cb();
-         }, this.LONG_TIMER);
       }
    }
 </script>

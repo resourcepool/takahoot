@@ -50,7 +50,7 @@ module.exports = {
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([
       { from: SRC_DIR + '/common/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
-      { from: SRC_DIR + '/target-service/actions.js', to: BRIDGE_DIR + '/actions.js' },
+      // { from: SRC_DIR + '/target-service/ipc-actions.js', to: BRIDGE_DIR + '/ipc-actions.js' },
     ]),
   ],
   resolve: {

@@ -1,5 +1,5 @@
 const logger = require('./Logger.js').child({service: 'Target-Handler'});
-const Actions = require('./actions.json');
+const actions = require('./ipc-actions.js');
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');
@@ -19,6 +19,7 @@ const IN_TOLERANCE_CHANGED = 0xC4; // <=> 1100 0004
 const IN_END_MESSAGE = [0x0D, 0x0A];
 
 const resolveIfEnd = (data, message, resolve) => {
+  logger.debug(message, data);
   if (data.length >= 3
     && IN_END_MESSAGE[1] === data[data.length - 1]
     && IN_END_MESSAGE[0] === data[data.length - 2]
@@ -45,6 +46,7 @@ const connected = () => {
   return new Promise(resolve => {
     port.on('data', data => resolveIfEnd(data, IN_CONNECTED, resolve));
     port.write(Buffer.from([OUT_CONNECTED]));
+    resolve(); // HACK : no response from the arduino for the moment
   })
 };
 
@@ -75,30 +77,33 @@ process.on('message', async ({type, data}) => {
     return;
   }
   switch (type) {
-    case Actions.TARGET_INIT:
+    case actions.msg.IPC_TARGET_INIT:
       logger.debug("Open Serial Connection");
       await init(data);
+      logger.debug("Serial Connection opened");
+      process.send(actions.initSuccess());
       break;
-    case Actions.TARGET_CONNECT:
+    case actions.msg.IPC_TARGET_CONNECT:
       logger.debug("Connect to device");
       await connected();
       logger.debug("Connected");
+      process.send(actions.connectSuccess());
       break;
-    case Actions.TARGET_START_PAIRING:
+    case actions.msg.IPC_TARGET_START_PAIRING:
       logger.debug("Start pairing");
       await startPairing();
       break;
-    case Actions.TARGET_STOP_PAIRING:
+    case actions.msg.IPC_TARGET_STOP_PAIRING:
       logger.debug("Stop pairing");
       await stopPairing();
       break;
-    case Actions.TARGET_START_CALIBRATING:
+    case actions.msg.IPC_TARGET_CALIBRATING:
       logger.debug("Start calibration");
       await startCalibration();
       logger.debug("Calibrated");
-      process.send({type: Actions.TARGET_END_CALIBRATING});
+      process.send(actions.calibratingSuccess());
       break;
-    case Actions.TARGET_GAME_RESET:
+    case actions.msg.IPC_TARGET_GAME_RESET:
       logger.debug("Reset the game");
       await gameReset();
       break;

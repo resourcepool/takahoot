@@ -1,44 +1,48 @@
-import * as Actions from './actions.json'
+export const msg = {
+    "TARGET_INIT_SUCCESS": "TARGET_INIT_SUCCESS",
+    "TARGET_CONNECT_SUCCESS": "TARGET_CONNECT_SUCCESS",
+    "TARGET_PAIRED": "TARGET_PAIRED",
+    "TARGET_PAIRING_SUCCESS": "TARGET_PAIRING_SUCCESS",
+    "TARGET_CALIBRATED": "TARGET_CALIBRATED",
+    "TARGET_CALIBRATING_SUCCESS": "TARGET_CALIBRATING_SUCCESS",
+    "TARGET_GAME_RESET": "TARGET_GAME_RESET"
+};
 
-/**
- * Action creator dispatched when a serial connection should be open
- * @return {Object} A poll messages action
- */
 export function initSuccess(devices) {
     return {
-        type: Actions.TARGET_INIT_SUCCESS,
+        type: msg.TARGET_INIT_SUCCESS,
         data: { devices }
     };
 }
 
 export function connectSuccess() {
     return {
-        type: Actions.TARGET_CONNECT_SUCCESS
+        type: msg.TARGET_CONNECT_SUCCESS
     };
 }
 
-export function stopPairing(index) {
+export function paired(index) {
     return {
-        type: Actions.TARGET_STOP_PAIRING,
+        type: msg.TARGET_PAIRED,
         data: { index }
     };
 }
 
 export function pairingSuccess() {
     return {
-        type: Actions.TARGET_PAIRING_SUCCESS
+        type: msg.TARGET_PAIRING_SUCCESS
     };
 }
 
-export function endCalibrating(index) {
+export function calibrated(index) {
     return {
-        type: Actions.TARGET_END_CALIBRATING,
+        type: msg.TARGET_CALIBRATED,
         data: { index }
     };
 }
 
 export function calibratingSuccess() {
     return {
-        type: Actions.TARGET_CALIBRATING_SUCCESS
+        type: msg.TARGET_CALIBRATING_SUCCESS
     };
 }

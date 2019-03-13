@@ -3,10 +3,10 @@
         <h1>Target detection...</h1>
         <div class="targets">
             <div v-for="device in devices">
-                <a-spin v-if="step === 0 || step === 1" size="large"/>
-                <p v-if="step === 0 || step === 1">connection...</p>
-                <a-icon v-if="step === 2" style="font-size: 2.5em;color:#27ae60;" type="check"/>
-                <p v-if="step === 2">connected !</p>
+                <a-spin v-if="device.state !== states.CONNECTED" size="large"/>
+                <p v-if="device.state !== states.CONNECTED">connection...</p>
+                <a-icon v-if="device.state === states.CONNECTED" style="font-size: 2.5em;color:#27ae60;" type="check"/>
+                <p v-if="device.state === states.CONNECTED">connected !</p>
             </div>
         </div>
     </div>
@@ -14,6 +14,7 @@
 
 <script>
   import Vue from 'vue';
+  import Device from '@/common/entities/device';
   import {Component, Prop, Watch} from 'vue-property-decorator';
   import {connectTargets, initTargets} from '@/target-service/service';
 
@@ -21,20 +22,17 @@
   export default class Connection extends Vue {
 
     @Prop(Array) devices;
-    @Prop(Number) step;
+    @Prop(Boolean) initialized;
+    states = Device.states;
 
     created() {
       initTargets();
     }
 
-    @Watch('step')
-    onStepChanged(step, oldStep) {
-      if (step - 1 === oldStep) { //step incremented
-        switch (step) {
-          case 1:
-            connectTargets();
-            break;
-        }
+    @Watch('initialized')
+    onInitializedChanged(initialized, old) {
+      if (initialized && !old) {
+        connectTargets();
       }
     }
   }

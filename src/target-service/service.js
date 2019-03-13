@@ -1,8 +1,8 @@
 import Logger from '@/common/Logger';
 import {store} from '@/common/store';
 const logger = Logger.child({service: 'Target-Service'});
-import {TARGET_FIND_ALL, TARGET_INIT, TARGET_CONNECT, TARGET_START_PAIRING, TARGET_STOP_PAIRING, TARGET_START_CALIBRATING, TARGET_END_CALIBRATING} from './actions.json';
-import {initSuccess, connectSuccess, stopPairing, endCalibrating, calibratingSuccess} from './actions';
+import * as actions from './actions';
+import * as ipcActions from './ipc-actions'
 import {fork} from 'child_process';
 
 let enabled = false;
@@ -17,7 +17,7 @@ const arduinoSignature = {
 
 
 export function initTargets() {
-  const targetsHandler = fork('bridge/targets-handler.js');
+  const targetsHandler = fork('bridge/target-service.js');
 
   //kill old process before init
   if (handlers.length > 0) {
@@ -38,47 +38,44 @@ export function initTargets() {
     // Create a process dedicated to the Arduino handle
     arduinoDevices.forEach(arduinoDevice => {
       const target = fork('bridge/target-handler.js');
-      target.send({
-        type: TARGET_INIT,
-        data: {
-          deviceConfig: arduinoDevice,
-          enabled: enabled
-        }
-      });
+      target.send(ipcActions.init(arduinoDevice, enabled));
       handlers.push(target);
       arduinoDevice.targetIndex = handlers.length - 1;
     });
 
     targetsHandler.kill('SIGINT');
-    store.dispatch(initSuccess(arduinoDevices));
+    store.dispatch(actions.initSuccess(arduinoDevices));
   });
 
-  targetsHandler.send({
-    type: TARGET_FIND_ALL,
-    data: arduinoSignature
-  });
+  targetsHandler.send(ipcActions.findAll(arduinoSignature));
 }
 
 export function connectTargets() {
-  store.getState().devices.forEach(device => {
-    handlers[device.data.targetIndex].send({
-      type: TARGET_CONNECT
+  function connectPromise(device) {
+    return new Promise(resolve => {
+      handlers[device.data.targetIndex].on('message', ({type}) => {
+        if (type === ipcActions.msg.IPC_TARGET_CONNECT_SUCCESS) {
+          resolve();
+        }
+      });
+      handlers[device.data.targetIndex].send(ipcActions.connect());
     });
+  }
+
+  const promises = store.getState().devices.map(device => connectPromise(device));
+
+  Promise.all(promises).then(function() {
+    store.dispatch(actions.connectSuccess());
   });
-  store.dispatch(connectSuccess());
 }
 
 export function startPairingTarget(device) {
-  handlers[device.data.targetIndex].send({
-    type: TARGET_START_PAIRING
-  });
+  handlers[device.data.targetIndex].send(ipcActions.startPairing());
 }
 
 export function stopPairingTarget(device, index) {
-  handlers[device.data.targetIndex].send({
-    type: TARGET_STOP_PAIRING
-  });
-  store.dispatch(stopPairing(index));
+  handlers[device.data.targetIndex].send(ipcActions.stopPairing());
+  store.dispatch(actions.paired(index));
 }
 
 
@@ -87,20 +84,18 @@ export function startCalibratingTargets() {
   function calibratingPromise(device) {
     return new Promise(resolve => {
       handlers[device.data.targetIndex].on('message', ({type}) => {
-        if (type === TARGET_END_CALIBRATING) {
-          store.dispatch(endCalibrating(device.data.targetIndex));
+        if (type === ipcActions.msg.IPC_TARGET_CALIBRATING_SUCCESS) {
+          store.dispatch(actions.calibrated(device.data.targetIndex));
           resolve();
         }
       });
-      handlers[device.data.targetIndex].send({
-        type: TARGET_START_CALIBRATING
-      });
+      handlers[device.data.targetIndex].send(ipcActions.calibrating());
     });
   }
 
   const promises = store.getState().devices.map(device => calibratingPromise(device));
 
   Promise.all(promises).then(function() {
-    store.dispatch(calibratingSuccess());
+    store.dispatch(actions.calibratingSuccess());
   });
 }

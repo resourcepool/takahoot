@@ -1,6 +1,3 @@
-import {} from './actions.json';
-import {} from './service';
-
 /**
  * Remote control middleware
  * @param {Object} store - The store

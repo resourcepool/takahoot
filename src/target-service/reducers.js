@@ -1,5 +1,5 @@
 import Device from '@/common/entities/Device';
-import {TARGET_CONNECT_SUCCESS, TARGET_INIT_SUCCESS, TARGET_STOP_PAIRING, TARGET_PAIRING_SUCCESS, TARGET_END_CALIBRATING} from './actions.json';
+import * as actions from './actions.js';
 
 const initialState = {
     lastAction: '',
@@ -13,24 +13,27 @@ const initialState = {
  */
 export default function target(state = initialState, action) {
     switch (action.type) {
-        case TARGET_INIT_SUCCESS:
+        case actions.msg.TARGET_INIT_SUCCESS:
             state.devices = action.data.devices.map((data, index) => new Device(data, Device.states.INITIALIZED, index));
-            state.lastAction = TARGET_INIT_SUCCESS;
+            state.lastAction = actions.msg.TARGET_INIT_SUCCESS;
             return state;
-        case TARGET_CONNECT_SUCCESS:
+        case actions.msg.TARGET_CONNECT_SUCCESS:
             state.devices.forEach(device => device.state = Device.states.CONNECTED);
-            state.lastAction = TARGET_CONNECT_SUCCESS;
+            state.lastAction = actions.msg.TARGET_CONNECT_SUCCESS;
             return state;
-        case TARGET_STOP_PAIRING:
+        case actions.msg.TARGET_PAIRED:
             state.devices[action.data.index].state = Device.states.PAIRED;
-            state.lastAction = TARGET_STOP_PAIRING;
+            state.lastAction = actions.msg.TARGET_PAIRED;
             return state;
-        case TARGET_PAIRING_SUCCESS:
-            state.lastAction = TARGET_PAIRING_SUCCESS;
+        case actions.msg.TARGET_PAIRING_SUCCESS:
+            state.lastAction = actions.msg.TARGET_PAIRING_SUCCESS;
             return state;
-        case TARGET_END_CALIBRATING:
+        case actions.msg.TARGET_CALIBRATED:
             state.devices[action.data.index].state = Device.states.CALIBRATED;
-            state.lastAction = TARGET_END_CALIBRATING;
+            state.lastAction = actions.msg.TARGET_CALIBRATED;
+            return state;
+        case actions.msg.TARGET_CALIBRATING_SUCCESS:
+            state.lastAction = actions.msg.TARGET_CALIBRATING_SUCCESS;
             return state;
     }
 }
