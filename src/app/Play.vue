@@ -1,6 +1,6 @@
 <template>
     <div class="centered-container">
-        <div class="content">
+        <div class="content" v-if="!gameStarted">
             <a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>
             <div>
                 <h2>Game-pin<span v-if="gamePin"> : {{gamePin}}</span></h2>
@@ -20,6 +20,11 @@
             <a-button :disabled="gameStarting || !gamePin && players.length < 1" type="primary" class="button"
                       size="large" block v-on:click="start">START</a-button>
         </div>
+        <div class="content" v-if="gameStarted">
+            <a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>
+            <h2>Join your Kahoot session with game pin: {{gamePin}}</h2>
+            <p>You can follow the game from the console.</p>
+        </div>
     </div>
 </template>
 
@@ -27,7 +32,7 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import uuid from 'uuid';
-  import KahootSession from '../kahoot-service/KahootSession';
+  import KahootGame from '../kahoot-service/KahootGame';
 
   @Component
   export default class Play extends Vue {
@@ -36,6 +41,7 @@
     playerNameInput = '';
     gamePinInput = '';
     gameStarting = false;
+    gameStarted = false;
 
     mounted() {
     }
@@ -60,13 +66,10 @@
 
     start() {
         this.gameStarting = true;
-        let kahootSessions = [];
-        this.players.forEach(p => {
-            kahootSessions.push(new KahootSession(this.gamePin, p.name));
-        });
-        Promise.all(kahootSessions).then(() => {
-            console.info('All players joined');
+        new KahootGame(this.gamePin, this.players).then(() => {
             this.gameStarting = false;
+            this.gameStarted = true;
+            console.info('All players joined, ready to start the game.');
         });
     }
   }

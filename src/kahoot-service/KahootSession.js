@@ -22,7 +22,9 @@ module.exports = class KahootSession {
 
         this.kahoot.on("quizStart", this.onQuizStart);
         this.kahoot.on("question", this.onQuestion);
-        this.kahoot.on("questionStart", this.onQuestionStart);
+        this.kahoot.on("questionStart", (question) => {
+            this.onQuestionStart(question);
+        });
         this.kahoot.on("questionSubmit", this.onQuestionSubmit);
 
         this.kahoot.on("questionEnd", e => console.debug("questionEnd"));
@@ -41,13 +43,15 @@ module.exports = class KahootSession {
     }
 
     onQuestionStart(question) {
+        let answer = Math.floor(Math.random() * 4);
         console.log(`[player ${this.name}] Question started`);
         this.question = question;
+        this.answerQuestion(answer);
     }
 
     answerQuestion(answer) {
         console.log(`[player ${this.name}] Answering question with ${answer}`);
-        if (!this.question) throw `[player ${this.name}] Answering before question display on, answer dismissed`;
+        if (!this.question) throw `[player ${this.name}] Answering before question display, answer dismissed`;
         this.question.answer(answer);
     }
 
