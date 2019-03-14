@@ -52,3 +52,9 @@ export function calibrating() {
         type: msg.IPC_TARGET_CALIBRATING
     };
 }
+
+export function gameReset() {
+    return {
+        type: msg.IPC_TARGET_GAME_RESET
+    };
+}

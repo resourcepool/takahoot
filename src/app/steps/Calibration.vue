@@ -3,10 +3,14 @@
         <h1>Target calibration</h1>
         <div class="targets">
             <div v-for="device in devices">
-                <a-spin v-if="device.state !== states.CALIBRATED" size="large"/>
-                <p v-if="device.state !== states.CALIBRATED">calibration...</p>
-                <a-icon v-if="device.state === states.CALIBRATED" style="font-size: 2.5em;color:#27ae60;" type="check"/>
-                <p v-if="device.state === states.CALIBRATED">calibrated !</p>
+                <div v-if="device.state !== states.CALIBRATED">
+                    <a-spin size="large"/>
+                    <p>calibration...</p>
+                </div>
+                <div v-if="device.state === states.CALIBRATED">
+                    <a-icon style="font-size: 2.5em;color:#27ae60;" type="check"/>
+                    <p>calibrated !</p>
+                </div>
             </div>
         </div>
     </div>

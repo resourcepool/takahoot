@@ -23,6 +23,7 @@
    import Connection from './steps/Connection';
    import Pairing from './steps/Pairing';
    import Calibration from './steps/Calibration';
+   import {gameReset} from '@/target-service/service';
 
    import * as actions from '@/target-service/actions.js';
    import {cloneDeep} from 'lodash';
@@ -51,7 +52,11 @@
       sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
       beforeCreate() {
-         this.$store.subscribe(() => this.storeChanged())
+         this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
+      }
+
+      beforeDestroy() {
+         this.unsubscribe();
       }
 
       async storeChanged() {
@@ -73,6 +78,7 @@
                break;
             case actions.msg.TARGET_CALIBRATING_SUCCESS:
                await this.sleep(this.LONG_TIMER);
+               gameReset();
                this.$router.push({ path: '/'});
                break;
          }

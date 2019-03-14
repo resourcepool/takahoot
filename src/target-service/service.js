@@ -99,3 +99,10 @@ export function startCalibratingTargets() {
     store.dispatch(actions.calibratingSuccess());
   });
 }
+
+export function gameReset() {
+  console.log('target calibrated !', store.getState().devices)
+  store.getState().devices.forEach(
+    device => handlers[device.data.targetIndex].send(ipcActions.gameReset())
+  );
+}

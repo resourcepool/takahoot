@@ -19,7 +19,6 @@ const IN_TOLERANCE_CHANGED = 0xC4; // <=> 1100 0004
 const IN_END_MESSAGE = [0x0D, 0x0A];
 
 const resolveIfEnd = (data, message, resolve) => {
-  logger.debug(message, data);
   if (data.length >= 3
     && IN_END_MESSAGE[1] === data[data.length - 1]
     && IN_END_MESSAGE[0] === data[data.length - 2]

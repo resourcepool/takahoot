@@ -3,10 +3,14 @@
         <h1>Target detection...</h1>
         <div class="targets">
             <div v-for="device in devices">
-                <a-spin v-if="device.state !== states.CONNECTED" size="large"/>
-                <p v-if="device.state !== states.CONNECTED">connection...</p>
-                <a-icon v-if="device.state === states.CONNECTED" style="font-size: 2.5em;color:#27ae60;" type="check"/>
-                <p v-if="device.state === states.CONNECTED">connected !</p>
+                <div v-if="device.state !== states.CONNECTED">
+                    <a-spin size="large"/>
+                    <p>connection...</p>
+                </div>
+                <div v-if="device.state === states.CONNECTED">
+                    <a-icon style="font-size: 2.5em;color:#27ae60;" type="check"/>
+                    <p>connected !</p>
+                </div>
             </div>
         </div>
     </div>

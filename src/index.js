@@ -29,6 +29,5 @@ const routes = {
 const router = new VueRouter(routes);
 
 Vue.prototype.$store = store;
-console.log(store);
 
 new Vue({router}).$mount('#app');
