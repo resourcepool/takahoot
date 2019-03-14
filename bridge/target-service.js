@@ -1,6 +1,6 @@
 const logger = require('./Logger.js').child({service: 'Serial-Port-Utils'});
 const actions = require('./ipc-actions.js');
-const IPC = actions.msg;
+const IPC = require('./ipc-actions.json');
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');

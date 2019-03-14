@@ -2,7 +2,7 @@ import Logger from '@/common/Logger';
 import {store} from '@/common/store';
 import * as actions from './actions';
 import * as ipcActions from './ipc-actions';
-const IPC = ipcActions.msg;
+import IPC from './ipc-actions.json';
 import {fork} from 'child_process';
 
 const logger = Logger.child({service: 'Target-Service'});
@@ -44,7 +44,6 @@ export function initTargets() {
     // Listen for target messages
     targets.forEach((target, index) =>
       target.process.on('message', ({type, data}) => {
-        console.log('receive message', type)
         if (type) {
           switch(type) {
             case IPC.INIT_SUCCESS:

@@ -30,9 +30,9 @@ export default function target(state = initialState, action) {
             state.lastAction = actions.msg.TARGET_CONNECTED;
             return state;
         case actions.msg.TARGET_PAIRED:
-            index = action.data.index;
+            index = action.data.targetPosition;
             state.devices[index].state = Device.states.PAIRED;
-            state.devices[index].targetPosition = action.data.targetPosition;
+            state.devices[index].targetPosition = action.data.index;
             state.lastAction = actions.msg.TARGET_PAIRED;
             return state;
         case actions.msg.TARGET_CALIBRATED:

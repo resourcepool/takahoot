@@ -67,7 +67,7 @@
          switch (newState.lastAction) {
             case actions.msg.TARGET_INITIALIZED:
                if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {
-                  await this.sleep(this.SHORT_TIMER);
+                  await this.sleep(4000);
                   this.initialized = true;
                }
                break;
@@ -86,7 +86,6 @@
             case actions.msg.TARGET_CALIBRATED:
                if (this.devices.every(device => device.state === Device.states.CALIBRATED)) {
                   await this.sleep(this.LONG_TIMER);
-                  gameReset();
                   this.$router.push({path: '/'});
                }
                break;

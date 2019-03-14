@@ -2,7 +2,7 @@
 #define BAUD_RATE 115200
 #endif
 
-#define DEBUG_MODE
+//#define DEBUG_MODE
 
 #define BTN_RED A0
 #define BTN_BLUE A1

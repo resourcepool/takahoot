@@ -36,7 +36,6 @@
     }
 
     pair(position) {
-      console.log(this.devices);
       stopPairingTarget(this.devices[this.currentIndex], position);
       if (this.currentIndex < this.devices.length - 1) {
         startPairingTarget(this.devices[++this.currentIndex]);

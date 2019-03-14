@@ -1,15 +1,4 @@
-export const msg = {
-    "FIND_ALL": "FIND_ALL",
-    "INIT": "INIT",
-    "INIT_SUCCESS": "INIT_SUCCESS",
-    "CONNECT": "CONNECT",
-    "CONNECT_SUCCESS": "CONNECT_SUCCESS",
-    "START_PAIRING": "START_PAIRING",
-    "STOP_PAIRING": "STOP_PAIRING",
-    "CALIBRATING": "CALIBRATING",
-    "CALIBRATING_SUCCESS": "CALIBRATING_SUCCESS",
-    "GAME_RESET": "GAME_RESET"
-};
+import msg from './ipc-actions.json';
 
 /**
  * Action creator dispatched when a serial connection should be open

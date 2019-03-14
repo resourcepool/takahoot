@@ -1,9 +1,9 @@
 const logger = require('./Logger.js').child({service: 'Target-Handler'});
 const actions = require('./ipc-actions.js');
-const IPC = actions.msg;
+const IPC = require('./ipc-actions.json');
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
-const {promisify} = require('util');
+const Delimiter = require('@serialport/parser-delimiter');
 
 const BAUDRATE = 115200; //same on arduino
 
@@ -24,77 +24,70 @@ const IN = {
   END_MESSAGE: Buffer.from([0x0D, 0x0A])
 };
 
-let buffer = new Buffer([]);
 let port;
 
-const init = async ({deviceConfig, enabled}) => {
+const init = ({deviceConfig, enabled}) => {
   if (!enabled) {
     logger.warn(`Target Handler disabled`);
     return;
   }
-  port = new SerialPort(deviceConfig.comName, {autoOpen: false, baudRate: BAUDRATE});
-  promisify(port.open).bind(port);
-  promisify(port.write).bind(port);
-  await port.open();
+  port = new SerialPort(deviceConfig.comName, {baudRate: BAUDRATE});
   logger.debug(`Port ${deviceConfig.comName} open`);
 
   /**
    * TARGET messages go here
    */
-  port.on('error', error => logger.warn(error));
-  port.on('readable', () => {
-    const message = receiveMessage(port.read());
-    if (message) {
-      switch (message) {
-        case IN.CONNECTED:
-          logger.debug("Connected");
-          process.send(actions.connectSuccess());
-          break;
-        case IN.CALIBRATION_FINISHED:
-          logger.debug("Calibrated");
-          process.send(actions.calibratingSuccess());
-          break;
+  const parser = port.pipe(new Delimiter({ delimiter: IN.END_MESSAGE }));
+  port.on('open', () => {
+    parser.on('data', (data) => {
+      const message = receiveMessage(data);
+      if (message) {
+        switch (message) {
+          case IN.CONNECTED:
+            logger.debug("Connected");
+            process.send(actions.connectSuccess());
+            break;
+          case IN.CALIBRATION_FINISHED:
+            logger.debug("Calibrated");
+            process.send(actions.calibratingSuccess());
+            break;
+        }
       }
-    }
+    });
   });
 };
 
 const receiveMessage = data => {
-  console.log(data);
-  buffer = Buffer.concat([data]);
-  if (buffer.includes(IN.END_MESSAGE)) {
-    let found = null;
-    Object.keys(IN).forEach(key => {
-      if (buffer.includes(IN[key])) {
-        buffer = new Buffer([]);
-        found = IN[key];
-      }
-    });
-    if (found === null) {
-      logger.warn('receive END_MESSAGE but no message found');
+  let found = null;
+  Object.keys(IN).forEach(key => {
+    if (data.includes(IN[key])) {
+      found = IN[key];
     }
-    buffer = new Buffer([]);
-    return found;
-  }
+  });
+  console.log(data, found);
+  return found;
 };
 
 /**
  * IPC messages go here
  */
-process.on('message', async ({type, data}) => {
+process.on('message', ({type, data}) => {
   if (!type) {
     return;
+  }
+  if (port) {
+    // console.log(port.is)
   }
   switch (type) {
     case IPC.INIT:
       logger.debug("Open Serial Connection");
-      await init(data);
+      init(data);
       logger.debug("Serial Connection opened");
       process.send(actions.initSuccess(data));
       break;
     case IPC.CONNECT:
       logger.debug("Connect to device");
-      await port.write(OUT.CONNECTING);
+      port.write(OUT.CONNECTING);
       process.send(actions.connectSuccess()); //HACK, we receive a connection from arduino normally
       break;
     case IPC.START_PAIRING:
