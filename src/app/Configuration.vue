@@ -27,6 +27,7 @@
 
    import * as actions from '@/target-service/actions.js';
    import {cloneDeep} from 'lodash';
+   import Device from '@/common/entities/device';
 
    @Component({
       components: { Connection, Pairing, Calibration}
@@ -64,22 +65,30 @@
          if (!newState || !newState.lastAction) return;
          this.devices = cloneDeep(this.$store.getState().devices);
          switch (newState.lastAction) {
-            case actions.msg.TARGET_INIT_SUCCESS:
-               await this.sleep(this.SHORT_TIMER);
-               this.initialized = true;
+            case actions.msg.TARGET_INITIALIZED:
+               if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {
+                  await this.sleep(this.SHORT_TIMER);
+                  this.initialized = true;
+               }
                break;
-            case actions.msg.TARGET_CONNECT_SUCCESS:
-               await this.sleep(this.LONG_TIMER);
-               this.step = 1;
+            case actions.msg.TARGET_CONNECTED:
+               if (this.devices.every(device => device.state === Device.states.CONNECTED)) {
+                  await this.sleep(this.LONG_TIMER);
+                  this.step = 1;
+               }
                break;
-            case actions.msg.TARGET_PAIRING_SUCCESS:
-               await this.sleep(this.LONG_TIMER);
-               this.step = 2;
+            case actions.msg.TARGET_PAIRED:
+               if (this.devices.every(device => device.state === Device.states.PAIRED)) {
+                  await this.sleep(this.LONG_TIMER);
+                  this.step = 2;
+               }
                break;
-            case actions.msg.TARGET_CALIBRATING_SUCCESS:
-               await this.sleep(this.LONG_TIMER);
-               gameReset();
-               this.$router.push({ path: '/'});
+            case actions.msg.TARGET_CALIBRATED:
+               if (this.devices.every(device => device.state === Device.states.CALIBRATED)) {
+                  await this.sleep(this.LONG_TIMER);
+                  gameReset();
+                  this.$router.push({path: '/'});
+               }
                break;
          }
       }

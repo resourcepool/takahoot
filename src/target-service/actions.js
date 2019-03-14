@@ -1,36 +1,29 @@
 export const msg = {
-    "TARGET_INIT_SUCCESS": "TARGET_INIT_SUCCESS",
-    "TARGET_CONNECT_SUCCESS": "TARGET_CONNECT_SUCCESS",
+    "TARGET_INITIALIZED": "TARGET_INITIALIZED",
+    "TARGET_CONNECTED": "TARGET_CONNECTED",
     "TARGET_PAIRED": "TARGET_PAIRED",
-    "TARGET_PAIRING_SUCCESS": "TARGET_PAIRING_SUCCESS",
     "TARGET_CALIBRATED": "TARGET_CALIBRATED",
-    "TARGET_CALIBRATING_SUCCESS": "TARGET_CALIBRATING_SUCCESS",
     "TARGET_GAME_RESET": "TARGET_GAME_RESET"
 };
 
-export function initSuccess(devices) {
+export function initialized(deviceConfig, index) {
     return {
-        type: msg.TARGET_INIT_SUCCESS,
-        data: { devices }
+        type: msg.TARGET_INITIALIZED,
+        data: { deviceConfig, index }
     };
 }
 
-export function connectSuccess() {
+export function connected(index) {
     return {
-        type: msg.TARGET_CONNECT_SUCCESS
-    };
-}
-
-export function paired(index) {
-    return {
-        type: msg.TARGET_PAIRED,
+        type: msg.TARGET_CONNECTED,
         data: { index }
     };
 }
 
-export function pairingSuccess() {
+export function paired(index, targetPosition) {
     return {
-        type: msg.TARGET_PAIRING_SUCCESS
+        type: msg.TARGET_PAIRED,
+        data: { index, targetPosition }
     };
 }
 
@@ -38,11 +31,5 @@ export function calibrated(index) {
     return {
         type: msg.TARGET_CALIBRATED,
         data: { index }
-    };
-}
-
-export function calibratingSuccess() {
-    return {
-        type: msg.TARGET_CALIBRATING_SUCCESS
     };
 }

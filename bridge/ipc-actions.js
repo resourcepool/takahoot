@@ -1,32 +1,31 @@
 const msg = {
-    "IPC_TARGET_FIND_ALL": "IPC_TARGET_FIND_ALL",
-    "IPC_TARGET_INIT": "IPC_TARGET_INIT",
-    "IPC_TARGET_INIT_SUCCESS": "IPC_TARGET_INIT_SUCCESS",
-    "IPC_TARGET_CONNECT": "IPC_TARGET_CONNECT",
-    "IPC_TARGET_CONNECT_SUCCESS": "IPC_TARGET_CONNECT_SUCCESS",
-    "IPC_TARGET_START_PAIRING": "IPC_TARGET_START_PAIRING",
-    "IPC_TARGET_STOP_PAIRING": "IPC_TARGET_STOP_PAIRING",
-    "IPC_TARGET_CALIBRATING": "IPC_TARGET_CALIBRATING",
-    "IPC_TARGET_CALIBRATING_SUCCESS": "IPC_TARGET_CALIBRATING_SUCCESS",
-    "IPC_TARGET_GAME_RESET": "IPC_TARGET_GAME_RESET"
+    "FIND_ALL": "FIND_ALL",
+    "INIT": "INIT",
+    "INIT_SUCCESS": "INIT_SUCCESS",
+    "CONNECT": "CONNECT",
+    "CONNECT_SUCCESS": "CONNECT_SUCCESS",
+    "START_PAIRING": "START_PAIRING",
+    "STOP_PAIRING": "STOP_PAIRING",
+    "CALIBRATING": "CALIBRATING",
+    "CALIBRATING_SUCCESS": "CALIBRATING_SUCCESS",
+    "GAME_RESET": "GAME_RESET"
 };
 
-function initSuccess() {
+function initSuccess(data) {
     return {
-        type: msg.IPC_TARGET_INIT_SUCCESS
+        type: msg.INIT_SUCCESS, data
     };
 }
 
 function connectSuccess() {
     return {
-        type: msg.IPC_TARGET_CONNECT_SUCCESS
+        type: msg.CONNECT_SUCCESS
     };
 }
 
-function calibratingSuccess(index) {
+function calibratingSuccess() {
     return {
-        type: msg.IPC_TARGET_CALIBRATING_SUCCESS,
-        data: { index }
+        type: msg.CALIBRATING_SUCCESS,
     };
 }
 

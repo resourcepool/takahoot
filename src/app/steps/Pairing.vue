@@ -23,25 +23,23 @@
   import Device from '@/common/entities/device';
   import {Component, Prop} from 'vue-property-decorator';
   import {startPairingTarget, stopPairingTarget} from '@/target-service/service';
-  import {pairingSuccess} from "@/target-service/actions";
 
   @Component
   export default class Pairing extends Vue {
 
     @Prop(Array) devices;
     states = Device.states;
-    currentPairingIndex = 0;
+    currentIndex = 0;
 
     created() {
-      startPairingTarget(this.devices[this.currentPairingIndex]);
+      startPairingTarget(this.devices[this.currentIndex]);
     }
 
-    pair(index) {
-      stopPairingTarget(this.devices[this.currentPairingIndex], index);
-      if (this.currentPairingIndex < this.devices.length - 1) {
-        startPairingTarget(this.devices[++this.currentPairingIndex]);
-      } else {
-        this.$store.dispatch(pairingSuccess());
+    pair(position) {
+      console.log(this.devices);
+      stopPairingTarget(this.devices[this.currentIndex], position);
+      if (this.currentIndex < this.devices.length - 1) {
+        startPairingTarget(this.devices[++this.currentIndex]);
       }
     }
   }

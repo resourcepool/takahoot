@@ -1,13 +1,14 @@
 import Logger from '@/common/Logger';
 import {store} from '@/common/store';
-const logger = Logger.child({service: 'Target-Service'});
 import * as actions from './actions';
-import * as ipcActions from './ipc-actions'
+import * as ipcActions from './ipc-actions';
+const IPC = ipcActions.msg;
 import {fork} from 'child_process';
 
-let enabled = false;
+const logger = Logger.child({service: 'Target-Service'});
 
-let handlers = [];
+let enabled = false;
+let targets = [];
 
 const arduinoSignature = {
   manufacturer: ['Arduino (www.arduino.cc)', 'Arduino LLC (www.arduino.cc)'],
@@ -15,19 +16,16 @@ const arduinoSignature = {
   productId: ['0043']
 };
 
-
 export function initTargets() {
-  const targetsHandler = fork('bridge/target-service.js');
+  const targetService = fork('bridge/target-service.js');
 
   //kill old process before init
-  if (handlers.length > 0) {
-    handlers.forEach(handler => {
-      handler.kill('SIGINT');
-    });
-    handlers = [];
+  if (targets.length > 0) {
+    targets.forEach(target => target.process.kill('SIGINT'));
+    targets = [];
   }
 
-  targetsHandler.on('message', arduinoDevices => {
+  targetService.on('message', arduinoDevices => {
     if (!arduinoDevices) {
       logger.error('NO Arduino Controller Device was found. Arduino-related features will behave as no-op.');
     } else {
@@ -35,74 +33,61 @@ export function initTargets() {
       logger.info(`Found ${arduinoDevices.length} Arduino devices`);
     }
 
-    // Create a process dedicated to the Arduino handle
-    arduinoDevices.forEach(arduinoDevice => {
-      const target = fork('bridge/target-handler.js');
-      target.send(ipcActions.init(arduinoDevice, enabled));
-      handlers.push(target);
-      arduinoDevice.targetIndex = handlers.length - 1;
+    // Create processes dedicated to the Arduino handle
+    targets = arduinoDevices.map(arduinoDevice => {
+      return {
+        process: fork('bridge/target-handler.js'),
+        arduinoDevice: arduinoDevice
+      }
     });
 
-    targetsHandler.kill('SIGINT');
-    store.dispatch(actions.initSuccess(arduinoDevices));
+    // Listen for target messages
+    targets.forEach((target, index) =>
+      target.process.on('message', ({type, data}) => {
+        console.log('receive message', type)
+        if (type) {
+          switch(type) {
+            case IPC.INIT_SUCCESS:
+              store.dispatch(actions.initialized(data.deviceConfig, index));
+              break;
+            case IPC.CONNECT_SUCCESS:
+              store.dispatch(actions.connected(index));
+              break;
+            case IPC.CALIBRATING_SUCCESS:
+              store.dispatch(actions.calibrated(index));
+              break;
+          }
+        }
+      })
+    );
+
+    // Init targets
+    targets.forEach(target => target.process.send(ipcActions.init(target.arduinoDevice, enabled)));
+
+    // Kill the service
+    targetService.kill('SIGINT');
   });
 
-  targetsHandler.send(ipcActions.findAll(arduinoSignature));
+  targetService.send(ipcActions.findAll(arduinoSignature));
 }
 
 export function connectTargets() {
-  function connectPromise(device) {
-    return new Promise(resolve => {
-      handlers[device.data.targetIndex].on('message', ({type}) => {
-        if (type === ipcActions.msg.IPC_TARGET_CONNECT_SUCCESS) {
-          resolve();
-        }
-      });
-      handlers[device.data.targetIndex].send(ipcActions.connect());
-    });
-  }
-
-  const promises = store.getState().devices.map(device => connectPromise(device));
-
-  Promise.all(promises).then(function() {
-    store.dispatch(actions.connectSuccess());
-  });
+  targets.forEach(target => target.process.send(ipcActions.connect()))
 }
 
 export function startPairingTarget(device) {
-  handlers[device.data.targetIndex].send(ipcActions.startPairing());
+  targets[device.index].process.send(ipcActions.startPairing());
 }
 
-export function stopPairingTarget(device, index) {
-  handlers[device.data.targetIndex].send(ipcActions.stopPairing());
-  store.dispatch(actions.paired(index));
+export function stopPairingTarget(device, position) {
+  targets[device.index].process.send(ipcActions.stopPairing());
+  store.dispatch(actions.paired(device.index, position));
 }
-
 
 export function startCalibratingTargets() {
-
-  function calibratingPromise(device) {
-    return new Promise(resolve => {
-      handlers[device.data.targetIndex].on('message', ({type}) => {
-        if (type === ipcActions.msg.IPC_TARGET_CALIBRATING_SUCCESS) {
-          store.dispatch(actions.calibrated(device.data.targetIndex));
-          resolve();
-        }
-      });
-      handlers[device.data.targetIndex].send(ipcActions.calibrating());
-    });
-  }
-
-  const promises = store.getState().devices.map(device => calibratingPromise(device));
-
-  Promise.all(promises).then(function() {
-    store.dispatch(actions.calibratingSuccess());
-  });
+  targets.forEach(target => target.process.send(ipcActions.calibrating()));
 }
 
 export function gameReset() {
-  console.log('target calibrated !', store.getState().devices)
-  store.getState().devices.forEach(
-    device => handlers[device.data.targetIndex].send(ipcActions.gameReset())
-  );
+  targets.forEach(target => target.process.send(ipcActions.gameReset()));
 }

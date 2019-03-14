@@ -1,5 +1,6 @@
 const logger = require('./Logger.js').child({service: 'Serial-Port-Utils'});
 const actions = require('./ipc-actions.js');
+const IPC = actions.msg;
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');
@@ -29,7 +30,7 @@ process.on('message', async ({type, data}) => {
     return;
   }
   switch (type) {
-    case actions.msg.IPC_TARGET_FIND_ALL:
+    case IPC.FIND_ALL:
       logger.debug("Find port called");
       process.send(await find(data));
       break;

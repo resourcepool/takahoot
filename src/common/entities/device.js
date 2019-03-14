@@ -7,13 +7,15 @@ export default class Device {
     CALIBRATED: 'CALIBRATED',
   };
 
-  data;
+  config;
   state;
   index;
+  targetPosition;
 
-  constructor(data, state, index) {
-    this.data = data;
+  constructor({config, state, index, targetPosition}) {
+    this.config = config;
     this.state = state;
     this.index = index;
+    this.targetPosition = targetPosition;
   }
 }
