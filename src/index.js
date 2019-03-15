@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/app/Home';
 import Play from '@/app/Play';
+import Start from '@/app/Start';
 import Configuration from '@/app/Configuration';
 import {store} from "@/shared/store";
 import '@/assets/style';
@@ -21,6 +22,7 @@ const routes = {
   routes: [
     {path: '/', component: Home},
     {path: '/configuration', component: Configuration},
+    {path: '/start', component: Start},
     {path: '/play', component: Play}
   ],
   path: '*', redirect: '/'

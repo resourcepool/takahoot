@@ -58,6 +58,7 @@ module.exports = {
     alias: {
       '@/app': path.resolve(__dirname, 'src/app/'),
       '@/target-service': path.resolve(__dirname, 'src/target-service/'),
+      '@/kahoot-service': path.resolve(__dirname, 'src/kahoot-service/'),
       '@/assets': path.resolve(__dirname, 'src/assets/'),
       '@/common': path.resolve(__dirname, 'common/'),
       '@/shared': path.resolve(__dirname, 'src/shared/'),

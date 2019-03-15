@@ -5,7 +5,6 @@
          <Connection v-if="step === 0" :devices="devices" :initialized="initialized"></Connection>
          <Pairing v-if="step === 1" :devices="devices"></Pairing>
          <Calibration v-if="step === 2" :devices="devices"></Calibration>
-         <Finish v-if="step === 3"></Finish>
       </div>
 
       <div class="steps-action">
@@ -59,9 +58,9 @@
       }
 
       async storeChanged() {
-         const newState = this.$store.getState();
+         const newState = this.$store.getState().targetReducer;
          if (!newState || !newState.lastAction) return;
-         this.devices = cloneDeep(this.$store.getState().devices);
+         this.devices = cloneDeep(this.$store.getState().targetReducer.devices);
          switch (newState.lastAction) {
             case actions.msg.TARGET_INITIALIZED:
                if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {

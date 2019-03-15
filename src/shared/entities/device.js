@@ -11,12 +11,11 @@ export default class Device {
   config;
   state;
   index;
-  targetPosition;
+  player;
 
-  constructor({config, state, index, targetPosition}) {
+  constructor({config, state, index}) {
     this.config = config;
     this.state = state;
     this.index = index;
-    this.targetPosition = targetPosition;
   }
 }

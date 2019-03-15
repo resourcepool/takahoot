@@ -11,8 +11,6 @@ const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const Delimiter = require('@serialport/parser-delimiter');
 
-const BAUDRATE = 115200; //same on arduino
-
 let port;
 
 const init = ({deviceConfig, enabled}) => {
@@ -20,7 +18,7 @@ const init = ({deviceConfig, enabled}) => {
     logger.warn(`Target Handler disabled`);
     return;
   }
-  port = new SerialPort(deviceConfig.comName, {baudRate: BAUDRATE});
+  port = new SerialPort(deviceConfig.comName, {baudRate: conf.BAUDRATE});
   logger.debug(`Port ${deviceConfig.comName} open`);
 
   /**
@@ -47,6 +45,22 @@ const init = ({deviceConfig, enabled}) => {
           case ARDUINO_IN.HIT:
             logger.debug("Button hit");
             process.send(bridgeOut.buttonHit());
+            break;
+          case ARDUINO_IN.HIT_RED:
+            logger.debug("Button hit RED");
+            process.send(bridgeOut.buttonHit(0));
+            break;
+          case ARDUINO_IN.HIT_BLUE:
+            logger.debug("Button hit BLUE");
+            process.send(bridgeOut.buttonHit(1));
+            break;
+          case ARDUINO_IN.HIT_YELLOW:
+            logger.debug("Button hit YELLOW");
+            process.send(bridgeOut.buttonHit(2));
+            break;
+          case ARDUINO_IN.HIT_GREEN:
+            logger.debug("Button hit GREEN");
+            process.send(bridgeOut.buttonHit(3));
             break;
         }
       }

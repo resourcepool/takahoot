@@ -18,9 +18,9 @@ function calibratingSuccess() {
     };
 }
 
-function buttonHit(data) {
+function buttonHit(btnId) {
     return {
-        type: BRIDGE_OUT.BUTTON_HIT, data
+        type: BRIDGE_OUT.BUTTON_HIT, data: { btnId }
     };
 }
 

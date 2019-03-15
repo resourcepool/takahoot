@@ -1,29 +1,12 @@
 <template>
     <div class="centered-container">
-        <div class="content" v-if="!gameStarted">
+        <div class="content">
             <a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>
-            <div>
-                <h2>Game-pin<span v-if="gamePin"> : {{gamePin}}</span></h2>
-                <a-input v-model="gamePinInput" placeholder="Set the game pin" @keyup.enter="setGamePin"/>
-            </div>
-            <div>
-                <h2>Players</h2>
-                <a-list size="small" bordered :dataSource="players" class="playerList">
-                    <a-list-item slot="renderItem" slot-scope="player, index">
-                        <span class="playerName">{{player.name}}</span>
-                        <a-button slot="actions" class="deleteButton" type="danger" shape="circle" icon="delete"
-                                                @click="deletePlayer(player.id)"></a-button>
-                    </a-list-item>
-                </a-list>
-                <a-input v-if="players.length < 4" v-model="playerNameInput" placeholder="Add a player" @keyup.enter="addPlayer"/>
-            </div>
-            <a-button :disabled="gameStarting || !gamePin && players.length < 1" type="primary" class="button"
-                      size="large" block v-on:click="start">START</a-button>
-        </div>
-        <div class="content" v-if="gameStarted">
-            <a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>
-            <h2>Join your Kahoot session with game pin: {{gamePin}}</h2>
+            <h2>Join your Kahoot session with game pin:</h2>
             <p>You can follow the game from the console.</p>
+            <a-button type="primary" class="button" size="large" block @click="reset">
+                RESET
+            </a-button>
         </div>
     </div>
 </template>
@@ -31,48 +14,20 @@
 <script>
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import uuid from 'uuid';
-  import KahootGame from '../kahoot-service/KahootGame';
-  import * as actions from '@/target-service/actions.js'
+  import {cloneDeep} from 'lodash';
+  import * as targetActions from '@/target-service/actions.js'
+  import * as kahootActions from '@/kahoot-service/actions.js'
+  import {play} from '@/kahoot-service/service';
+  import {gameReset} from '@/target-service/service';
 
   @Component
   export default class Play extends Vue {
-    gamePin = '';
-    players = [];
-    kahootGame = null;
-    playerNameInput = '';
-    gamePinInput = '';
-    gameStarting = false;
-    gameStarted = false;
-
-    mounted() {
+    reset() {
+      gameReset();
     }
 
-    setGamePin() {
-        console.log(this.gamePinInput);
-        this.gamePin = this.gamePinInput;
-        this.gamePinInput = '';
-    }
-
-    addPlayer() {
-      this.players.push({
-          name: this.playerNameInput,
-          id: uuid.v1()
-      });
-      this.playerNameInput = '';
-    }
-
-    deletePlayer(id) {
-      this.players = this.players.filter(player => player.id !== id);
-    }
-
-    start() {
-        this.gameStarting = true;
-        this.kahootGame = new KahootGame(this.gamePin, this.players).then(() => {
-            this.gameStarting = false;
-            this.gameStarted = true;
-            console.info('All players joined, ready to start the game.');
-        });
+    create() {
+        play();
     }
 
     beforeCreate() {
@@ -88,9 +43,12 @@
       if (!newState || !newState.lastAction) return;
       this.devices = cloneDeep(this.$store.getState().devices);
       switch (newState.lastAction) {
-          case actions.msg.TARGET_HIT:
-              console.log(newState.devices, 'HIT');
+          case targetActions.msg.TARGET_HIT:
+              const player = newState.devices[newState.lastActionDeviceIndex].player;
+              console.log('TARGET_HIT', player);
               //TODO: hit should trigger answer for proper player
+              //TODO: store kahoot session in state player
+              // this.kahootGame.kahootSessions[newState.lastActionDeviceIndex].answerQuestion(player.lastHit);
               break;
       }
     }

@@ -6,7 +6,7 @@
                 <span>Takahoot !</span>
             </h1>
             <div>
-                <a-button type="primary" class="button" size="large" block @click="$router.push('/play')">
+                <a-button type="primary" class="button" size="large" block @click="$router.push('/start')">
                     LET'S PLAY
                 </a-button>
                 <a-button type="primary" class="button" size="large" block @click="$router.push('/configuration')">
@@ -14,9 +14,6 @@
                 </a-button>
                 <a-button type="primary" class="button" size="large" block @click="exit">
                     EXIT
-                </a-button>
-                <a-button type="primary" class="button" size="large" block @click="reset">
-                    RESET
                 </a-button>
             </div>
         </div>
@@ -26,15 +23,11 @@
 <script>
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import {gameReset} from '@/target-service/service';
 
   @Component
   export default class Home extends Vue {
     exit() {
       window.close();
-    }
-    reset() {
-      gameReset();
     }
   }
 </script>

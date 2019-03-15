@@ -35,9 +35,9 @@ export function calibrated(index) {
     };
 }
 
-export function buttonHit(data, index) {
+export function buttonHit(btnId, index) {
     return {
         type: msg.TARGET_HIT,
-        data: { data, index }
+        data: { btnId, index }
     };
 }

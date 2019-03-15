@@ -56,7 +56,7 @@ export function initTargets() {
               store.dispatch(actions.calibrated(index));
               break;
             case BRIDGE_OUT.BUTTON_HIT:
-              store.dispatch(actions.buttonHit(data, index));
+              store.dispatch(actions.buttonHit(data.btnId, index));
               break;
           }
         }
@@ -90,6 +90,10 @@ export function startCalibratingTargets() {
   targets.forEach(target => target.process.send(bridgeActions.calibrating()));
 }
 
-export function gameReset() {
-  targets.forEach(target => target.process.send(bridgeActions.gameReset()));
+export function gameReset(index = -1) {
+  if (index === -1) {
+    targets.forEach(target => target.process.send(bridgeActions.gameReset()));
+  } else {
+    targets[index].process.send(bridgeActions.gameReset());
+  }
 }
