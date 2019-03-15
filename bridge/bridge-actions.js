@@ -18,8 +18,15 @@ function calibratingSuccess() {
     };
 }
 
+function buttonHit(data) {
+    return {
+        type: IPC.BUTTON_HIT, data
+    };
+}
+
 module.exports = {
-    initSuccess: initSuccess,
-    connectSuccess: connectSuccess,
-    calibratingSuccess: calibratingSuccess,
+    initSuccess,
+    connectSuccess,
+    calibratingSuccess,
+    buttonHit,
 };

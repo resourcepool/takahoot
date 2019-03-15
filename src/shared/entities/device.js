@@ -5,6 +5,7 @@ export default class Device {
     CONNECTED: 'CONNECTED',
     PAIRED: 'PAIRED',
     CALIBRATED: 'CALIBRATED',
+    HIT: 'HIT'
   };
 
   config;

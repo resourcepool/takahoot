@@ -47,6 +47,7 @@ module.exports = class KahootSession {
         console.log(`[player ${this.name}] Question started`);
         this.question = question;
         this.answerQuestion(answer);
+        //TODO: Should RESET target
     }
 
     answerQuestion(answer) {

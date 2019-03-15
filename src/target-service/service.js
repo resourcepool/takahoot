@@ -55,6 +55,9 @@ export function initTargets() {
             case BRIDGE_OUT.CALIBRATING_SUCCESS:
               store.dispatch(actions.calibrated(index));
               break;
+            case BRIDGE_OUT.BUTTON_HIT:
+              store.dispatch(actions.buttonHit(data, index));
+              break;
           }
         }
       })

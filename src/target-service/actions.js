@@ -3,7 +3,8 @@ export const msg = {
     "TARGET_CONNECTED": "TARGET_CONNECTED",
     "TARGET_PAIRED": "TARGET_PAIRED",
     "TARGET_CALIBRATED": "TARGET_CALIBRATED",
-    "TARGET_GAME_RESET": "TARGET_GAME_RESET"
+    "TARGET_GAME_RESET": "TARGET_GAME_RESET",
+    "TARGET_HIT": "TARGET_HIT",
 };
 
 export function initialized(deviceConfig, index) {
@@ -31,5 +32,12 @@ export function calibrated(index) {
     return {
         type: msg.TARGET_CALIBRATED,
         data: { index }
+    };
+}
+
+export function buttonHit(data, index) {
+    return {
+        type: msg.TARGET_HIT,
+        data: { data, index }
     };
 }

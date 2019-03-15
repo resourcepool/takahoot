@@ -40,5 +40,10 @@ export default function target(state = initialState, action) {
             state.devices[index].state = Device.states.CALIBRATED;
             state.lastAction = actions.msg.TARGET_CALIBRATED;
             return state;
+        case actions.msg.TARGET_HIT:
+            index = action.data.index;
+            state.devices[index].state = Device.states.HIT;
+            state.lastAction = actions.msg.TARGET_HIT;
+            return state;
     }
 }

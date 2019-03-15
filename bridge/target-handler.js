@@ -44,6 +44,10 @@ const init = ({deviceConfig, enabled}) => {
             logger.debug('Calibrated');
             process.send(bridgeOut.calibratingSuccess());
             break;
+          case IN.HIT:
+            logger.debug("Button hit");
+            process.send(actions.buttonHit());
+            break;
         }
       }
     });

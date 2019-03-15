@@ -33,6 +33,7 @@
   import {Component} from 'vue-property-decorator';
   import uuid from 'uuid';
   import KahootGame from '../kahoot-service/KahootGame';
+  import * as actions from '@/target-service/actions.js'
 
   @Component
   export default class Play extends Vue {
@@ -71,6 +72,26 @@
             this.gameStarted = true;
             console.info('All players joined, ready to start the game.');
         });
+    }
+
+    beforeCreate() {
+      this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
+    }
+
+    beforeDestroy() {
+      this.unsubscribe();
+    }
+
+    async storeChanged() {
+      const newState = this.$store.getState();
+      if (!newState || !newState.lastAction) return;
+      this.devices = cloneDeep(this.$store.getState().devices);
+      switch (newState.lastAction) {
+          case actions.msg.TARGET_HIT:
+              console.log(newState.devices, 'HIT');
+              //TODO: hit should trigger answer for proper player
+              break;
+      }
     }
   }
 </script>

@@ -16,7 +16,7 @@
                     EXIT
                 </a-button>
                 <a-button type="primary" class="button" size="large" block @click="reset">
-                    RESET A LA PLACE DE EXIT
+                    RESET
                 </a-button>
             </div>
         </div>
