@@ -20,7 +20,7 @@ function calibratingSuccess() {
 
 function buttonHit(data) {
     return {
-        type: IPC.BUTTON_HIT, data
+        type: BRIDGE_OUT.BUTTON_HIT, data
     };
 }
 

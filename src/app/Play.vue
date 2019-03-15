@@ -39,6 +39,7 @@
   export default class Play extends Vue {
     gamePin = '';
     players = [];
+    kahootGame = null;
     playerNameInput = '';
     gamePinInput = '';
     gameStarting = false;
@@ -67,7 +68,7 @@
 
     start() {
         this.gameStarting = true;
-        new KahootGame(this.gamePin, this.players).then(() => {
+        this.kahootGame = new KahootGame(this.gamePin, this.players).then(() => {
             this.gameStarting = false;
             this.gameStarted = true;
             console.info('All players joined, ready to start the game.');
