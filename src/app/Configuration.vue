@@ -58,9 +58,9 @@
       }
 
       async storeChanged() {
-         const newState = this.$store.getState().targetReducer;
+         const newState = this.$store.getState();
          if (!newState || !newState.lastAction) return;
-         this.devices = cloneDeep(this.$store.getState().targetReducer.devices);
+         this.devices = cloneDeep(this.$store.getState().devices);
          switch (newState.lastAction) {
             case actions.msg.TARGET_INITIALIZED:
                if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {

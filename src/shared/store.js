@@ -1,10 +1,17 @@
-import {createStore, applyMiddleware, combineReducers} from 'redux';
-import targetReducer from '@/target-service/reducer';
-import kahootReducer from '@/kahoot-service/reducer';
+import {createStore, applyMiddleware} from 'redux';
+import reducer from './reducer';
 import { default as middlewares }  from '@/target-service/middleware';
 
+const initialState = {
+  lastAction: '',
+  lastActionDeviceIndex: -1,
+  devices: [],
+  gamePin: ''
+};
+
+
 function createAppStore() {
-  return createStore(combineReducers({targetReducer, kahootReducer}), {}, applyMiddleware(...middlewares));
+  return createStore(reducer, initialState, applyMiddleware(...middlewares));
 }
 
 export const store = createAppStore();

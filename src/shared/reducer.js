@@ -1,53 +1,59 @@
 import Device from '@/shared/entities/device';
 import Player from '@/shared/entities/player';
-import * as actions from './actions.js';
-
-const initialState = {
-    lastAction: '',
-    lastActionDeviceIndex: -1,
-    devices: []
-};
+import {msg as target} from '@/target-service/actions';
+import {msg as kahoot} from '@/kahoot-service/actions';
 
 /**
  * @param {Object} state The current application state
  * @param {Object} action The redux action
  * @return {Object} The update state if it changed
  */
-export default function targetReducer(state = initialState, action) {
+export default function reducer(state, action) {
     let index;
     switch (action.type) {
-        case actions.msg.TARGET_INITIALIZED:
+        case target.TARGET_INITIALIZED:
             index = action.data.index;
             state.devices[index] = new Device({
                 config: action.deviceConfig,
                 state: Device.states.INITIALIZED,
                 index: index
             });
-            state.lastAction = actions.msg.TARGET_INITIALIZED;
+            state.lastAction = target.TARGET_INITIALIZED;
             return state;
-        case actions.msg.TARGET_CONNECTED:
+        case target.TARGET_CONNECTED:
             index = action.data.index;
             state.devices[index].state = Device.states.CONNECTED;
-            state.lastAction = actions.msg.TARGET_CONNECTED;
+            state.lastAction = target.TARGET_CONNECTED;
             return state;
-        case actions.msg.TARGET_PAIRED:
+        case target.TARGET_PAIRED:
             index = action.data.targetPosition;
             const targetPosition = action.data.index;
             state.devices[index].state = Device.states.PAIRED;
             state.devices[index].player = new Player({name: `Player ${targetPosition}`, targetPosition});
-            state.lastAction = actions.msg.TARGET_PAIRED;
+            state.lastAction = target.TARGET_PAIRED;
             return state;
-        case actions.msg.TARGET_CALIBRATED:
+        case target.TARGET_CALIBRATED:
             index = action.data.index;
             state.devices[index].state = Device.states.CALIBRATED;
-            state.lastAction = actions.msg.TARGET_CALIBRATED;
+            state.lastAction = target.TARGET_CALIBRATED;
             return state;
-        case actions.msg.TARGET_HIT:
+        case target.TARGET_HIT:
             index = action.data.index;
             state.devices[index].state = Device.states.HIT;
             state.devices[index].player.lastHit = action.data.btnId;
             state.lastActionDeviceIndex = index;
-            state.lastAction = actions.msg.TARGET_HIT;
+            state.lastAction = target.TARGET_HIT;
+            return state;
+        case kahoot.KAHOOT_INIT:
+            state.gamePin = action.gamePin;
+            state.devices.forEach((device, index) => {
+                device.player.name = state.devices[index].player.name
+            });
+            state.lastAction = kahoot.KAHOOT_INIT;
+            return state;
+        case kahoot.KAHOOT_JOINED:
+            state.devices[action.data.index].player.kahootSession = action.data.kahootSession;
+            state.lastAction = kahoot.KAHOOT_JOINED;
             return state;
         default:
             return state;

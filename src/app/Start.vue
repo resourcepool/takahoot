@@ -16,7 +16,7 @@
 
 <script>
     import Vue from 'vue';
-    import {Component, Prop} from 'vue-property-decorator';
+    import {Component} from 'vue-property-decorator';
     import {init} from '@/kahoot-service/service';
     import * as actions from '@/kahoot-service/actions';
     import {cloneDeep} from 'lodash';
@@ -24,7 +24,7 @@
     @Component
     export default class Pairing extends Vue {
 
-        @Prop(Array) devices;
+        devices = [];
         gamePin = '';
 
         beforeCreate() {
@@ -36,11 +36,11 @@
         }
 
         created() {
-          this.devices = cloneDeep(this.$store.getState().targetReducer.devices);
+          this.devices = cloneDeep(this.$store.getState().devices);
         }
 
         async storeChanged() {
-            const newState = this.$store.getState().kahootReducer;
+            const newState = this.$store.getState();
             if (!newState || !newState.lastAction) return;
             this.devices = cloneDeep(this.$store.getState().devices);
             switch (newState.lastAction) {

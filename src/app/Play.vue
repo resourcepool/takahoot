@@ -1,14 +1,28 @@
 <template>
     <div class="centered-container">
-        <div class="content">
-            <a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>
-            <h2>Join your Kahoot session with game pin:</h2>
-            <p>You can follow the game from the console.</p>
-            <a-button type="primary" class="button" size="large" block @click="reset">
-                RESET
-            </a-button>
+        <h1><a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button> Play game</h1>
+        <div class="targets">
+            <div v-for="device in devices">
+                <div class="target">
+                    <img src="@/assets/images/target.png" alt="target"/>
+                    <p>{{device.player.name}}</p>
+                    <p>{{device.player.kahootSession ? 'JOINED' : '...'}}</p>
+                </div>
+            </div>
         </div>
+        <a-button type="primary" class="button" size="large" block @click="reset">RESET</a-button>
     </div>
+
+    <!--<div class="centered-container">-->
+        <!--<div class="content">-->
+            <!--<a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>-->
+            <!--<h2>Join your Kahoot session with game pin:</h2>-->
+            <!--<p>You can follow the game from the console.</p>-->
+            <!--<a-button type="primary" class="button" size="large" block @click="reset">-->
+                <!--RESET-->
+            <!--</a-button>-->
+        <!--</div>-->
+    <!--</div>-->
 </template>
 
 <script>
@@ -22,12 +36,11 @@
 
   @Component
   export default class Play extends Vue {
+
+    devices = [];
+
     reset() {
       gameReset();
-    }
-
-    create() {
-        play();
     }
 
     beforeCreate() {
@@ -38,48 +51,64 @@
       this.unsubscribe();
     }
 
+    created() {
+      this.devices = cloneDeep(this.$store.getState().devices);
+      play();
+    }
+
     async storeChanged() {
       const newState = this.$store.getState();
       if (!newState || !newState.lastAction) return;
       this.devices = cloneDeep(this.$store.getState().devices);
       switch (newState.lastAction) {
-          case targetActions.msg.TARGET_HIT:
-              const player = newState.devices[newState.lastActionDeviceIndex].player;
-              console.log('TARGET_HIT', player);
-              //TODO: hit should trigger answer for proper player
-              //TODO: store kahoot session in state player
-              // this.kahootGame.kahootSessions[newState.lastActionDeviceIndex].answerQuestion(player.lastHit);
-              break;
+        case kahootActions.msg.KAHOOT_JOINED:
+
+          break;
+        case targetActions.msg.TARGET_HIT:
+          const player = newState.devices[newState.lastActionDeviceIndex].player;
+          console.log('TARGET_HIT', player);
+          //TODO: hit should trigger answer for proper player
+          //TODO: store kahoot session in state player
+          // this.kahootGame.kahootSessions[newState.lastActionDeviceIndex].answerQuestion(player.lastHit);
+          break;
       }
     }
   }
 </script>
 
 <style scoped lang="scss">
-    @import '@/assets/colors';
+    .centered-container {
+        flex-direction: column;
 
+        .targets {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            width: 100%;
 
+            button {
+                padding: 15px 15px 6px;
+                border-radius: 10px;
+                height: initial;
+            }
 
-    .content > * {
-        display: block;
-        margin-bottom: 15px;
-    }
+            p {
+                margin: 0;
+                font-size: 16px;
+            }
 
-    .playerList {
-        margin-bottom: 15px;
-        .playerName {
-            text-transform: capitalize;
+            .target{
+                padding: 15px 15px 6px;
+                text-align: center;
+            }
+
+            .start-target-input {
+                width: 125px;
+                margin-top: 15px;
+                display: block;
+            }
         }
     }
-
-    .button {
-        margin-top: 30px;
-    }
-
-    .back {
-        left: -85px;
-        top: 85px;
-        position: absolute;
-    }
-
 </style>
