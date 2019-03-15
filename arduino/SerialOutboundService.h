@@ -3,15 +3,21 @@
 struct Board;
 
 // All outbound message commands start with 1100 <=> 192
-#define OUT_DEVICE_CONNECTED 0xC0 // <=> 1100 0000
-#define OUT_DEVICE_CALIBRATION_STARTED 0xC1 // <=> 1100 0001
-#define OUT_DEVICE_CALIBRATION_FINISHED 0xC2 // <=> 1100 0002
-#define OUT_TARGET_HIT 0xC3 // <=> 1100 0003
-#define OUT_TOLERANCE_CHANGED 0xC4 // <=> 1100 0004
+#define OUT_DEVICE_INITIALIZED 0xC0 // <=> 1100 0000
+#define OUT_DEVICE_CONNECTED 0xC1 // <=> 1100 0001
+#define OUT_DEVICE_CALIBRATION_STARTED 0xC2 // <=> 1100 0002
+#define OUT_DEVICE_CALIBRATION_FINISHED 0xC3 // <=> 1100 0003
+#define OUT_TARGET_HIT 0xC4 // <=> 1100 0004
+#define OUT_TOLERANCE_CHANGED 0xC5 // <=> 1100 0005
 
 class SerialOutboundService {
 public:
   SerialOutboundService(Board* board);
+
+  /**
+   * Device Initialized is a one-byte message with command OUT_DEVICE_INITIALIZED
+   */
+  void sendDeviceInitializedMessage();
   /**
    * Device Connected is a one-byte message with command OUT_DEVICE_CONNECTED
    */

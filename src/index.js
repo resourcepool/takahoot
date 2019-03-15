@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/app/Home';
 import Play from '@/app/Play';
 import Configuration from '@/app/Configuration';
-import {store} from "@/common/store";
+import {store} from "@/shared/store";
 import '@/assets/style';
 import 'ant-design-vue/dist/antd.css';
 import { Button, Input, Steps, List, Spin, Tooltip, Icon } from 'ant-design-vue';

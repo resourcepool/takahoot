@@ -1,4 +1,4 @@
-import Device from '@/common/entities/device';
+import Device from '@/shared/entities/device';
 import * as actions from './actions.js';
 
 const initialState = {

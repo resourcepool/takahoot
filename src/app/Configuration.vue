@@ -23,11 +23,11 @@
    import Connection from './steps/Connection';
    import Pairing from './steps/Pairing';
    import Calibration from './steps/Calibration';
-   import {gameReset} from '@/target-service/service';
+   import conf from '@/common/conf.json';
 
    import * as actions from '@/target-service/actions.js';
    import {cloneDeep} from 'lodash';
-   import Device from '@/common/entities/device';
+   import Device from '@/shared/entities/device';
 
    @Component({
       components: { Connection, Pairing, Calibration}
@@ -37,8 +37,6 @@
       devices = [];
       step = 0;
       initialized = false;
-      SHORT_TIMER = 600;
-      LONG_TIMER = 1500;
       steps = [{
          title: 'Connection',
          content: Connection
@@ -67,25 +65,25 @@
          switch (newState.lastAction) {
             case actions.msg.TARGET_INITIALIZED:
                if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {
-                  await this.sleep(4000);
+                  await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.initialized = true;
                }
                break;
             case actions.msg.TARGET_CONNECTED:
                if (this.devices.every(device => device.state === Device.states.CONNECTED)) {
-                  await this.sleep(this.LONG_TIMER);
+                  await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.step = 1;
                }
                break;
             case actions.msg.TARGET_PAIRED:
                if (this.devices.every(device => device.state === Device.states.PAIRED)) {
-                  await this.sleep(this.LONG_TIMER);
+                  await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.step = 2;
                }
                break;
             case actions.msg.TARGET_CALIBRATED:
                if (this.devices.every(device => device.state === Device.states.CALIBRATED)) {
-                  await this.sleep(this.LONG_TIMER);
+                  await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.$router.push({path: '/'});
                }
                break;

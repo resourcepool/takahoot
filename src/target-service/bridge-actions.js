@@ -1,4 +1,4 @@
-import msg from './ipc-actions.json';
+import {IN as BRIDGE_IN} from '@/common/bridge-actions.json';
 
 /**
  * Action creator dispatched when a serial connection should be open
@@ -6,44 +6,44 @@ import msg from './ipc-actions.json';
  */
 export function findAll(arduinoSignature) {
     return {
-        type: msg.FIND_ALL,
+        type: BRIDGE_IN.FIND_ALL,
         data: arduinoSignature
     };
 }
 
 export function init(deviceConfig, enabled) {
     return {
-        type: msg.INIT,
+        type: BRIDGE_IN.INIT,
         data: { deviceConfig, enabled }
     };
 }
 
 export function connect() {
     return {
-        type: msg.CONNECT
+        type: BRIDGE_IN.CONNECT
     };
 }
 
 export function startPairing() {
     return {
-        type: msg.START_PAIRING
+        type: BRIDGE_IN.START_PAIRING
     };
 }
 
 export function stopPairing() {
     return {
-        type: msg.STOP_PAIRING
+        type: BRIDGE_IN.STOP_PAIRING
     };
 }
 
 export function calibrating() {
     return {
-        type: msg.CALIBRATING
+        type: BRIDGE_IN.CALIBRATING
     };
 }
 
 export function gameReset() {
     return {
-        type: msg.GAME_RESET
+        type: BRIDGE_IN.GAME_RESET
     };
 }

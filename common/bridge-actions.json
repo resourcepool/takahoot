@@ -1,0 +1,16 @@
+{
+    "IN": {
+        "FIND_ALL": "FIND_ALL",
+        "INIT": "INIT",
+        "CONNECT": "CONNECT",
+        "START_PAIRING": "START_PAIRING",
+        "STOP_PAIRING": "STOP_PAIRING",
+        "CALIBRATING": "CALIBRATING",
+        "GAME_RESET": "GAME_RESET"
+    },
+    "OUT": {
+        "INIT_SUCCESS": "INIT_SUCCESS",
+        "CONNECT_SUCCESS": "CONNECT_SUCCESS",
+        "CALIBRATING_SUCCESS": "CALIBRATING_SUCCESS"
+    }
+}

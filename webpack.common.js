@@ -48,10 +48,10 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({template: 'src/index.html'}),
     new VueLoaderPlugin(),
-    new CopyWebpackPlugin([
-      { from: SRC_DIR + '/common/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
-      { from: SRC_DIR + '/target-service/ipc-actions.json', to: BRIDGE_DIR + '/ipc-actions.json' },
-    ]),
+    // new CopyWebpackPlugin([
+    //   { from: SRC_DIR + '/common/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
+    //   { from: SRC_DIR + '/target-service/bridge-actions.json', to: BRIDGE_DIR + '/bridge-actions.json' },
+    // ]),
   ],
   resolve: {
     extensions: ['.js', '.vue', '.scss', '.json'],
@@ -59,7 +59,8 @@ module.exports = {
       '@/app': path.resolve(__dirname, 'src/app/'),
       '@/target-service': path.resolve(__dirname, 'src/target-service/'),
       '@/assets': path.resolve(__dirname, 'src/assets/'),
-      '@/common': path.resolve(__dirname, 'src/common/'),
+      '@/common': path.resolve(__dirname, 'common/'),
+      '@/shared': path.resolve(__dirname, 'src/shared/'),
       vue: 'vue/dist/vue.js'
     }
   }

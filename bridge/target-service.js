@@ -1,6 +1,6 @@
-const logger = require('./Logger.js').child({service: 'Serial-Port-Utils'});
-const actions = require('./ipc-actions.js');
-const IPC = require('./ipc-actions.json');
+const logger = require('../common/Logger.js').child({service: 'Serial-Port-Utils'});
+const actions = require('./bridge-actions.js');
+const BRIDGE_IN = require('../common/bridge-actions.json').IN;
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const {promisify} = require('util');
@@ -23,14 +23,14 @@ const find = async ({manufacturer = [], vendorId = [], productId = []}) => {
 };
 
 /**
- * IPC messages go here
+ * bridge messages go here
  */
 process.on('message', async ({type, data}) => {
   if (!type) {
     return;
   }
   switch (type) {
-    case IPC.FIND_ALL:
+    case BRIDGE_IN.FIND_ALL:
       logger.debug("Find port called");
       process.send(await find(data));
       break;

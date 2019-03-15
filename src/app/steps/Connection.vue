@@ -18,7 +18,7 @@
 
 <script>
   import Vue from 'vue';
-  import Device from '@/common/entities/device';
+  import Device from '@/shared/entities/device';
   import {Component, Prop, Watch} from 'vue-property-decorator';
   import {connectTargets, initTargets} from '@/target-service/service';
 

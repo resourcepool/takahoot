@@ -17,6 +17,7 @@ GameController::GameController(Board* board) {
 void GameController::init() {
   this->boardStateHandler->init();
   this->reset();
+  this->serialService->sendDeviceInitializedMessage();
 }
 
 void GameController::tick() {

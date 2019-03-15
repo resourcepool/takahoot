@@ -1,28 +1,17 @@
-const logger = require('./Logger.js').child({service: 'Target-Handler'});
-const actions = require('./ipc-actions.js');
-const IPC = require('./ipc-actions.json');
+const logger = require('../common/Logger.js').child({service: 'Target-Handler'});
+const conf = require('../common/conf.json');
+
+const ARDUINO_IN = require('./arduino-actions.js').IN;
+const ARDUINO_OUT = require('./arduino-actions.js').OUT;
+
+const bridgeOut = require('./bridge-actions.js');
+const BRIDGE_IN = require('../common/bridge-actions.json').IN;
+
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
 const Delimiter = require('@serialport/parser-delimiter');
 
 const BAUDRATE = 115200; //same on arduino
-
-const OUT = {
-  CONNECTING: Buffer.from([0x30]), // <=> 0011 0000
-  START_PAIRING: Buffer.from([0x31]), // <=> 0011 0001
-  FINISH_PAIRING: Buffer.from([0x32]), // <=> 0011 0002
-  START_CALIBRATION: Buffer.from([0x33]), // <=> 0011 0003
-  GAME_RESET: Buffer.from([0x34]) // <=> 0011 0004
-};
-
-const IN = {
-  CONNECTED: Buffer.from([0xC0]), // <=> 1100 0000
-  CALIBRATION_STARTED: Buffer.from([0xC1]), // <=> 1100 0001
-  CALIBRATION_FINISHED: Buffer.from([0xC2]), // <=> 1100 0002
-  HIT: Buffer.from([0xC3]), // <=> 1100 0003
-  TOLERANCE_CHANGED: Buffer.from([0xC4]), // <=> 1100 0004
-  END_MESSAGE: Buffer.from([0x0D, 0x0A])
-};
 
 let port;
 
@@ -37,19 +26,23 @@ const init = ({deviceConfig, enabled}) => {
   /**
    * TARGET messages go here
    */
-  const parser = port.pipe(new Delimiter({ delimiter: IN.END_MESSAGE }));
+  const parser = port.pipe(new Delimiter({ delimiter: ARDUINO_IN.END_MESSAGE }));
   port.on('open', () => {
     parser.on('data', (data) => {
       const message = receiveMessage(data);
       if (message) {
         switch (message) {
-          case IN.CONNECTED:
-            logger.debug("Connected");
-            process.send(actions.connectSuccess());
+          case ARDUINO_IN.INITIALIZED:
+            logger.debug('Initialized');
+            process.send(bridgeOut.initSuccess({deviceConfig}));
             break;
-          case IN.CALIBRATION_FINISHED:
-            logger.debug("Calibrated");
-            process.send(actions.calibratingSuccess());
+          case ARDUINO_IN.CONNECTED:
+            logger.debug('Connected');
+            process.send(bridgeOut.connectSuccess());
+            break;
+          case ARDUINO_IN.CALIBRATION_FINISHED:
+            logger.debug('Calibrated');
+            process.send(bridgeOut.calibratingSuccess());
             break;
         }
       }
@@ -59,52 +52,52 @@ const init = ({deviceConfig, enabled}) => {
 
 const receiveMessage = data => {
   let found = null;
-  Object.keys(IN).forEach(key => {
-    if (data.includes(IN[key])) {
-      found = IN[key];
+  Object.keys(ARDUINO_IN).forEach(key => {
+    if (data.includes(ARDUINO_IN[key])) {
+      found = ARDUINO_IN[key];
     }
   });
   console.log(data, found);
   return found;
 };
 
+const sendMessage = action => {
+  setTimeout(() => {
+    port.write(action);
+  }, conf.BRIDGE_DELAY);
+};
+
 /**
- * IPC messages go here
+ * bridge messages go here
  */
 process.on('message', ({type, data}) => {
   if (!type) {
     return;
   }
-  if (port) {
-    // console.log(port.is)
-  }
   switch (type) {
-    case IPC.INIT:
-      logger.debug("Open Serial Connection");
+    case BRIDGE_IN.INIT:
+      logger.debug('Open Serial Connection');
       init(data);
-      logger.debug("Serial Connection opened");
-      process.send(actions.initSuccess(data));
       break;
-    case IPC.CONNECT:
-      logger.debug("Connect to device");
-      port.write(OUT.CONNECTING);
-      process.send(actions.connectSuccess()); //HACK, we receive a connection from arduino normally
+    case BRIDGE_IN.CONNECT:
+      logger.debug('Connect to device');
+      sendMessage(ARDUINO_OUT.CONNECTING);
       break;
-    case IPC.START_PAIRING:
-      logger.debug("Start pairing");
-      port.write(OUT.START_PAIRING);
+    case BRIDGE_IN.START_PAIRING:
+      logger.debug('Start pairing');
+      sendMessage(ARDUINO_OUT.START_PAIRING);
       break;
-    case IPC.STOP_PAIRING:
-      logger.debug("Stop pairing");
-      port.write(OUT.FINISH_PAIRING);
+    case BRIDGE_IN.STOP_PAIRING:
+      logger.debug('Stop pairing');
+      sendMessage(ARDUINO_OUT.FINISH_PAIRING);
       break;
-    case IPC.CALIBRATING:
-      logger.debug("Start calibration");
-      port.write(OUT.START_CALIBRATION);
+    case BRIDGE_IN.CALIBRATING:
+      logger.debug('Start calibration');
+      sendMessage(ARDUINO_OUT.START_CALIBRATION);
       break;
-    case IPC.GAME_RESET:
-      logger.debug("Reset the game");
-      port.write(OUT.GAME_RESET);
+    case BRIDGE_IN.GAME_RESET:
+      logger.debug('Reset the game');
+      sendMessage(ARDUINO_OUT.GAME_RESET);
       break;
   }
 });

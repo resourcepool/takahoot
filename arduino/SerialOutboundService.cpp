@@ -7,6 +7,11 @@ SerialOutboundService::SerialOutboundService(Board* board) {
   this->board = board;
 }
 
+void SerialOutboundService::sendDeviceInitializedMessage() {
+  Serial.write(OUT_DEVICE_INITIALIZED);
+  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+}
+
 void SerialOutboundService::sendDeviceConnectedMessage() {
   Serial.write(OUT_DEVICE_CONNECTED);
   Serial.write(END_MESSAGE, END_MESSAGE_SIZE);

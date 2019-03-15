@@ -1,8 +1,8 @@
 import Logger from '@/common/Logger';
-import {store} from '@/common/store';
+import {store} from '@/shared/store';
 import * as actions from './actions';
-import * as ipcActions from './ipc-actions';
-import IPC from './ipc-actions.json';
+import * as bridgeActions from './bridge-actions';
+import {OUT as BRIDGE_OUT} from '@/common/bridge-actions.json';
 import {fork} from 'child_process';
 
 const logger = Logger.child({service: 'Target-Service'});
@@ -46,13 +46,13 @@ export function initTargets() {
       target.process.on('message', ({type, data}) => {
         if (type) {
           switch(type) {
-            case IPC.INIT_SUCCESS:
+            case BRIDGE_OUT.INIT_SUCCESS:
               store.dispatch(actions.initialized(data.deviceConfig, index));
               break;
-            case IPC.CONNECT_SUCCESS:
+            case BRIDGE_OUT.CONNECT_SUCCESS:
               store.dispatch(actions.connected(index));
               break;
-            case IPC.CALIBRATING_SUCCESS:
+            case BRIDGE_OUT.CALIBRATING_SUCCESS:
               store.dispatch(actions.calibrated(index));
               break;
           }
@@ -61,32 +61,32 @@ export function initTargets() {
     );
 
     // Init targets
-    targets.forEach(target => target.process.send(ipcActions.init(target.arduinoDevice, enabled)));
+    targets.forEach(target => target.process.send(bridgeActions.init(target.arduinoDevice, enabled)));
 
     // Kill the service
     targetService.kill('SIGINT');
   });
 
-  targetService.send(ipcActions.findAll(arduinoSignature));
+  targetService.send(bridgeActions.findAll(arduinoSignature));
 }
 
 export function connectTargets() {
-  targets.forEach(target => target.process.send(ipcActions.connect()))
+  targets.forEach(target => target.process.send(bridgeActions.connect()))
 }
 
 export function startPairingTarget(device) {
-  targets[device.index].process.send(ipcActions.startPairing());
+  targets[device.index].process.send(bridgeActions.startPairing());
 }
 
 export function stopPairingTarget(device, position) {
-  targets[device.index].process.send(ipcActions.stopPairing());
+  targets[device.index].process.send(bridgeActions.stopPairing());
   store.dispatch(actions.paired(device.index, position));
 }
 
 export function startCalibratingTargets() {
-  targets.forEach(target => target.process.send(ipcActions.calibrating()));
+  targets.forEach(target => target.process.send(bridgeActions.calibrating()));
 }
 
 export function gameReset() {
-  targets.forEach(target => target.process.send(ipcActions.gameReset()));
+  targets.forEach(target => target.process.send(bridgeActions.gameReset()));
 }

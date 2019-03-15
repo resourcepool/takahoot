@@ -20,7 +20,7 @@
 
 <script>
   import Vue from 'vue';
-  import Device from '@/common/entities/device';
+  import Device from '@/shared/entities/device';
   import {Component, Prop} from 'vue-property-decorator';
   import {startPairingTarget, stopPairingTarget} from '@/target-service/service';
 
