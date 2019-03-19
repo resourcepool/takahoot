@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/app/Home';
-import Play from '@/app/Play';
 import Start from '@/app/Start';
+import Play from '@/app/Play';
+import End from '@/app/End';
 import Configuration from '@/app/Configuration';
 import {store} from "@/shared/store";
 import '@/assets/style';
@@ -23,7 +24,8 @@ const routes = {
     {path: '/', component: Home},
     {path: '/configuration', component: Configuration},
     {path: '/start', component: Start},
-    {path: '/play', component: Play}
+    {path: '/play', component: Play},
+    {path: '/end', component: End}
   ],
   path: '*', redirect: '/'
 };

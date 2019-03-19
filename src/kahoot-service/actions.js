@@ -2,6 +2,7 @@ export const msg = {
     "KAHOOT_INIT": "KAHOOT_INIT",
     "KAHOOT_STARTED": "KAHOOT_STARTED",
     "KAHOOT_JOINED": "KAHOOT_JOINED",
+    "KAHOOT_QUIZ_END": "KAHOOT_QUIZ_END",
     "KAHOOT_CLEAN_SESSIONS": "KAHOOT_CLEAN_SESSIONS",
 };
 
@@ -25,6 +26,12 @@ export function joined(kahootSession, index) {
     return {
         type: msg.KAHOOT_JOINED,
         data: { kahootSession, index }
+    };
+}
+
+export function quizEnd() {
+    return {
+        type: msg.KAHOOT_QUIZ_END
     };
 }
 

@@ -55,13 +55,22 @@ export default function reducer(state, action) {
             state.devices[action.data.index].player.kahootSession = action.data.kahootSession;
             state.lastAction = kahoot.KAHOOT_JOINED;
             return state;
+        case kahoot.KAHOOT_QUIZ_END:
+            state.lastAction = kahoot.KAHOOT_QUIZ_END;
+            return state;
         case kahoot.KAHOOT_CLEAN_SESSIONS:
             state.devices.forEach((device) => {
                 let position = device.player.targetPosition;
-                device.player.kahootSession.leave().then(() => {
+                if (typeof device.player.kahootSession.leave === 'function') {
+                    device.player.kahootSession.leave().then(() => {
+                        device.player = new Player({name: `Player ${position}`, position});
+                    });
+                } else {
                     device.player = new Player({name: `Player ${position}`, position});
-                });
+                }
             });
+            state.lastAction = kahoot.KAHOOT_CLEAN_SESSIONS;
+            return state;
         default:
             return state;
     }

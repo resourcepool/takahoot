@@ -1,3 +1,5 @@
+const {quizEnd} = require("./actions");
+
 const Kahoot = require("./kahoot.js/index.js");
 
 //dummy "hacks" kahoot client script challenge
@@ -7,7 +9,8 @@ global.angular.isString = () => false;
 global.angular.isArray = () => false;
 global.angular.isDate = () => false;
 
-import {gameReset} from '@/target-service/service';
+const {store} = require('@/shared/store');
+const {gameReset} = require( '@/target-service/service');
 
 module.exports = class KahootSession {
     joinPromise;
@@ -66,7 +69,7 @@ module.exports = class KahootSession {
     }
 
     onQuizEnd() {
-        console.log(`[player ${this.name}] Question started`);
-        this.kahoot.leave();
+        console.log(`[player ${this.name}] Quiz end`);
+        store.dispatch(quizEnd());
     }
 };
