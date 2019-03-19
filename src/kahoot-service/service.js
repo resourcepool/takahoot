@@ -15,11 +15,8 @@ export function play() {
             store.dispatch(actions.joined(kahootSession, device.index))
         })
     });
+}
 
-    // let kahootGame = new KahootGame(this.gamePin, this.players);
-    // kahootGame.kahootSessionsPromise.then(() => {
-    //     store.dispatch(actions.started(kahootGame));
-    //     gameReset();
-    //     console.info('All players joined, ready to start the game.');
-    // });
+export function clean() {
+    store.dispatch(actions.clean())
 }

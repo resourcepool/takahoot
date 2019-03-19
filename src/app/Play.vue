@@ -21,7 +21,7 @@
   import {cloneDeep} from 'lodash';
   import * as targetActions from '@/target-service/actions.js'
   import * as kahootActions from '@/kahoot-service/actions.js'
-  import {play} from '@/kahoot-service/service';
+  import {play, clean} from '@/kahoot-service/service';
   import {gameReset} from '@/target-service/service';
 
   @Component
@@ -38,6 +38,7 @@
     }
 
     beforeDestroy() {
+      clean();
       this.unsubscribe();
     }
 

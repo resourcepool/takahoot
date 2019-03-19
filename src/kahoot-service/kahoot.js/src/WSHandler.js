@@ -155,7 +155,7 @@ class WSHandler extends EventEmitter {
 				}),
 				gameid: me.gameID,
 				host: consts.ENDPOINT_URI,
-				id: 6,
+				id: 45,
 				type: "message"
 			},
 			id: me.msgID + ""

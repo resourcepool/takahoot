@@ -9,7 +9,7 @@ import {msg as kahoot} from '@/kahoot-service/actions';
  * @return {Object} The update state if it changed
  */
 export default function reducer(state, action) {
-    let index;
+    let index, targetPosition;
     switch (action.type) {
         case target.TARGET_INITIALIZED:
             index = action.data.index;
@@ -27,7 +27,7 @@ export default function reducer(state, action) {
             return state;
         case target.TARGET_PAIRED:
             index = action.data.targetPosition;
-            const targetPosition = action.data.index;
+            targetPosition = action.data.index;
             state.devices[index].state = Device.states.PAIRED;
             state.devices[index].player = new Player({name: `Player ${targetPosition}`, targetPosition});
             state.lastAction = target.TARGET_PAIRED;
@@ -55,6 +55,13 @@ export default function reducer(state, action) {
             state.devices[action.data.index].player.kahootSession = action.data.kahootSession;
             state.lastAction = kahoot.KAHOOT_JOINED;
             return state;
+        case kahoot.KAHOOT_CLEAN_SESSIONS:
+            targetPosition = action.data.targetPosition;
+            state.devices.forEach((device) => {
+                device.player.kahootSession.leave().then(() => {
+                    device.player = new Player({name: `Player ${targetPosition}`, targetPosition});
+                });
+            });
         default:
             return state;
     }

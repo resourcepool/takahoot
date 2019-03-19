@@ -31,7 +31,9 @@ module.exports = class KahootSession {
 
         this.kahoot.on("questionEnd", e => console.debug("questionEnd"));
         this.kahoot.on("finishText", e => console.debug("finishText"));
-        this.kahoot.on("quizEnd", () => console.debug("quizEnd"));
+        this.kahoot.on("quizEnd", () => {
+            this.onQuizEnd();
+        });
     }
 
     onQuizStart(quiz) {
@@ -58,5 +60,10 @@ module.exports = class KahootSession {
 
     onQuestionSubmit(event) {
         console.log(`[player ${this.name}] Submitted the answer, Kahoot says, ${event.message}`);
+    }
+
+    onQuizEnd() {
+        console.log(`[player ${this.name}] Question started`);
+        this.kahoot.leave();
     }
 };
