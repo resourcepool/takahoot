@@ -10,7 +10,7 @@ export function init(gamePin, devices) {
 export function play() {
     const state = store.getState();
     state.devices.forEach(device => {
-        const kahootSession = new KahootSession(state.gamePin, device.player.name);
+        const kahootSession = new KahootSession(state.gamePin, device.player.name, device.player.targetPosition);
         kahootSession.joinPromise.then(() => {
             store.dispatch(actions.joined(kahootSession, device.index))
         })

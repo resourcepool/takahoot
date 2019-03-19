@@ -56,10 +56,10 @@ export default function reducer(state, action) {
             state.lastAction = kahoot.KAHOOT_JOINED;
             return state;
         case kahoot.KAHOOT_CLEAN_SESSIONS:
-            targetPosition = action.data.targetPosition;
             state.devices.forEach((device) => {
+                let position = device.player.targetPosition;
                 device.player.kahootSession.leave().then(() => {
-                    device.player = new Player({name: `Player ${targetPosition}`, targetPosition});
+                    device.player = new Player({name: `Player ${position}`, position});
                 });
             });
         default:

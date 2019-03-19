@@ -7,17 +7,20 @@ global.angular.isString = () => false;
 global.angular.isArray = () => false;
 global.angular.isDate = () => false;
 
+import {gameReset} from '@/target-service/service';
+
 module.exports = class KahootSession {
     joinPromise;
 
-    constructor(id, name) {
-        console.log(`[session ${id} - player ${name}] Creating KahootSession`);
+    constructor(id, name, targetPosition) {
+        console.log(`[session ${id} - player ${name} (index: ${targetPosition})] Creating KahootSession`);
         if (!id || !name) {
             throw new Error('Kahoot session id and player name are required !');
         }
 
         this.id = id;
         this.name = name;
+        this.targetPosition = targetPosition;
         this.question = null;
         this.kahoot = new Kahoot();
         this.joinPromise = this.kahoot.join(id, name);
@@ -47,7 +50,7 @@ module.exports = class KahootSession {
     onQuestionStart(question) {
         console.log(`[player ${this.name}] Question started`);
         this.question = question;
-        //TODO: Should RESET target
+        gameReset(this.targetPosition);
     }
 
     answerQuestion(answer) {
