@@ -47,7 +47,7 @@ export default function reducer(state, action) {
         case kahoot.KAHOOT_INIT:
             state.gamePin = action.data.gamePin;
             state.devices.forEach((device, index) => {
-                device.player.name = state.devices[index].player.name
+                device.player.name = action.data.devices[index].player.name;
             });
             state.lastAction = kahoot.KAHOOT_INIT;
             return state;
