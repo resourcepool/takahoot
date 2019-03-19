@@ -135,7 +135,8 @@ class WSHandler extends EventEmitter {
 	getSubmitPacket(questionChoice) {
 		var me = this;
 		me.msgID++;
-		return [{
+		//Use real userAgent to avoid getting ignored by kahoot API
+		let mess = {
 			channel: '/service/controller',
 			clientId: me.clientID,
 			data: {
@@ -144,7 +145,7 @@ class WSHandler extends EventEmitter {
 					meta: {
 						lag: 30,
 						device: {
-							userAgent: "kahoot.js",
+							userAgent: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36",
 							screen: {
 								width: 1920,
 								height: 1050
@@ -158,7 +159,8 @@ class WSHandler extends EventEmitter {
 				type: "message"
 			},
 			id: me.msgID + ""
-		}]
+		};
+		return [mess];
 	}
 	send(msg) {
 		if (this.connected) {
