@@ -7,22 +7,12 @@
                     <img src="@/assets/images/target.png" alt="target"/>
                     <p>{{device.player.name}}</p>
                     <p>{{device.player.kahootSession ? 'JOINED' : '...'}}</p>
+                    <pre>{{device.player.lastHit}} - {{device.player.targetPosition}}</pre>
                 </div>
             </div>
         </div>
         <a-button type="primary" class="button" size="large" block @click="reset">RESET</a-button>
     </div>
-
-    <!--<div class="centered-container">-->
-        <!--<div class="content">-->
-            <!--<a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/')"></a-button>-->
-            <!--<h2>Join your Kahoot session with game pin:</h2>-->
-            <!--<p>You can follow the game from the console.</p>-->
-            <!--<a-button type="primary" class="button" size="large" block @click="reset">-->
-                <!--RESET-->
-            <!--</a-button>-->
-        <!--</div>-->
-    <!--</div>-->
 </template>
 
 <script>
@@ -67,9 +57,7 @@
         case targetActions.msg.TARGET_HIT:
           const player = newState.devices[newState.lastActionDeviceIndex].player;
           console.log('TARGET_HIT', player);
-          //TODO: hit should trigger answer for proper player
-          //TODO: store kahoot session in state player
-          // this.kahootGame.kahootSessions[newState.lastActionDeviceIndex].answerQuestion(player.lastHit);
+          setTimeout(() => player.kahootSession.question.answer(player.lastHit), 500);
           break;
       }
     }
