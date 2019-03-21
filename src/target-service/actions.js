@@ -3,6 +3,7 @@ export const msg = {
     "TARGET_CONNECTED": "TARGET_CONNECTED",
     "TARGET_PAIRED": "TARGET_PAIRED",
     "TARGET_CALIBRATED": "TARGET_CALIBRATED",
+    "TARGET_TESTED": "TARGET_TESTED",
     "TARGET_GAME_RESET": "TARGET_GAME_RESET",
     "TARGET_HIT": "TARGET_HIT",
 };
@@ -32,6 +33,12 @@ export function calibrated(index) {
     return {
         type: msg.TARGET_CALIBRATED,
         data: { index }
+    };
+}
+
+export function tested() {
+    return {
+        type: msg.TARGET_TESTED
     };
 }
 

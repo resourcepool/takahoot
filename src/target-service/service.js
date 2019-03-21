@@ -97,3 +97,7 @@ export function gameReset(index = -1) {
     targets[index].process.send(bridgeActions.gameReset());
   }
 }
+
+export function finishTest() {
+  store.dispatch(actions.tested());
+}

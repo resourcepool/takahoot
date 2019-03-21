@@ -37,6 +37,9 @@ export default function reducer(state, action) {
             state.devices[index].state = Device.states.CALIBRATED;
             state.lastAction = target.TARGET_CALIBRATED;
             return state;
+        case target.TARGET_TESTED:
+            state.lastAction = target.TARGET_TESTED;
+            return state;
         case target.TARGET_HIT:
             index = action.data.index;
             state.devices[index].state = Device.states.HIT;

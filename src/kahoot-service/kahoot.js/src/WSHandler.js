@@ -1,4 +1,5 @@
 const EventEmitter = require('events');
+const conf = require( '@/common/conf.json');
 // var WebSocket = require('ws'); using browser WS
 var consts = require('./consts.js');
 
@@ -135,7 +136,7 @@ class WSHandler extends EventEmitter {
 	getSubmitPacket(questionChoice) {
 		var me = this;
 		me.msgID++;
-		//Use real userAgent to avoid getting ignored by kahoot API
+		//Use a real userAgent to avoid getting ignored by kahoot API
 		let mess = {
 			channel: '/service/controller',
 			clientId: me.clientID,
@@ -155,7 +156,7 @@ class WSHandler extends EventEmitter {
 				}),
 				gameid: me.gameID,
 				host: consts.ENDPOINT_URI,
-				id: 45,
+				id: conf.KAHOOT_MESSAGE_ID,
 				type: "message"
 			},
 			id: me.msgID + ""

@@ -5,6 +5,7 @@
          <Connection v-if="step === 0" :devices="devices" :initialized="initialized"></Connection>
          <Pairing v-if="step === 1" :devices="devices"></Pairing>
          <Calibration v-if="step === 2" :devices="devices"></Calibration>
+         <Test v-if="step === 3" :devices="devices"></Test>
       </div>
 
       <div class="steps-action">
@@ -22,6 +23,7 @@
    import Connection from './steps/Connection';
    import Pairing from './steps/Pairing';
    import Calibration from './steps/Calibration';
+   import Test from './steps/Test';
    import conf from '@/common/conf.json';
 
    import * as actions from '@/target-service/actions.js';
@@ -83,8 +85,12 @@
             case actions.msg.TARGET_CALIBRATED:
                if (this.devices.every(device => device.state === Device.states.CALIBRATED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
-                  this.$router.push({path: '/'});
+                  this.step = 3;
                }
+               break;
+            case actions.msg.TARGET_TESTED:
+               await this.sleep(conf.CONFIGURATION_STEP_DELAY);
+               this.$router.push({path: '/'});
                break;
          }
       }
