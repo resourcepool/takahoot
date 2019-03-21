@@ -8,8 +8,8 @@
     "build": "webpack --config webpack.build.js",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.js",
     "postinstall": "(cd ./bridge && npm install)",
-    "package": "webpack --config webpack.build.js",
-    "postpackage": "electron-packager ./dist --out=./builds",
+    "prepackage": "webpack --config webpack.build.js",
+    "package": "electron-packager ./dist --out=./builds --all",
     "prod": "webpack --config webpack.build.js && electron --noDevServer ."
   },
   "keywords": [],
