@@ -1,9 +1,7 @@
-const logger = require('../common/Logger.js').child({service: 'Serial-Port-Utils'});
-const actions = require('./bridge-actions.js');
+const logger = require('../common/Logger.js').child({service: 'Target-Service'});
 const BRIDGE_IN = require('../common/bridge-actions.json').IN;
 const SerialPort = require('@serialport/stream');
 SerialPort.Binding = require('@serialport/bindings');
-const {promisify} = require('util');
 
 /**
  * Find ports by a signature
@@ -13,7 +11,7 @@ const {promisify} = require('util');
  * @returns {Promise<*>}
  */
 const find = async ({manufacturer = [], vendorId = [], productId = []}) => {
-  const ports = await promisify(SerialPort.list)();
+  const ports = await SerialPort.list();
   if (!ports || ports.length === 0) {
     throw new Error('No ports currently connected');
   }

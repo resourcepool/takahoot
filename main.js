@@ -56,7 +56,7 @@ function createWindow() {
     height: 600,
     show: false,
     title: 'Takahoot',
-    width: 1000,
+    width: 800,
     webPreferences: {
       nodeIntegrationInWorker: true
     }
@@ -111,7 +111,7 @@ function createWindow() {
   } else {
     indexPath = url.format({
       protocol: 'file:',
-      pathname: path.join(__dirname, 'dist', 'index.html'),
+      pathname: path.join(__dirname, 'index.html'),
       slashes: true
     })
   }

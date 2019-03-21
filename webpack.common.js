@@ -4,12 +4,10 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Config directories
-const SRC_DIR = path.resolve(__dirname, 'src');
-const BRIDGE_DIR = path.resolve(__dirname, 'bridge');
 
 module.exports = {
   watch: false,
-  entry: SRC_DIR + '/index.js',
+  entry: './src/index.js',
   output: {
     filename: 'bundle.js'
   },
@@ -25,8 +23,6 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        // this will apply to both plain `.scss` files
-        // AND `<style lang="scss">` blocks in `.vue` files
         test: /\.(scss|css)$/,
         use: [
           'vue-style-loader',
@@ -46,12 +42,14 @@ module.exports = {
   },
   target: 'electron-renderer',
   plugins: [
-    new HtmlWebpackPlugin({template: 'src/index.html'}),
+    new HtmlWebpackPlugin({template: './src/index.html'}),
     new VueLoaderPlugin(),
-    // new CopyWebpackPlugin([
-    //   { from: SRC_DIR + '/common/Logger.js', to: BRIDGE_DIR + '/Logger.js' },
-    //   { from: SRC_DIR + '/target-service/bridge-actions.json', to: BRIDGE_DIR + '/bridge-actions.json' },
-    // ]),
+    new CopyWebpackPlugin([
+      { from: './package.json', to: '.' },
+      { from: './main.js', to: '.' },
+      { from: './bridge', to: './bridge' },
+      { from: './common', to: './common' }
+    ]),
   ],
   resolve: {
     extensions: ['.js', '.vue', '.scss', '.json'],
