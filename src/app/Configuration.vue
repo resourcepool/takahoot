@@ -31,7 +31,7 @@
    import Device from '@/shared/entities/device';
 
    @Component({
-      components: { Connection, Pairing, Calibration}
+      components: { Connection, Pairing, Calibration, Test }
    })
    export default class Configuration extends Vue {
 
@@ -47,6 +47,9 @@
       }, {
          title: 'Calibration',
          content: Calibration
+      }, {
+         title: 'Test',
+         content: Test
       }];
 
       sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
