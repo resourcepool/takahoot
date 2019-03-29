@@ -3,7 +3,12 @@
         <h1>Target test</h1>
         <div class="targets">
             <div v-for="device in devices">
-                <pre>{{device.player.lastHit}} - {{device.player.targetPosition}}</pre>
+                <pre>{{device.player.targetPosition}}</pre>
+                <img v-if="device.player.lastHit === -1" src="@/assets/images/target-to-pairing.png" alt="target"/>
+                <img v-if="device.player.lastHit === 0" src="@/assets/images/target-hit-red.png" alt="target red"/>
+                <img v-if="device.player.lastHit === 1" src="@/assets/images/target-hit-blue.png" alt="target blue"/>
+                <img v-if="device.player.lastHit === 2" src="@/assets/images/target-hit-yellow.png" alt="target yellow"/>
+                <img v-if="device.player.lastHit === 3" src="@/assets/images/target-hit-green.png" alt="target green"/>
             </div>
         </div>
         <a-button type="primary" class="button" size="large" block v-on:click="resetAll">RESET ALL</a-button>
