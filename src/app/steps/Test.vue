@@ -2,8 +2,7 @@
     <div class="step-container">
         <h1>Target test</h1>
         <div class="targets">
-            <div v-for="device in devices">
-                <pre>{{device.player.targetPosition}}</pre>
+            <div v-for="device in orderedDevices">
                 <img v-if="device.player.lastHit === -1" src="@/assets/images/target-to-pairing.png" alt="target"/>
                 <img v-if="device.player.lastHit === 0" src="@/assets/images/target-hit-red.png" alt="target red"/>
                 <img v-if="device.player.lastHit === 1" src="@/assets/images/target-hit-blue.png" alt="target blue"/>
@@ -19,17 +18,18 @@
 
 <script>
     import Vue from 'vue';
-    import {cloneDeep} from 'lodash';
     import Device from '@/shared/entities/device';
-    import {Component, Prop} from 'vue-property-decorator';
+    import {Component, Prop, Watch} from 'vue-property-decorator';
     import * as targetActions from '@/target-service/actions.js'
     import {finishTest} from "@/target-service/service";
     import {gameReset} from '@/target-service/service';
+    import {orderBy} from 'lodash';
 
     @Component
     export default class Test extends Vue {
 
         @Prop(Array) devices;
+        orderedDevices = [];
         states = Device.states;
 
         finishTest() {
@@ -46,6 +46,15 @@
 
         beforeDestroy() {
             this.unsubscribe();
+        }
+
+        created() {
+            this.orderedDevices = orderBy(this.devices, 'player.targetPosition');
+        }
+
+        @Watch('devices')
+        onDevicesChange(devices) {
+            this.orderedDevices = orderBy(devices, 'player.targetPosition');
         }
 
         async storeChanged() {

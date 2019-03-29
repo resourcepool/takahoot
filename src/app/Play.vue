@@ -17,52 +17,49 @@
 
 <script>
     import Vue from 'vue';
-    import {Component} from 'vue-property-decorator';
-    import {cloneDeep} from 'lodash';
+    import {Component, Prop} from 'vue-property-decorator';
     import * as targetActions from '@/target-service/actions.js'
     import * as kahootActions from '@/kahoot-service/actions.js'
     import {clean, play} from '@/kahoot-service/service';
     import {gameReset} from '@/target-service/service';
 
     @Component
-  export default class Play extends Vue {
+    export default class Play extends Vue {
 
-    devices = [];
+        @Prop(Array) devices;
 
-    reset() {
-      gameReset();
-    }
+        beforeCreate() {
+            this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
+        }
 
-    beforeCreate() {
-      this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
-    }
+        beforeDestroy() {
+            this.unsubscribe();
+        }
 
-    beforeDestroy() {
-      this.unsubscribe();
-    }
+        reset() {
+          gameReset();
+        }
 
-    created() {
-      this.devices = cloneDeep(this.$store.getState().devices);
-      play();
-    }
+        created() {
+          play();
+        }
 
-    async storeChanged() {
-      const newState = this.$store.getState();
-      if (!newState || !newState.lastAction) return;
-      this.devices = cloneDeep(this.$store.getState().devices);
-      switch (newState.lastAction) {
-        case kahootActions.msg.KAHOOT_JOINED:
-          break;
-        case kahootActions.msg.KAHOOT_QUIZ_END:
-          this.$router.push({path: '/end'});
-          break;
-        case targetActions.msg.TARGET_HIT:
-          const player = newState.devices[newState.lastActionDeviceIndex].player;
-          console.log('TARGET_HIT', player);
-          setTimeout(() => player.kahootSession.question.answer(player.lastHit), 500);
-          break;
-      }
-    }
+        async storeChanged() {
+          const newState = this.$store.getState();
+          if (!newState || !newState.lastAction) return;
+          switch (newState.lastAction) {
+            case kahootActions.msg.KAHOOT_JOINED:
+              break;
+            case kahootActions.msg.KAHOOT_QUIZ_END:
+              this.$router.push({path: '/end'});
+              break;
+            case targetActions.msg.TARGET_HIT:
+              const player = newState.devices[newState.lastActionDeviceIndex].player;
+              console.log('TARGET_HIT', player);
+              setTimeout(() => player.kahootSession.question.answer(player.lastHit), 500);
+              break;
+          }
+        }
   }
 </script>
 

@@ -19,7 +19,7 @@
     import {Component} from 'vue-property-decorator';
     import {init} from '@/kahoot-service/service';
     import * as actions from '@/kahoot-service/actions';
-    import {cloneDeep} from 'lodash';
+    import {cloneDeep, orderBy} from 'lodash';
 
     @Component
     export default class Pairing extends Vue {
@@ -36,13 +36,13 @@
         }
 
         created() {
-          this.devices = cloneDeep(this.$store.getState().devices);
+          this.devices = orderBy(cloneDeep(this.$store.getState().devices), 'player.targetPosition');
         }
 
         async storeChanged() {
             const newState = this.$store.getState();
             if (!newState || !newState.lastAction) return;
-            this.devices = cloneDeep(this.$store.getState().devices);
+            this.devices = orderBy(cloneDeep(this.$store.getState().devices), 'player.targetPosition');
             switch (newState.lastAction) {
                 case actions.msg.KAHOOT_INIT:
                     this.$router.push('/play');

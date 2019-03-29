@@ -66,10 +66,10 @@ export default function reducer(state, action) {
                 let position = device.player.targetPosition;
                 if (typeof device.player.kahootSession.leave === 'function') {
                     device.player.kahootSession.leave().then(() => {
-                        device.player = new Player({name: `Player ${position}`, position});
+                        device.player = new Player({name: `Player ${position}`, targetPosition: position});
                     });
                 } else {
-                    device.player = new Player({name: `Player ${position}`, position});
+                    device.player = new Player({name: `Player ${position}`, targetPosition: position});
                 }
             });
             state.lastAction = kahoot.KAHOOT_CLEAN_SESSIONS;
