@@ -3,11 +3,11 @@
         <h1>Target detection...</h1>
         <div class="targets">
             <div v-for="device in devices">
-                <div v-if="device.state !== states.CONNECTED">
+                <div v-if="device && device.state !== states.CONNECTED">
                     <a-spin size="large"/>
                     <p>connection...</p>
                 </div>
-                <div v-if="device.state === states.CONNECTED">
+                <div v-if="device && device.state === states.CONNECTED">
                     <a-icon style="font-size: 2.5em;color:#27ae60;" type="check"/>
                     <p>connected !</p>
                 </div>
@@ -50,7 +50,9 @@
 
         .targets {
             flex: 1;
-            display: flex;
+            display: grid;
+            grid-template-columns: auto auto;
+            grid-gap: 20px 20px;
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;

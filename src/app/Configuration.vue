@@ -68,25 +68,25 @@
          this.devices = cloneDeep(this.$store.getState().devices);
          switch (newState.lastAction) {
             case actions.msg.TARGET_INITIALIZED:
-               if (this.devices.every(device => device.state === Device.states.INITIALIZED)) {
+               if (this.devices.every(device => device && device.state === Device.states.INITIALIZED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.initialized = true;
                }
                break;
             case actions.msg.TARGET_CONNECTED:
-               if (this.devices.every(device => device.state === Device.states.CONNECTED)) {
+               if (this.devices.every(device => device && device.state === Device.states.CONNECTED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.step = 1;
                }
                break;
             case actions.msg.TARGET_PAIRED:
-               if (this.devices.every(device => device.state === Device.states.PAIRED)) {
+               if (this.devices.every(device => device && device.state === Device.states.PAIRED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.step = 2;
                }
                break;
             case actions.msg.TARGET_CALIBRATED:
-               if (this.devices.every(device => device.state === Device.states.CALIBRATED)) {
+               if (this.devices.every(device => device && device.state === Device.states.CALIBRATED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
                   this.step = 3;
                }

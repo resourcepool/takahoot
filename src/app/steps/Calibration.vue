@@ -42,7 +42,9 @@
 
         .targets {
             flex: 1;
-            display: flex;
+            display: grid;
+            grid-template-columns: auto auto;
+            grid-gap: 20px 20px;
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;

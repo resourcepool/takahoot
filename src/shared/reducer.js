@@ -26,8 +26,9 @@ export default function reducer(state, action) {
             state.lastAction = target.TARGET_CONNECTED;
             return state;
         case target.TARGET_PAIRED:
-            index = action.data.targetPosition;
-            targetPosition = action.data.index;
+            index = action.data.index;
+            targetPosition = action.data.targetPosition;
+            //TODO: Check pairing
             state.devices[index].state = Device.states.PAIRED;
             state.devices[index].player = new Player({name: `Player ${targetPosition}`, targetPosition});
             state.lastAction = target.TARGET_PAIRED;

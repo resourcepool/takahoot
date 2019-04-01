@@ -3,6 +3,7 @@
         <h1>Target test</h1>
         <div class="targets">
             <div v-for="device in orderedDevices">
+                <!--<pre>{{device}}</pre>-->
                 <img v-if="device.player.lastHit === -1" src="@/assets/images/target-to-pairing.png" alt="target"/>
                 <img v-if="device.player.lastHit === 0" src="@/assets/images/target-hit-red.png" alt="target red"/>
                 <img v-if="device.player.lastHit === 1" src="@/assets/images/target-hit-blue.png" alt="target blue"/>
@@ -79,7 +80,9 @@
 
         .targets {
             flex: 1;
-            display: flex;
+            display: grid;
+            grid-template-columns: auto auto;
+            grid-gap: 20px 20px;
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;
