@@ -6,8 +6,8 @@
 
 #define BTN_RED A0
 #define BTN_BLUE A1
-#define BTN_YELLOW A2
-#define BTN_GREEN A3
+#define BTN_GREEN A2
+#define BTN_YELLOW A3
 #define POT_THRESHOLD A4
 
 #define BTN_CALIBRATE 5
