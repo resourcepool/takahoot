@@ -1,7 +1,13 @@
 <template>
     <div class="centered-container">
-        <h1><a-button class="back" type="primary" shape="circle" icon="arrow-left" size="large" @click="$router.push('/start')"></a-button> Quiz end</h1>
-        <a-button type="primary" class="button" size="large" block @click="clean">CLEAN</a-button>
+        <h1>
+            <a-button class="back" type="primary" shape="circle"
+                      icon="arrow-left" size="large" @click="clean"
+                      :disabled="reCalibrating">
+            </a-button>
+            Quiz end
+        </h1>
+        <a-spin v-if="reCalibrating" size="large"/>
     </div>
 </template>
 
@@ -12,38 +18,52 @@
     import * as targetActions from '@/target-service/actions.js'
     import * as kahootActions from '@/kahoot-service/actions.js'
     import {clean} from '@/kahoot-service/service';
+    import {startCalibratingTargets} from '@/target-service/service';
+    import Device from '@/shared/entities/device';
+    import conf from '@/common/conf.json';
 
     @Component
-  export default class End extends Vue {
+    export default class End extends Vue {
 
-    devices = [];
+        devices = [];
+        reCalibrating = false;
 
-    beforeCreate() {
-      this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
-    }
+        beforeCreate() {
+          this.unsubscribe = this.$store.subscribe(() => this.storeChanged())
+        }
 
-    beforeDestroy() {
-      this.unsubscribe();
-    }
+        beforeDestroy() {
+          this.unsubscribe();
+        }
 
-    clean() {
-        clean();
-    }
+        clean() {
+            clean();
+        }
 
-    created() {
-      this.devices = cloneDeep(this.$store.getState().devices);
-    }
+        created() {
+          this.devices = cloneDeep(this.$store.getState().devices);
+        }
 
-    async storeChanged() {
-      const newState = this.$store.getState();
-      if (!newState || !newState.lastAction) return;
-      this.devices = cloneDeep(this.$store.getState().devices);
-      switch (newState.lastAction) {
-          case kahootActions.msg.KAHOOT_CLEAN_SESSIONS:
-              this.$router.push({path: '/start'});
-              break;
-      }
-    }
+        sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+        async storeChanged() {
+          const newState = this.$store.getState();
+          if (!newState || !newState.lastAction) return;
+          this.devices = cloneDeep(this.$store.getState().devices);
+          switch (newState.lastAction) {
+              case kahootActions.msg.KAHOOT_CLEAN_SESSIONS:
+                  this.reCalibrating = true;
+                  startCalibratingTargets();
+                  break;
+              case targetActions.msg.TARGET_CALIBRATED:
+                  if (this.devices.every(device => device && device.state === Device.states.CALIBRATED)) {
+                      this.reCalibrating = false;
+                      await this.sleep(conf.CONFIGURATION_STEP_DELAY);
+                      this.$router.push({path: '/start'});
+                  }
+                  break;
+          }
+        }
   }
 </script>
 

@@ -3,7 +3,6 @@
         <h1>Target test</h1>
         <div class="targets">
             <div v-for="device in orderedDevices">
-                <!--<pre>{{device}}</pre>-->
                 <img v-if="device.player.lastHit === -1" src="@/assets/images/target-to-pairing.png" alt="target"/>
                 <img v-if="device.player.lastHit === 0" src="@/assets/images/target-hit-red.png" alt="target red"/>
                 <img v-if="device.player.lastHit === 1" src="@/assets/images/target-hit-blue.png" alt="target blue"/>

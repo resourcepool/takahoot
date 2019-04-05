@@ -29,6 +29,7 @@
    import * as actions from '@/target-service/actions.js';
    import {cloneDeep} from 'lodash';
    import Device from '@/shared/entities/device';
+   import {gameReset} from '@/target-service/service';
 
    @Component({
       components: { Connection, Pairing, Calibration, Test }
@@ -88,6 +89,7 @@
             case actions.msg.TARGET_CALIBRATED:
                if (this.devices.every(device => device && device.state === Device.states.CALIBRATED)) {
                   await this.sleep(conf.CONFIGURATION_STEP_DELAY);
+                  gameReset();
                   this.step = 3;
                }
                break;

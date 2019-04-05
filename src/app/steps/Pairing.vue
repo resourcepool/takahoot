@@ -4,14 +4,12 @@
         <div class="targets">
             <div v-for="device in devices">
                 <div class="target-to-pairing" v-if="device.state !== states.PAIRED">
-                    <!--<pre>{{device}}</pre>-->
                     <a-button type="dashed" size="large" block @click="pair(device.index)">
                         <img src="@/assets/images/target-to-pairing.png" alt="target"/>
                         <p>blinking ?</p>
                     </a-button>
                 </div>
                 <div class="target-paired" v-if="device.state === states.PAIRED">
-                    <!--<pre>{{device}}</pre>-->
                     <img src="@/assets/images/target.png" alt="target"/>
                     <p>paired !</p>
                 </div>
