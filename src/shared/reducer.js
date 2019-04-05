@@ -28,9 +28,11 @@ export default function reducer(state, action) {
         case target.TARGET_PAIRED:
             index = action.data.index;
             targetPosition = action.data.targetPosition;
-            //TODO: Check pairing
+            //TODO: Order pairing
+            // state.devices.splice(targetPosition, 0, state.devices.splice(index, 1)[0]);
+            // needs to be done in targetService.targets
             state.devices[index].state = Device.states.PAIRED;
-            state.devices[index].player = new Player({name: `Player ${targetPosition}`, targetPosition});
+            state.devices[index].player = new Player({name: `Player ${targetPosition + 1}`, targetPosition});
             state.lastAction = target.TARGET_PAIRED;
             return state;
         case target.TARGET_CALIBRATED:
@@ -65,7 +67,7 @@ export default function reducer(state, action) {
         case kahoot.KAHOOT_CLEAN_SESSIONS:
             state.devices.forEach((device) => {
                 let position = device.player.targetPosition;
-                if (typeof device.player.kahootSession.leave === 'function') {
+                if (device.player.kahootSession && typeof device.player.kahootSession.leave === 'function') {
                     device.player.kahootSession.leave().then(() => {
                         device.player = new Player({name: `Player ${position}`, targetPosition: position});
                     });
