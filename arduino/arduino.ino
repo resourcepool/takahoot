@@ -2,6 +2,7 @@
 #include "SerialInboundService.h"
 #include "CalibrationController.h"
 #include "GameController.h"
+#include "LedController.h"
 #include "board.h"
 
 Board board = {
