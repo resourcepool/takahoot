@@ -2,6 +2,7 @@
 
 class GameController;
 class CalibrationController;
+class LedController;
 
 // All outbound message commands start with 0011 <=> 48
 #define IN_COMPUTER_CONNECTED 0x30 // <=> 0011 0000
@@ -12,10 +13,11 @@ class CalibrationController;
 
 class SerialInboundService {
 public:
-  SerialInboundService(GameController* gameController, CalibrationController* calibrationController);
+  SerialInboundService(GameController* gameController, CalibrationController* calibrationController, LedController* ledController);
   void tick();
 private:
   GameController* gameController;
   CalibrationController* calibrationController;
+  LedController* ledController;
 
 };

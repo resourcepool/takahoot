@@ -5,10 +5,10 @@
 #include "LedController.h"
 #include "SerialOutboundService.h"
 
-GameController::GameController(Board* board) {
+GameController::GameController(Board* board, LedController* ledController) {
   this->board = board;
   this->boardStateHandler = new BoardStateHandler(board);
-  this->ledController = new LedController();
+  this->ledController = ledController;
   this->serialService = new SerialOutboundService(board);
   this->ready = false;
   this->hit = false;

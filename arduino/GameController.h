@@ -8,7 +8,7 @@ class SerialOutboundService;
 
 class GameController {
 public:
-  GameController(Board* board);
+  GameController(Board* board, LedController* ledController);
   void init();
   void reset();
   void pause();
