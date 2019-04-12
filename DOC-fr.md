@@ -1,9 +1,9 @@
 # Documentation takahoot
-> Takahoot est une solution composé de 1 ou plusieurs cibles se connectant à des sessions kahoot pour répondre aux
-questions en utilisant des nerfs.
+> Takahoot est une solution composé de 1 ou plusieurs cibles se connectant à des sessions kahoot pour répondre à des
+quizz en utilisant des nerfs.
 
-On distingue plusieurs éléments principaux:
-- les cibles composés principalement de 4 boutons, 1 carte arduino et une interface de controle (3 leds, bouton de 
+On distingue 3 éléments principaux:
+- les cibles composées principalement de 4 boutons, 1 carte arduino et une interface de controle (3 leds, bouton de 
 calibration et potentiometre de sensibilité)
 - kahoot (kahoot.com) l'interface de jeux en ligne, ou sont sauvegardés les questionnaires et qui permet de lancer les
 quizz (utiliser le compte takimahoot)
@@ -29,9 +29,11 @@ vert
 - R ON: calibration
 - Y ON: en attente
 - G ON: touché
+NB: la cible est bloqué lorsqu'un tir est détecté et la led passe à G ON, dès lors aucun tir ne sera détecté (un tir 
+peut être détecté seulement lorsque la cible est en attente, Y ON)
 
 ## Jeux
-Pré-requis: les cibles participantes doivent avoir été configuré en suivant les étapes du point précédent
+Pré-requis: les cibles participantes doivent avoir été configurée en suivant les étapes du point précédent
 1. Accéder à l'interface de jeux: les cibles configurées apparaissent
 2. Lancer une session sur kahoot et obtenir une id de session (copier l'identifiant de jeux)
 3. Saisir/Coller l'identifiant de jeux dans l'interface serveur et lancer
