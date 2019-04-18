@@ -114,8 +114,8 @@ class WSHandler extends EventEmitter {
 		}
 	}
 	getPacket(packet) {
-		var l = ((new Date).getTime() - packet.ext.timesync.tc - packet.ext.timesync.p) / 2;
-		var o = (packet.ext.timesync.ts - packet.ext.timesync.tc - l);
+		var l = ((new Date).getTime() - ((packet.ext.timesync || {}).tc || 0) - ((packet.ext.timesync || {}).p || 0)) / 2;
+		var o = (((packet.ext.timesync || {}).ts || 0) - ((packet.ext.timesync || {}).tc || 0) - l);
 		var ack;
 		var me = this;
 		me.msgID++;

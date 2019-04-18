@@ -10,6 +10,12 @@ quizz (utiliser le compte takimahoot)
 - le serveur takahoot qui se connecte aux cibles et permet leur configuration. Le serveur se charge de connecter les
 joueurs à une session/quizz kahoot pour permettre de jouer
 
+## Serveur
+cd takahoot/
+Utiliser node 10+/11+ (testé principalement avec node 11)
+Installer le projet (npm install)
+Lancer le serveur de dev (npm run dev)
+
 ## Configuration
 1. Positionner les 4 cibles (1-NW, 2-NE, 3-SW, 4-SE)
 2. Connecter les 4 cibles dans le bon ordre
