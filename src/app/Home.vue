@@ -2,7 +2,7 @@
     <div class="centered-container">
         <div class="content">
             <h1 class="title">
-                <img src="https://vuematerial.io/assets/logo-color.png">
+                <img src="../assets/images/resourcepool.png">
                 <span>Takahoot !</span>
             </h1>
             <div>

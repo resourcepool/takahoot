@@ -1,6 +1,6 @@
 {
   "name": "takahoot",
-  "version": "1.0.0",
+  "version": "0.8.0",
   "description": "A physical target remote control for Kahoot Games",
   "repository": "https://github.com/resourcepool/takahoot",
   "main": "main.js",
@@ -8,9 +8,9 @@
     "build": "webpack --config webpack.build.js",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.js",
     "postinstall": "(cd ./bridge && npm install)",
-    "prepackage": "webpack --config webpack.build.js",
-    "package": "electron-packager ./dist --out=./builds --all",
-    "prod": "webpack --config webpack.build.js && electron --noDevServer ."
+    "package": "electron-packager ./dist --out=./builds",
+    "prod": "webpack --config webpack.build.js && electron --noDevServer .",
+    "release": "release-it --no-npm.publish"
   },
   "keywords": [],
   "author": "loic ortola <contact@loicortola.com>",
@@ -29,6 +29,7 @@
     "file-loader": "3.0.1",
     "html-webpack-plugin": "3.2.0",
     "node-sass": "4.11.0",
+    "release-it": "^12.2.0",
     "sass-loader": "7.1.0",
     "vue-loader": "15.7.0",
     "vue-style-loader": "4.1.2",
