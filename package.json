@@ -1,6 +1,6 @@
 {
   "name": "takahoot",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "A physical target remote control for Kahoot Games",
   "repository": "https://github.com/resourcepool/takahoot",
   "main": "main.js",
