@@ -22,15 +22,13 @@ Although this may seem **easy**, it actually means that we:
  
 We are very proud of this project and hope it can be useful to create a more ludic way of learning.
 
-## Getting started guide
 
-Already have your own targets? [Get started here](https://resourcepool.github.io/takahoot/getting-started).
-
-## Maker guide
-Want to create your own device from scratch? [Follow the guide](https://resourcepool.github.io/takahoot/maker-guide).
+## About this doc
+This documentation will allow you to get started on the use of your own takahoot devices.  
+It also contains a Maker guide which will allow you to create your own device from scratch.  
 
 Don't want to bother buying and printing / cutting materials?  
-[Contact-us](mailto:loic@takima.fr) and we will find a way to do that for you and send you the whole kits ready to assemble.
+Contact-us and we will find a way to do that for you and send you the whole kits ready to assemble.
 
 ## Contributors
 
@@ -42,3 +40,5 @@ Thanks to [Nicolas Thierion](https://github.com/NicolasThierion) for coming up w
  * [Alexandre Nunesse](https://github.com/anunesse) - Kahoot API, Target fixes & Takahoot Client 
  * [Logan Lepage](https://github.com/loganlepage) - Takahoot UI & Client
  * [Loïc Ortola](https://github.com/loicortola) - Target design & making, Hardware & Arduino
+ 
+ 
