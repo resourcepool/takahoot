@@ -1,7 +1,5 @@
 #include <Arduino.h>
 
-#define SENSOR_MIN_VALUE 100
-
 struct Board;
 struct Trigger;
 
@@ -11,8 +9,8 @@ public:
   BoardStateHandler(Board* board);
   void refreshState();
   bool hasChanged();
+  bool isHit();
 private:
   Board* board;
   Board* previousBoard;
-  void refreshState(Trigger* trigger);
 };
