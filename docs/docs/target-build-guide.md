@@ -47,3 +47,78 @@ You can now put solder on each pin and make sure your Arduino is now perfectly c
 ![Straight Pins soldered](assets/tutorial-build-target-board-8.jpg)
 
 Congratulations! Your board is finished!
+
+## 2. Assembling the target
+
+### LED Strip
+
+Take each LED Strip and plate it with tin.
+
+![LED Strips not tin-plated](assets/tutorial-build-target-led-1.jpg)
+
+![LED Strips tin-plated](assets/tutorial-build-target-led-2.jpg)
+
+Once done, cut out 3 wire-strips of 7-7.5cm long.
+![LED Wire length](assets/tutorial-build-target-led-3.jpg)
+
+Strip the ends and plate it with tin.
+![LED Wire tin-plated](assets/tutorial-build-target-led-4.jpg)
+
+Assemble each strip to the next one, make sure that the arrow goes the same direction!
+![Assembled strips](assets/tutorial-build-target-led-5.jpg)
+
+Cut one last wire-strip ~15cm long. Use your Crimping tool to make a 3-Dupont-female-pin on one end, and solder it to the first strip on the other end.
+
+![Crimping tool with Dupont Female connector](assets/tutorial-build-target-led-6.jpg)
+
+![Assembling Dupont Connector](assets/tutorial-build-target-led-7.jpg)
+
+![Assembling Dupont Connector (2)](assets/tutorial-build-target-led-8.jpg)
+
+You can then fix the LEDs on the target itself.
+![Final LED Strip](assets/tutorial-build-target-led-9.jpg)
+
+![Final LED Strip (2)](assets/tutorial-build-target-led-10.jpg)
+
+Great job!
+
+### Parts, Sensor & PCB
+
+Take all the bolts and insert them in the 3D-printed supports.
+Sometimes, prints are so narrow that your plastic support wont let the bolt come in.
+This is where your soldering-iron might come handy. Be careful, heat the bolt slowly until it is perfectly in position.
+
+![Bolts and 3D-Printed parts](assets/tutorial-build-target-parts-1.jpg)
+
+![Bolts assembly](assets/tutorial-build-target-parts-2.jpg)
+
+![Bolts assembly final](assets/tutorial-build-target-parts-3.jpg)
+
+Then you can screw on the board using the M3 screws.
+![Bolts and 3D-Printed parts](assets/tutorial-build-target-parts-4.jpg)
+
+Take the Piezo sensor and lock both wires inside their small PCB controller.
+![Piezo Controller assembly](assets/tutorial-build-target-parts-5.jpg)
+
+Then easily screw it on the Piezo 3D-printed support
+![Piezo Controller assembly](assets/tutorial-build-target-parts-6.jpg)
+
+You are now ready to fix the Piezo and its support on the white Plexiglas Hit-zone.
+![Piezo Controller assembly](assets/tutorial-build-target-parts-7.jpg)
+
+Get the Silicon dampers and make sure you put the Hit-zone in the right direction.
+You are now ready to fix the Piezo and its support on the white Plexiglas Hit-zone.
+![Dampers and hit zone](assets/tutorial-build-target-parts-8.jpg)
+
+Fix them one by one like this:
+You are now ready to fix the Piezo and its support on the white Plexiglas Hit-zone.
+![Dampers hit zone assembled](assets/tutorial-build-target-parts-9.jpg)
+
+Now find a way to make each damper go through the frontend of the Target. Warning: this may start to look VERY COOL!
+![Dampers front zone assembled](assets/tutorial-build-target-parts-10.jpg)
+
+Once you're done, you can simply put the wires together (make sure to get the wires right!!!)
+![Target assembly](assets/tutorial-build-target-parts-11.jpg)
+
+TADAAAAAAA
+![Target final](assets/tutorial-build-target-final.jpg)

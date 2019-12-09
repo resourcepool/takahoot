@@ -19,7 +19,10 @@ For one target :
  * 1x 6-pin JST
  * Dupont Pins (2x 3-pin angled, 2x 3-pin straight, 3x 1-pin straight)
  * Dupont connector & socket (3-pin female)
+ * 4x Silicon Dumpers
 
 ### Tools
- * Soldering iron
+ * Soldering iron (+ tin solder, third hand support, etc...)
  * Bolt cutter
+ * Cutter
+ * Dupont & JST Crimping Tool
