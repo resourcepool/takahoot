@@ -21,8 +21,26 @@ For one target :
  * Dupont connector & socket (3-pin female)
  * 4x Silicon Dumpers
 
-### Tools
+ ## The Controller
+
+ ### Hardware
+
+ For one controller (handles 4 targets) :
+  * 3D-printed box : case and lid
+  * 1x Arduino Nano v3
+  * 1x Power-supply Jack & Bolt
+  * 2x Power-supply wire (1 red and 1 black)
+  * 8x 3mmx5mm round magnets
+  * 1x Controller PCB
+  * 4x 6-pin JST
+  * Dupont Pins (1x 6-pin straight, 2x 1-pin straight)
+
+
+## Tools
  * Soldering iron (+ tin solder, third hand support, etc...)
  * Bolt cutter
  * Cutter
+ * Screwdrivers & Hex keys (3mm and 4mm)
  * Dupont & JST Crimping Tool
+   * Epoxy glue, Plexiglas glue
+ * Optional: heat-shrink tubes

@@ -21,7 +21,6 @@ Solder it to the board as shown on picture: (NB: notice the board was flipped ov
 ### Arduino pins
 
 Take your Arduino Nano v3 (328P recommended) and use a bolt cutter to cut out the straight-pins : 2x 3-pins, 3x 1-pin
-(NB: On the picture, we took an extra 3-pin just in case, but you're not supposed to need it in your kit)
 The angled pins should already be cut-out.
 
 ![Arduino Board and Pins](assets/tutorial-build-target-board-3.jpg)
@@ -50,6 +49,41 @@ Congratulations! Your board is finished!
 
 ## 2. Assembling the target
 
+![Target Kit](assets/tutorial-build-target-kit-1.jpg)
+
+
+
+### The Box
+
+The target box might already be assembled. If it's the case, you can go directly to the next part: LED Strip
+
+In this part, we will only consider the case of the target, as shown on picture.
+![Target Kit 2](assets/tutorial-build-target-kit-2.jpg)
+
+First thing to do is to glue the sides together. This should be easy if you use a dense glue. We recommend using Plexiglas glue gel, which will give you both a firm grip from the first second and a quick dry.
+![Gluing the sides together](assets/tutorial-build-target-kit-3.jpg)
+
+After, find which will be the front and which will be the back of your target (as shown below).
+The center square hole (to connect the target) is not centered vertically. It is closer to the back of the target.
+![Front and back](assets/tutorial-build-target-kit-4.jpg)
+
+If you got it right, you can now glue the top of the target, using the same Plexiglas glue. Be gentle and precise.
+![Front target glued](assets/tutorial-build-target-kit-5.jpg)
+
+Your box is almost ready. To make sure we can access the target content (for firmware upgrades or anything else), we thought it would be nice if it was screwless. Therefore, we gave you some very cool and powerful magnets.
+Glue one in each corner, making sure they are all pointing the same direction (we used a red marker to mark their direction to avoid any cruel mistakes here!). We used an Epoxy glue for that one.
+
+![Gluing the magnets](assets/tutorial-build-target-kit-6.jpg)
+
+Once the magnets are glued to the box, we can do the same and glue the other magnet to the back. For that one, we used plain old plastic glue, were very "generous" on the quantity, and cut anything extra after it dried.  
+**Warning:** Make sure you double-check which side you are gluing the back on, and the direction of each magnet. We don't want any surprises here!
+
+![Gluing the back corner](assets/tutorial-build-target-kit-7.jpg)
+
+![Gluing the back corner](assets/tutorial-build-target-kit-8.jpg)
+
+Congratulations, your box should be all set :)
+
 ### LED Strip
 
 Take each LED Strip and plate it with tin.
@@ -67,7 +101,7 @@ Strip the ends and plate it with tin.
 Assemble each strip to the next one, make sure that the arrow goes the same direction!
 ![Assembled strips](assets/tutorial-build-target-led-5.jpg)
 
-Cut one last wire-strip ~15cm long. Use your Crimping tool to make a 3-Dupont-female-pin on one end, and solder it to the first strip on the other end.
+Cut one last wire-strip ~25cm long. Use your Crimping tool to make a 3-Dupont-female-pin on one end, and solder it to the first strip on the other end.
 
 ![Crimping tool with Dupont Female connector](assets/tutorial-build-target-led-6.jpg)
 
