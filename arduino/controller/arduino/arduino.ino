@@ -18,7 +18,7 @@ SerialClient serialClient = SerialClient();
 TargetController ctrl = TargetController(&board, &spiClient, &serialClient);
 
 void setup() {
-    ctrl.init();
+  ctrl.init();
 }
 
 void loop() {

@@ -4,49 +4,53 @@
 #include "board.h"
 
 SerialClient::SerialClient() {
-
 }
 
 void SerialClient::init(TargetController* ctrl) {
+  
+  while (!WebUSBSerial) {
+    ;
+  }
+  WebUSBSerial.begin(BAUD_RATE);
   Serial.begin(BAUD_RATE);
   this->ctrl = ctrl;
 }
 
 void SerialClient::tick() {
-  if (Serial.available() > 0) {
-    byte cmd = Serial.read();
+  if (WebUSBSerial.available() > 0) {
+    byte cmd = WebUSBSerial.read();
     onRequest(cmd);
   }
 }
 
 void SerialClient::sendConnected(byte* state) {
-  Serial.write(OUT_COMPUTER_CONNECTED);
-  Serial.write(state, CONTROLLER_STATE_SIZE);
-  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.write(OUT_COMPUTER_CONNECTED);
+  WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
+  WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
 }
 
 void SerialClient::sendCalibrationStarted() {
-  Serial.write(OUT_COMPUTER_CALIBRATION_STARTED);
-  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.write(OUT_COMPUTER_CALIBRATION_STARTED);
+  WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
 }
 
 void SerialClient::sendCalibrationFinished(byte* state) {
-  Serial.write(OUT_COMPUTER_CALIBRATION_FINISHED);
-  Serial.write(state, CONTROLLER_STATE_SIZE);
-  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.write(OUT_COMPUTER_CALIBRATION_FINISHED);
+  WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
+  WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
 }
 
 void SerialClient::sendTargetHit(byte* state) {
-  Serial.write(OUT_COMPUTER_TARGET_HIT);
-  Serial.write(state, CONTROLLER_STATE_SIZE);
-  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.write(OUT_COMPUTER_TARGET_HIT);
+  WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
+  WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
 }
 
 
 void SerialClient::sendState(byte* state) {
-  Serial.write(OUT_COMPUTER_CONTROLLER_STATE);
-  Serial.write(state, CONTROLLER_STATE_SIZE);
-  Serial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.write(OUT_COMPUTER_CONTROLLER_STATE);
+  WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
+  WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
 }
 
 void SerialClient::onRequest(byte cmd) {
@@ -119,8 +123,10 @@ void SerialClient::processCommand() {
       Serial.println(")");
       #endif
       ctrl->changeTolerance(buffer[1], buffer[2]);
+      #ifdef DEBUG_MODE
       Serial.print("Tolerance changed for target ");
       Serial.println(buffer[1]);
+      #endif
       break;
     case IN_COMPUTER_ENABLE_TARGET:
       #ifdef DEBUG_MODE

@@ -1,5 +1,8 @@
 #include <Arduino.h>
+#include <WebUSB.h>
+
 class TargetController;
+
 
 // All outbound message commands start with 0011 <=> 48
 #define IN_COMPUTER_CONNECTED 0x30 // <=> 0011 0000
@@ -41,4 +44,5 @@ private:
   void processCommand();
   const byte END_MESSAGE[2] = { 0x0D, 0x0A };
   const byte END_MESSAGE_SIZE = 2;
+  WebUSB WebUSBSerial = {0 /* http:// */, "localhost:4200"};
 };

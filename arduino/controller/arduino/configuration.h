@@ -2,7 +2,7 @@
 #define BAUD_RATE 115200
 #endif
 
-//#define DEBUG_MODE
+#define DEBUG_MODE
 //#define DEBUG_MODE_SPI
 
 #define CONTROLLER_STATE_SIZE 12
