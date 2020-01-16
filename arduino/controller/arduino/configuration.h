@@ -7,9 +7,6 @@
 
 #define CONTROLLER_STATE_SIZE 12
 
-#define BTN_TRIGGER A2
-#define POT_THRESHOLD A4
-
 #define TARGET_1_ID 0
 #define TARGET_1_PIN 7
 #define TARGET_1_COLOR 0xFF0000
