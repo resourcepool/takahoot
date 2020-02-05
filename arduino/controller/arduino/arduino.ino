@@ -1,3 +1,5 @@
+#include "WebUSB.h"
+
 #include "configuration.h"
 #include "SerialClient.h"
 #include "TargetController.h"
