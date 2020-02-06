@@ -27,23 +27,27 @@ void SerialClient::sendConnected(byte* state) {
   WebUSBSerial.write(OUT_COMPUTER_CONNECTED);
   WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.flush();
 }
 
 void SerialClient::sendCalibrationStarted() {
   WebUSBSerial.write(OUT_COMPUTER_CALIBRATION_STARTED);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.flush();
 }
 
 void SerialClient::sendCalibrationFinished(byte* state) {
   WebUSBSerial.write(OUT_COMPUTER_CALIBRATION_FINISHED);
   WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.flush();
 }
 
 void SerialClient::sendTargetHit(byte* state) {
   WebUSBSerial.write(OUT_COMPUTER_TARGET_HIT);
   WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.flush();
 }
 
 
@@ -51,6 +55,7 @@ void SerialClient::sendState(byte* state) {
   WebUSBSerial.write(OUT_COMPUTER_CONTROLLER_STATE);
   WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
+  WebUSBSerial.flush();
 }
 
 void SerialClient::onRequest(byte cmd) {

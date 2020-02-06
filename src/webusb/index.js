@@ -1,5 +1,15 @@
 var serial = {};
 
+const IN_ENDPOINT = 5; // In endpoint ID of WebUSB for Arduino
+const OUT_ENDPOINT = 4; // Out endpoint ID of WebUSB for Arduino
+const CONFIG_NUMBER = 1; // Device specific configuration value
+const INTERFACE_NUMBER = 2; // Device specific interface number
+const REQUEST_TYPE = 'class'; // industry-standard class of devices
+const TRANSFER_RECIPIENT = "interface"; // target on the transfer on the device
+const ARDUINO_CORE_REQUEST = 0x22; // see 'USBCore.h' > #define CDC_SET_CONTROL_LINE_STATE	0x22
+const ARDUINO_CONTROL_CONNECT = 0x01; // Vendor-specific, 0x00 for DISCONNECT
+const RECIPIENT_INTERFACE_NUMBER = 0x02; // Interface number on the recipient
+
 (function() {
     'use strict';
 
@@ -42,31 +52,59 @@ var serial = {};
 
     serial.Port.prototype.connect = async function() {
         let readLoop = () => {
-          console.log("In readloop");
-          console.log(this.device_)
+            const selectedInterface = this.device_.configuration.interfaces.filter((i) => i.claimed)[0];
             const {
-                endpointNumber
-            } = this.device_.configuration.interfaces[0].alternates[0].endpoints[0]
-            const that = this;
-            console.log(endpointNumber)
-            this.device_.transferIn(endpointNumber, 64).then(result => {
-                that.onReceive(result.data);
+                endpointNumber,
+                packetSize
+            } = selectedInterface.alternate.endpoints.filter(e => e.direction === "in")[0];
+            this.device_.transferIn(endpointNumber, packetSize).then(result => {
+                console.log("Ohh");
+                this.onReceive(result.data);
                 readLoop();
             }, error => {
-              if (that.onReceiveError) {
-                that.onReceiveError(error);
-              } else {
+            if (this.onReceiveError) {
+                this.onReceiveError(error);
+            } else {
                 throw error;
-              }
+            }
 
-            });
+          });
         };
 
-        const connectDevice = async (usbDevice) => {
-          await usbDevice.open();
-          if (usbDevice.configuration === null)
-            await usbDevice.selectConfiguration(1);
-          await usbDevice.claimInterface(0);
+        const claimInterface = async (device) => {
+          for (let i = 2; i < device.configurations[0].interfaces.length; i++) {
+            let selectedInterface = device.configurations[0].interfaces[i];
+            let interfaceNumber = selectedInterface.interfaceNumber;
+            try {
+              await device.claimInterface(interfaceNumber);
+              console.log("Found interface");
+              console.log(selectedInterface);
+              return;
+            } catch (error) {
+              continue;
+            }
+          }
+          throw "Aie";
+        }
+
+        const connectDevice = async (device) => {
+          await device.open();
+          await device.selectConfiguration(CONFIG_NUMBER);
+          await device.claimInterface(INTERFACE_NUMBER);
+          await device.controlTransferOut({
+            requestType: REQUEST_TYPE,
+            recipient: TRANSFER_RECIPIENT,
+            request: ARDUINO_CORE_REQUEST,
+            value: ARDUINO_CONTROL_CONNECT,
+            index: RECIPIENT_INTERFACE_NUMBER
+          });
+          await device.controlTransferIn({
+            requestType: REQUEST_TYPE,
+            recipient: TRANSFER_RECIPIENT,
+            request: ARDUINO_CORE_REQUEST,
+            value: ARDUINO_CONTROL_CONNECT,
+            index: RECIPIENT_INTERFACE_NUMBER
+          }, 0);
           return await readLoop();
         }
 
@@ -78,9 +116,10 @@ var serial = {};
     };
 
     serial.Port.prototype.send = function(data) {
+        const selectedInterface = this.device_.configuration.interfaces.filter((i) => i.claimed)[0];
         const {
             endpointNumber
-        } = this.device_.configuration.interfaces[0].alternate.endpoints[1]
+        } = selectedInterface.alternate.endpoints.filter(e => e.direction === "out")[0];
         return this.device_.transferOut(endpointNumber, data);
     };
 })();
@@ -113,9 +152,10 @@ function byteToHexString(byte) {
   return (((byte & 0xF0) >> 4).toString(16) + (byte & 0x0F).toString(16)).toLowerCase();
 }
 
-function bytesToPrettyHexString(bytes) {
+function bytesToPrettyHexString(dataview) {
   let hex = '';
-  for (let byte of bytes.values()) {
+  for (let i = 0; i < dataview.byteLength; i++) {
+    let byte = dataview.getUint8(i);
     if (hex.length > 0) {
       hex += ':';
     }
@@ -127,8 +167,8 @@ function bytesToPrettyHexString(bytes) {
 function connect() {
     port.connect().then(() => {
         port.onReceive = data => {
-            console.log("Received:", bytesToPrettyHexString(data));
-            document.getElementById('output').value += bytesToPrettyHexString(data);
+            console.log("Received:", data);
+            document.getElementById('output').value += bytesToPrettyHexString(data) + '\r\n';
         };
         port.onReceiveError = error => {
             console.error(error);
