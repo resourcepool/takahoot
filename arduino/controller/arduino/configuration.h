@@ -5,6 +5,10 @@
 #define DEBUG_MODE
 //#define DEBUG_MODE_SPI
 
+// 0 for HTTP, 1 for HTTPS
+#define WEBUSB_PROTOCOL 1 
+#define WEBUSB_HOST "takahoot.takima.io"
+
 #define CONTROLLER_STATE_SIZE 12
 
 #define TARGET_1_ID 0
