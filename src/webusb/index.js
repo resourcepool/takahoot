@@ -39,30 +39,39 @@ var serial = {};
         this.device_ = device;
     };
 
-    serial.Port.prototype.connect = function() {
+
+    serial.Port.prototype.connect = async function() {
         let readLoop = () => {
+          console.log("In readloop");
+          console.log(this.device_)
             const {
                 endpointNumber
-            } = this.device_.configuration.interfaces[0].alternate.endpoints[0]
+            } = this.device_.configuration.interfaces[0].alternates[0].endpoints[0]
+            const that = this;
+            console.log(endpointNumber)
             this.device_.transferIn(endpointNumber, 64).then(result => {
-                this.onReceive(result.data);
+                that.onReceive(result.data);
                 readLoop();
             }, error => {
-                this.onReceiveError(error);
+              if (that.onReceiveError) {
+                that.onReceiveError(error);
+              } else {
+                throw error;
+              }
+
             });
         };
 
-        return this.device_.open()
-            .then(() => {
-                if (this.device_.configuration === null) {
-                    return this.device_.selectConfiguration(1);
-                }
-            })
-            .then(() => this.device_.claimInterface(0))
-            .then(() => {
-                readLoop();
-            });
-    };
+        const connectDevice = async (usbDevice) => {
+          await usbDevice.open();
+          if (usbDevice.configuration === null)
+            await usbDevice.selectConfiguration(1);
+          await usbDevice.claimInterface(0);
+          return await readLoop();
+        }
+
+        await connectDevice(this.device_);
+    }
 
     serial.Port.prototype.disconnect = function() {
         return this.device_.close();
@@ -160,7 +169,7 @@ window.onload = () => {
         document.querySelector("#editor").innerHTML = "30";
     }
 
-    document.querySelector("#connectAndCalibrate").onclick = () => {
+    document.querySelector("#calibrate").onclick = () => {
         document.querySelector("#editor").innerHTML = "3100310131023103";
     }
 
