@@ -1,11 +1,13 @@
 class Quiz {
-	constructor(name, type, answerCount, client) {
+	constructor(name, type, answerCount, client, amount, answers) {
 		this.client = client;
 		this.name = name;
 		this.type = type;
 		this.answerCount = answerCount;
 		this.currentQuestion = null;
 		this.questions = [];
+		this.questionCount = amount;
+		this.answerCounts = answers;
 	}
 }
 class Question {
@@ -14,7 +16,7 @@ class Question {
 		this.quiz = client.quiz;
 		this.index = rawEvent.questionIndex;
 		this.timeLeft = rawEvent.timeLeft;
-		this.type = rawEvent.type,
+		this.type = rawEvent.type;
 		this.usesStoryBlocks = rawEvent.useStoryBlocks;
 		this.ended = false;
 		this.quiz.questions.push(this);
@@ -23,28 +25,39 @@ class Question {
 	}
 	answer(number) {
 		return new Promise((fulfill, reject) => {
-			if (!number && number !== 0) reject("Question answer is missing question number!");
+			if (!number && number !== 0) reject(console.log("Question answer is missing question number!"));
 			else {
 				this.client.answerQuestion(number).then(() => {
 					fulfill();
-				}).catch(reject);
+				}).catch(e => {
+					reject();
+					console.log(e);
+				});
 			}
 		});
 	}
 }
 class QuestionEndEvent {
 	constructor(rawEvent, client) {
-		this.client = client;
-		this.quiz = client.quiz;
-		this.question = this.quiz.questions[this.quiz.questions.length - 1];
-		this.question.ended = true;
-		this.correctAnswers = rawEvent.correctAnswers;
-		this.correctAnswer = this.correctAnswers[0];
-		this.text = rawEvent.text;
-		this.correct = rawEvent.correct;
-		this.nemesis = new Nemesis(rawEvent.nemesis);
-		this.quiz.client.nemesis = this.nemesis;
-		this.quiz.client.nemeses.push(this.nemesis);
+		try {
+			this.client = client;
+			this.quiz = client.quiz;
+			this.question = this.quiz.questions[this.quiz.questions.length - 1];
+			this.question.ended = true;
+			this.correctAnswers = rawEvent.correctAnswers;
+			this.correctAnswer = this.correctAnswers[0];
+			this.text = rawEvent.text;
+			this.correct = rawEvent.correct;
+			this.nemesis = new Nemesis(rawEvent.nemesis);
+			this.quiz.client.nemesis = this.nemesis;
+			this.quiz.client.nemeses.push(this.nemesis);
+			this.points = rawEvent.points;
+			this.rank = rawEvent.rank;
+			this.total = rawEvent.totalScore;
+			this.streak = rawEvent.pointsData.answerStreakPoints.streakLevel;
+		} catch (e) {
+			console.log("GET_END_EVT_ERR"); //this error will usually only happen if you join during the game.
+		}
 	}
 }
 class QuestionSubmitEvent {
@@ -52,16 +65,15 @@ class QuestionSubmitEvent {
 		this.message = message;
 		this.client = client;
 		this.quiz = client.quiz;
-		this.question = this.quiz.questions[this.quiz.questions.length - 1];
+		this.question = this.quiz.questions[this.quiz.questions.length - 1]; // not entirely sure what this is, but ok.
 	}
 }
 class Nemesis {
 	constructor(rawData) {
 		if (rawData) {
 			this.name = rawData.name;
-			this.id = rawData.cid;
 			this.score = rawData.totalScore;
-			this.isKicked = rawData.isKicked;
+			this.isGhost = rawData.isGhost;
 			this.exists = true;
 		} else {
 			this.name = null;
@@ -74,12 +86,6 @@ class Nemesis {
 }
 class FinishTextEvent {
 	constructor(rawEvent) {
-		this.fistMessage = rawEvent.msg1;
-		this.secondMessage = rawEvent.msg2;
-		this.messages = [
-			this.firstMessage,
-			this.secondMessage
-		];
 		this.metal = rawEvent.metal;
 	}
 }

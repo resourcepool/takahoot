@@ -1,4 +1,5 @@
 import consts from './consts.js';
+const ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36";
 
 class TokenJS {
 	static requestToken(sessionID, callback) {
@@ -10,11 +11,11 @@ class TokenJS {
 			path: endpoint,
 			port: consts.ENDPOINT_PORT,
 			headers: {
-				'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36',
-				'host': 'kahoot.it',
-				'referer': 'https://kahoot.it/',
-				'accept-language': 'en-US,en;q=0.8',
-				'accept': '*/*'
+				"user-agent": ua,
+				"host": "kahoot.it",
+				"referer": "https://kahoot.it/",
+				"accept-language": "en-US,en;q=0.8",
+				"accept": "*/*"
 			}
 		}).then(res => {
 			// The first token is the session token, which is given as a header by the server encoded in base64
@@ -24,7 +25,7 @@ class TokenJS {
 			token1 = res.headers.get('x-kahoot-session-token');
 			return res.json()
 		}).then(data => {
-			// The second token is given as a "challenge", which must be eval'd by the client to be decoded
+			// The second token is given as a "challenge", which must be evaluated by the client to be decoded
 			let challenge = data.challenge;
 			callback(token1, challenge);
 		}).catch(err => {
