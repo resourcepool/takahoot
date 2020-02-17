@@ -25,18 +25,14 @@ export default class KahootSession {
         this.kahoot = new Kahoot();
         this.joinPromise = this.kahoot.join(id, name);
 
-        this.kahoot.on("quizStart", this.onQuizStart);
-        this.kahoot.on("question", this.onQuestion);
-        this.kahoot.on("questionStart", (question) => {
-            this.onQuestionStart(question);
-        });
-        this.kahoot.on("questionSubmit", this.onQuestionSubmit);
+        this.kahoot.on("quizStart", q => this.onQuizStart(q));
+        this.kahoot.on("question", q => this.onQuestion(q));
+        this.kahoot.on("questionStart", q => this.onQuestionStart(q));
+        this.kahoot.on("questionSubmit", e => this.onQuestionSubmit(e));
 
         this.kahoot.on("questionEnd", e => console.debug("questionEnd"));
         this.kahoot.on("finishText", e => console.debug("finishText"));
-        this.kahoot.on("quizEnd", () => {
-            this.onQuizEnd();
-        });
+        this.kahoot.on("quizEnd", () => this.onQuizEnd());
     }
 
     onQuizStart(quiz) {
@@ -44,7 +40,8 @@ export default class KahootSession {
     }
 
     onQuestion(question) {
-        console.log(`[player ${this.name}] Received new question`);
+        console.log(`[player ${this.name}] Received new question:`);
+        console.log(question);
     }
 
     onQuestionStart(question) {

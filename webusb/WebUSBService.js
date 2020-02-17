@@ -8,6 +8,9 @@ const TRANSFER_RECIPIENT = "interface"; // target on the transfer on the device
 const ARDUINO_CORE_REQUEST = 0x22; // see 'USBCore.h' > #define CDC_SET_CONTROL_LINE_STATE	0x22
 const ARDUINO_CONTROL_CONNECT = 0x01; // Vendor-specific, 0x00 for DISCONNECT
 const RECIPIENT_INTERFACE_NUMBER = 0x02; // Interface number on the recipient
+const BUFFER_LENGTH = 64; // Interface number on the recipient
+
+
 
 class WebUSBService {
 
@@ -22,7 +25,8 @@ class WebUSBService {
     async connect() {
         try {
             if (this._devices && this._devices.length > 0) {
-                for (let device of this._devices) {
+                for (let [index, device] of this._devices.entries()) {
+                    device.index = index;
                     await device.open();
                     await device.selectConfiguration(CONFIG_NUMBER);
                     await device.claimInterface(INTERFACE_NUMBER);
@@ -40,8 +44,9 @@ class WebUSBService {
                         value: ARDUINO_CONTROL_CONNECT,
                         index: RECIPIENT_INTERFACE_NUMBER
                     }, 0);
+                    device.serialSubscriber = new SerialSubscriber();
+                    this.subscribe(device);
                 }
-                return this._devices;
             }
         } catch (e) {
             console.error(`Error while setting up the devices:\n${e.toString()}`);
@@ -68,27 +73,18 @@ class WebUSBService {
         const {
             endpointNumber
         } = selectedInterface.alternate.endpoints.filter(e => e.direction === "out")[0];
+        console.info('Writing message: ' + message);
         return this._devices[deviceIndex].transferOut(endpointNumber, hexStringToBytes(message));
     }
 
-    async read(deviceIndex) {
-        try {
-            if (this._devices[deviceIndex] && this._devices[deviceIndex].opened) {
-                // Read the bytes from the device
-                const bufferLength = 64;
-                const payload = await this._devices[deviceIndex].transferIn(IN_ENDPOINT, bufferLength);
-                const decoder = new TextDecoder();
-                const decodedPayload = decoder.decode(payload.data);
-                const out = buf2hex(payload.data.buffer);
-                console.log(`Read data: '${out}'`);
-            }
-        } catch (e) {
-            console.error(
-                `Error while reading from the device:\n${e.toString()}`
-            );
-            throw e;
-        }
-    };
+    async subscribe(device) {
+        device.transferIn(IN_ENDPOINT, BUFFER_LENGTH).then(payload => {
+            device.serialSubscriber.onReceive(device, payload.data);
+            this.subscribe(device);
+        }, error => {
+            device.serialSubscriber.onReceiveError(error);
+        });
+    }
 }
 
 const instance = new WebUSBService();
@@ -129,4 +125,37 @@ function bytesToPrettyHexString(bytes) {
 
 function buf2hex(buffer) { // buffer is an ArrayBuffer
     return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+}
+
+class SerialSubscriber {
+    onReceive = (device, data) => {
+        console.info('SerialSubscriber received data: ');
+        const decoder = new TextDecoder();
+        const out = buf2hex(data.buffer);
+        let cmd, b0, b1, b2, b3;
+        if (out.length === 30) {
+            cmd = out.substring(0, 2);
+            b0 = out.substring(2, 8);
+            b1 = out.substring(8, 14);
+            b2 = out.substring(14, 20);
+            b3 = out.substring(20, 26);
+            device.state = {
+                cmd, b0, b1, b2, b3
+            };
+            //TODO: dummy handle hit
+            if (cmd === "84") {//BUMPER HIT
+                let hit = [b0, b1, b2, b3].filter(s => s.indexOf("09") > 0);//identify bumper
+                let hitIndex = hit[0].substring(1,2);
+                console.info(`Target ${device.index} hit bumper ${hitIndex}`);
+                if (device.kahootSession) {
+                    device.kahootSession.answerQuestion(hitIndex);
+                }
+            }
+        }
+    };
+
+    onReceiveError = (error) => {
+        console.error('SerialSubscriber received error: ');
+        console.error(error);
+    };
 }

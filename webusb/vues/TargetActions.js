@@ -37,9 +37,6 @@ export default class TargetActions {
         this.connect.onclick = evt => {
             console.info('Connect target !');
             WebUSBService.write(targetIndex, "30")
-                .then(() => {
-                    WebUSBService.read(targetIndex);
-                })
                 .catch(e => {
                     console.error("ERROR: " + e)
                 });
@@ -57,9 +54,6 @@ export default class TargetActions {
         this.getState.onclick = evt => {
             console.info('Get target state !');
             WebUSBService.write(targetIndex, "38")
-                .then(() => {
-                    WebUSBService.read(targetIndex);
-                })
                 .catch(e => {
                     console.error("ERROR: " + e)
                 });
