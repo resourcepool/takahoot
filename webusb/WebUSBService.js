@@ -63,7 +63,7 @@ class WebUSBService {
 
     async getDevices() {
         this._devices = await navigator.usb.getDevices();
-        /*FOR TEST:/ this._devices = [{open: () => {}, selectConfiguration: () => {}, claimInterface: () => {}, controlTransferOut: () => {}, controlTransferIn: () => {}}];*/
+        // /*FOR TEST:*/ this._devices = [{open: () => {}, selectConfiguration: () => {}, claimInterface: () => {}, controlTransferOut: () => {}, controlTransferIn: () => {}}];
         return this._devices;
     }
 

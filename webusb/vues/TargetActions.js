@@ -68,7 +68,7 @@ export default class TargetActions {
         };
 
         this.disable.onclick = evt => {
-            console.info('Disable target and blink !');
+            console.info('Disable all bumpers and blink !');
             WebUSBService.write(targetIndex, "37")
                 .catch(e => {
                     console.error("ERROR: " + e)
