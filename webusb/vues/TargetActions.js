@@ -48,7 +48,10 @@ export default class TargetActions {
 
         this.disable.onclick = evt => {
             console.info('Disable target and blink !');
-            WebUSBService.write(targetIndex, "37");
+            WebUSBService.write(targetIndex, "37")
+                .catch(e => {
+                    console.error("ERROR: " + e)
+                });
         };
 
         this.getState.onclick = evt => {
@@ -61,7 +64,10 @@ export default class TargetActions {
 
         this.reset.onclick = evt => {
             console.info('Reset target !');
-            WebUSBService.write(targetIndex, "3F");
+            WebUSBService.write(targetIndex, "3f")
+                .catch(e => {
+                    console.error("ERROR: " + e)
+                });
         }
     }
 }

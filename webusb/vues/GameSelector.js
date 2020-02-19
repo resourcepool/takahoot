@@ -12,6 +12,12 @@ export default class GameSelector {
             ]
         );
 
+        this.gamePin.onkeypress = evt => {
+            if (evt.key === "Enter") {
+                this.connect.onclick();
+            }
+        };
+
         this.connect.onclick = evt => {
             console.info('Connecting to game: ' + this.gamePin.value);
             setAttr(this.connect, "disabled", true);

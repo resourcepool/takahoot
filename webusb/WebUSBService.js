@@ -10,8 +10,6 @@ const ARDUINO_CONTROL_CONNECT = 0x01; // Vendor-specific, 0x00 for DISCONNECT
 const RECIPIENT_INTERFACE_NUMBER = 0x02; // Interface number on the recipient
 const BUFFER_LENGTH = 64; // Interface number on the recipient
 
-
-
 class WebUSBService {
 
     constructor(){
@@ -65,6 +63,7 @@ class WebUSBService {
 
     async getDevices() {
         this._devices = await navigator.usb.getDevices();
+        /*FOR TEST:/ this._devices = [{open: () => {}, selectConfiguration: () => {}, claimInterface: () => {}, controlTransferOut: () => {}, controlTransferIn: () => {}}];*/
         return this._devices;
     }
 
@@ -142,14 +141,28 @@ class SerialSubscriber {
             device.state = {
                 cmd, b0, b1, b2, b3
             };
-            //TODO: dummy handle hit
-            if (cmd === "84") {//BUMPER HIT
-                let hit = [b0, b1, b2, b3].filter(s => s.indexOf("09") > 0);//identify bumper
-                let hitIndex = hit[0].substring(1,2);
-                console.info(`Target ${device.index} hit bumper ${hitIndex}`);
-                if (device.kahootSession) {
-                    device.kahootSession.answerQuestion(hitIndex);
-                }
+
+            switch(cmd) {
+                case "84"://OUT_COMPUTER_TARGET_HIT
+                    let hit = [b0, b1, b2, b3].filter(s => s.indexOf("09") > 0);//identify bumper
+                    let hitIndex = hit[0].substring(1,2);
+                    console.info(`Target ${device.index} hit bumper ${hitIndex}`);
+                    if (device.kahootSession) {
+                        device.kahootSession.answerQuestion(hitIndex);
+                    }
+                    break;
+                case "88"://OUT_COMPUTER_CONTROLLER_STATE
+                    console.info(`Reading #getState target ${device.index} - state: ${device.state}`);
+                    break;
+                case "82"://OUT_COMPUTER_CALIBRATION_FINISHED
+                    console.info(`Reading #calibrationFinished target ${device.index} - state: ${device.state}`);
+                    break;
+                case "81"://OUT_COMPUTER_CALIBRATION_STARTED
+                    console.info(`Reading #calibrationStarted target ${device.index} - state: ${device.state}`);
+                    break;
+                case "80"://OUT_COMPUTER_CONNECTED
+                    console.info(`Reading #computerConnected target ${device.index} - state: ${device.state}`);
+                    break;
             }
         }
     };
