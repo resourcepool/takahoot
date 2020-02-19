@@ -11,7 +11,12 @@ export default class TargetActions {
                         el("i.fas.fa-link")
                     )
                 ),
-                this.calibrate = el("button.button", { title: "Calibrate", disabled: true },
+                this.enableAll = el("button.button", { title: "Enable all" },
+                    el("span.icon.is-small",
+                        el("i.fas.fa-check-circle")
+                    )
+                ),
+                this.calibrateAll = el("button.button", { title: "Calibrate all" },
                     el("span.icon.is-small",
                         el("i.fas.fa-thermometer-half")
                     )
@@ -42,8 +47,14 @@ export default class TargetActions {
                 });
         };
 
-        this.calibrate.onclick = evt => {
-            console.info('Calibrate target !');
+        this.enableAll.onclick = evt => {
+            console.info('Calibrate all bumpers !');
+            [0, 1, 2, 3].forEach(i => WebUSBService.write(targetIndex, "340" + i));
+        };
+
+        this.calibrateAll.onclick = evt => {
+            console.info('Calibrate all bumpers !');
+            [0, 1, 2, 3].forEach(i => WebUSBService.write(targetIndex, "310" + i));
         };
 
         this.disable.onclick = evt => {

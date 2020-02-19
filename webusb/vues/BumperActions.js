@@ -16,6 +16,11 @@ export default class BumperActions {
                         el("i.fas.fa-unlink")
                     )
                 ),
+                this.calibrate = el("button.button", { title: "Calibrate" },
+                    el("span.icon.is-small",
+                        el("i.fas.fa-thermometer-half")
+                    )
+                ),
                 this.changeTolerance = el("button.button", { title: "Change tolerance" },
                     el("span.icon.is-small",
                         el("i.fas.fa-ruler")
@@ -47,6 +52,14 @@ export default class BumperActions {
                 });
         };
 
+        this.calibrate.onclick = evt => {
+            console.info('Calibrate bumper !');
+            WebUSBService.write(targetIndex, "310" + bumperIndex)
+                .catch(e => {
+                    console.error("ERROR: " + e)
+                });
+        };
+
         this.changeTolerance.onclick = evt => {
             if (!this.toleranceSelector.isDisplayed) {
                 setAttr(this.toleranceSelector, { style: { display: "inline-flex" } });
@@ -66,7 +79,7 @@ export default class BumperActions {
         this.sendTolerance.onclick = evt => {
             console.info('Send bumper tolerance !')
             console.info(`Sending to bumper ${bumperIndex}, tolerance value: ${this.tolerance.value}`);
-            WebUSBService.write(targetIndex, 320, bumperIndex)
+            WebUSBService.write(targetIndex, "320", bumperIndex)
                 .catch(e => {
                     console.error("ERROR: " + e)
                 });
