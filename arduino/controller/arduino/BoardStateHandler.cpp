@@ -101,7 +101,9 @@ void BoardStateHandler::prettyPrint() {
     Serial.print(" enabled: ");
     Serial.print(board->targets[i].enabled);
     Serial.print(" hit: ");
-    Serial.println(board->targets[i].hit);
+    Serial.print(board->targets[i].hit);
+    Serial.print(" tolerance: ");
+    Serial.print(board->targets[i].tolerance);
     
   }
 }
