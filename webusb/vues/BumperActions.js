@@ -29,7 +29,7 @@ export default class BumperActions {
             ],
             this.toleranceSelector = el(".field.has-addons", [
                     el(".control",
-                        this.tolerance = el("input.input", { type: "text", placeholder: "Enter tolerance 00 to ff" })),
+                        this.tolerance = el("input.input", { type: "text", placeholder: "Enter tolerance 00 to 0f" })),
                     el(".control",
                         this.sendTolerance = el("a.button.is-info", "Change")),
                 ], { style: { display: "none" } }
@@ -79,7 +79,7 @@ export default class BumperActions {
         this.sendTolerance.onclick = evt => {
             console.info('Send bumper tolerance !')
             console.info(`Sending to bumper ${bumperIndex}, tolerance value: ${this.tolerance.value}`);
-            WebUSBService.write(targetIndex, "320", bumperIndex)
+            WebUSBService.write(targetIndex, `320${bumperIndex}${this.tolerance.value}`)
                 .catch(e => {
                     console.error("ERROR: " + e)
                 });
