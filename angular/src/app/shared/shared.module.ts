@@ -1,19 +1,15 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
-import {
-  ButtonsModule,
-  InputsModule,
-  CardsModule,
-  InputUtilitiesModule,
-  IconsModule
-} from 'angular-bootstrap-md';
-import { CustomersModalComponent } from './components/customers-modal/customers-modal.component';
-import { ProjectModalComponent } from './components/project-modal/project-modal.component';
-import { FormsModule } from '@angular/forms';
-import { ProjectComponent } from './components/project/project.component';
-import { ProjectsListComponent } from './components/projects-list/projects-list.component';
-import { CustomersListComponent } from './components/customers-list/customers-list.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ConfirmModalComponent} from './components/confirm-modal/confirm-modal.component';
+import {ButtonsModule, CardsModule, IconsModule, InputsModule, InputUtilitiesModule} from 'angular-bootstrap-md';
+import {CustomersModalComponent} from './components/customers-modal/customers-modal.component';
+import {ProjectModalComponent} from './components/project-modal/project-modal.component';
+import {FormsModule} from '@angular/forms';
+import {ProjectComponent} from './components/project/project.component';
+import {ProjectsListComponent} from './components/projects-list/projects-list.component';
+import {TargetsListComponent} from './components/targets-list/targets-list.component';
+import {CustomersListComponent} from './components/customers-list/customers-list.component';
+import {TargetComponent} from './components/target/target.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +17,9 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     CustomersModalComponent,
     ProjectModalComponent,
     ProjectsListComponent,
+    TargetsListComponent,
     ProjectComponent,
+    TargetComponent,
     CustomersListComponent
   ],
   imports: [
@@ -33,7 +31,7 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     ButtonsModule,
     CardsModule
   ],
-  exports: [ProjectsListComponent, ProjectComponent, CustomersListComponent],
+  exports: [TargetsListComponent, TargetComponent, ProjectsListComponent, ProjectComponent, CustomersListComponent],
   providers: [],
   entryComponents: [
     ConfirmModalComponent,
@@ -41,4 +39,5 @@ import { CustomersListComponent } from './components/customers-list/customers-li
     ProjectModalComponent
   ]
 })
-export class SharedModule {}
+export class SharedModule {
+}
