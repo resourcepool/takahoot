@@ -1,5 +1,11 @@
 <div class="targets-list d-flex flex-wrap fadeIn animated">
     <div class="target" *ngFor="let target of targets; trackBy: trackByFunction">
-      <app-target [target]="target" (claimClicked)="onTargetClaimClicked($event)" (unclaimClicked)="onTargetUnclaimClicked($event)" (connectClicked)="onTargetConnectClicked($event)" (refreshState)="onRefreshState($event)"></app-target>
+      <app-target [target]="target"
+                  (calibrate)="onCalibrate($event)"
+                  (connect)="onConnect($event)"
+                  (reset)="onReset($event)"
+                  (enableBumpers)="onEnableBumpers($event)"
+                  (disableBumpers)="onDisableBumpers($event)"
+                  (refreshState)="onRefreshState($event)"></app-target>
     </div>
 </div>

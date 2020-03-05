@@ -1,9 +1,6 @@
-<mdb-card>
+<mdb-card class="card">
   <!--Card image-->
-  <mdb-card-img *ngIf="target.claimed" src="assets/img/online.png" alt="Online" class="waves-light"
-    mdbWavesEffect></mdb-card-img>
-  <mdb-card-img *ngIf="!target.claimed" src="assets/img/offline.png" alt="Offline" class="waves-light"
-                mdbWavesEffect></mdb-card-img>
+
   <!-- <mdb-card-img *ngIf="!target.photoUrl" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(97).jpg" alt="Card image cap"></mdb-card-img> -->
   <!--Card content-->
   <mdb-card-body>
@@ -11,20 +8,33 @@
     <!--Title-->
     <mdb-card-title>
       <h4>{{ target.name }} - {{ target.index }}</h4>
+      <div class="bubble-group">
+        <img *ngIf="target.connected" src="assets/img/online.png" alt="Online" class="bubble connection-status" mdbWavesEffect/>
+        <img *ngIf="!target.connected" src="assets/img/offline.png" alt="Offline" class="bubble connection-status" mdbWavesEffect/>
+      </div>
     </mdb-card-title>
 
     <!--Text-->
     <mdb-card-text>
-      <div *ngFor="let s of target.state">
-        Bumper {{ s.id }} -- connected: {{ s.connected }} - calibrating: {{ s.calibrating }} - enabled: {{ s.enabled }} - hit: {{ s.hit }} - tolerance: {{ s.tolerance }}
+      <div class="target-container" *ngIf="target.state && target.state.length === 4">
+        <app-bumper [bumper]="target.state[0]"></app-bumper>
+        <app-bumper [bumper]="target.state[1]"></app-bumper>
+        <app-bumper [bumper]="target.state[2]"></app-bumper>
+        <app-bumper [bumper]="target.state[3]"></app-bumper>
       </div>
     </mdb-card-text>
 
-    <div class="text-left">
-      <a *ngIf="!target.claimed" mdbBtn color="primary" mdbWavesEffect (click)="onClaim()">Claim</a>
-      <a *ngIf="target.claimed" mdbBtn color="primary" mdbWavesEffect (click)="onConnectClicked()">Connect</a>
-      <a *ngIf="target.claimed" mdbBtn color="primary" mdbWavesEffect (click)="onRefreshState()">Get State</a>
-      <a *ngIf="target.claimed" mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onUnclaim()">Unclaim</a>
+    <div class="text-left" *ngIf="showControls">
+      <div *ngIf="target.claimed">
+        <a *ngIf="!target.connected" mdbBtn color="primary" mdbWavesEffect (click)="onConnectClicked()">Connect</a>
+        <div *ngIf="target.connected">
+          <a mdbBtn color="primary" mdbWavesEffect (click)="onRefreshState()">Get State</a>
+          <a *ngIf="target.state && target.state.length === 4" mdbBtn color="primary" mdbWavesEffect (click)="onCalibrateClicked()">Calibrate</a>
+          <a *ngIf="target.state && target.state.length === 4" mdbBtn color="primary" mdbWavesEffect (click)="onEnableBumpersClicked()">Enable Bumpers</a>
+          <a *ngIf="target.state && target.state.length === 4" mdbBtn color="primary" mdbWavesEffect (click)="onDisableBumpersClicked()">Disable Bumpers and Blink</a>
+        </div>
+      </div>
+      <a *ngIf="target.claimed && target.connected" mdbBtn class="red lighten-1 white-text" mdbWavesEffect (click)="onResetClicked()">Reset</a>
     </div>
   </mdb-card-body>
 </mdb-card>

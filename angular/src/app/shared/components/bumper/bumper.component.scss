@@ -1,0 +1,31 @@
+$border-size: 8px;
+.bumper {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+  background-color: grey;
+  border: $border-size solid #333e42;
+  &.hit {
+    border: $border-size solid #caeefb;
+  }
+}
+.bumper-0 {
+  &.connected {
+    background-color: #e34a4e;
+  }
+}
+.bumper-1 {
+  &.connected {
+    background-color: #4770ff;
+  }
+}
+.bumper-2 {
+  &.connected {
+    background-color: #ffde67;
+  }
+}
+.bumper-3 {
+  &.connected {
+    background-color: #49804f;
+  }
+}

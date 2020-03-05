@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {defer, Observable, of} from 'rxjs';
+import {defer, Observable, of, Subject} from 'rxjs';
 
 const ARDUINO_VENDOR_ID = 0x2341;
 const ARDUINO_PRODUCT_ID = 0x8036;
@@ -129,7 +129,6 @@ export class WebusbService {
     const {
       endpointNumber
     } = selectedInterface.alternate.endpoints.filter((e: any) => e.direction === 'out')[0];
-    console.log(message);
     return defer(() => {
       try {
         return this.devices[deviceIndex].transferOut(endpointNumber, new Uint8Array([...message, 0x0D, 0x0A]));
@@ -140,7 +139,18 @@ export class WebusbService {
     });
   }
 
+  private listenToNextInboundMessage(device: USBDevice, sub: Subject<USBInTransferResult>) {
+    return device.transferIn(IN_ENDPOINT, BUFFER_LENGTH).then(r => {
+      if (!sub.closed) {
+        sub.next(r);
+        setTimeout(() => this.listenToNextInboundMessage(device, sub), 0);
+      }
+    })
+  }
+
   listen(device: any): Observable<USBInTransferResult> {
-    return defer(async () => await device.transferIn(IN_ENDPOINT, BUFFER_LENGTH));
+    let sub = new Subject<USBInTransferResult>();
+    this.listenToNextInboundMessage(device, sub);
+    return sub;
   }
 }

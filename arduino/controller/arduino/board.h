@@ -1,5 +1,5 @@
-#import "target.h"
+#import "bumper.h"
 
 struct Board {
-  Target targets[4];
+  Bumper bumpers[4];
 };

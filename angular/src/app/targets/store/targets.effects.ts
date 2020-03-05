@@ -17,6 +17,7 @@ function deviceToTarget(index: number, device: USBDevice): Target {
         index: index,
         name: device.productName || '',
         claimed: claimedInterfaces > 0,
+        connected: false,
         device: device,
         state: []
     };

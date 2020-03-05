@@ -12,24 +12,24 @@ void SPIClient::init(byte* pins) {
   SPI.setClockDivider(SPI_CLOCK_DIV8);
   for (byte i = 0; i < sizeof(pins); i++) {
     pinMode(pins[i], OUTPUT);
-    digitalWrite(pins[i], HIGH);  
+    digitalWrite(pins[i], HIGH);
   }
 }
 
-byte* SPIClient::initTarget(byte pin, CRGB color) {
+byte* SPIClient::initBumper(byte pin, CRGB color) {
   #ifdef DEBUG_MODE
-  Serial.print("Initializing target on pin ");
+  Serial.print("Initializing bumper on pin ");
   Serial.println(pin);
   #endif
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_CONNECT);
+  transferSPI(OUT_BUMPER_CONNECT);
   transferSPI(color.red);
   transferSPI(color.green);
   transferSPI(color.blue);
   bool connected = getResponseBuffer();
   digitalWrite(pin, HIGH);
   if (!connected) {
-    Serial.println("Target is not connected");
+    Serial.println("Bumper is not connected");
     return new byte[2]{0x00, 0x00};
   }
   return new byte[2]{buffer[0], buffer[1]};
@@ -37,7 +37,7 @@ byte* SPIClient::initTarget(byte pin, CRGB color) {
 
 bool SPIClient::startCalibration(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_START_CALIBRATION);
+  transferSPI(OUT_BUMPER_START_CALIBRATION);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   return success;
@@ -45,7 +45,7 @@ bool SPIClient::startCalibration(byte pin) {
 
 bool SPIClient::changeTolerance(byte pin, byte tolerance) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_CHANGE_TOLERANCE);
+  transferSPI(OUT_BUMPER_CHANGE_TOLERANCE);
   transferSPI(tolerance);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
@@ -55,7 +55,7 @@ bool SPIClient::changeTolerance(byte pin, byte tolerance) {
 
 bool SPIClient::enable(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_ENABLE);
+  transferSPI(OUT_BUMPER_ENABLE);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   return success;
@@ -64,7 +64,7 @@ bool SPIClient::enable(byte pin) {
 
 bool SPIClient::disable(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_DISABLE);
+  transferSPI(OUT_BUMPER_DISABLE);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   return success;
@@ -73,7 +73,7 @@ bool SPIClient::disable(byte pin) {
 
 bool SPIClient::disableAndBlink(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_DISABLE_AND_BLINK);
+  transferSPI(OUT_BUMPER_DISABLE_AND_BLINK);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   return success;
@@ -82,11 +82,11 @@ bool SPIClient::disableAndBlink(byte pin) {
 
 byte* SPIClient::getState(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_GET_STATE);
+  transferSPI(OUT_BUMPER_GET_STATE);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   if (success) {
-    return new byte[2]{buffer[0], buffer[1]};  
+    return new byte[2]{buffer[0], buffer[1]};
   }
   return new byte[2]{0x00, 0x00};
 }
@@ -94,7 +94,7 @@ byte* SPIClient::getState(byte pin) {
 
 bool SPIClient::reset(byte pin) {
   digitalWrite(pin, LOW);
-  transferSPI(OUT_TARGET_RESET);
+  transferSPI(OUT_BUMPER_RESET);
   bool success = getResponseBuffer();
   digitalWrite(pin, HIGH);
   return success;

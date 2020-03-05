@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 struct Board;
-struct Target;
+struct Bumper;
 
 class BoardStateHandler {
 public:

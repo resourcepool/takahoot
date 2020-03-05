@@ -1,12 +1,11 @@
 <header>
-  <app-header [user]="user$ | async" [isLoggedIn]="isLoggedIn$ | async" [isLoading]="isLoading$ | async" [isAdmin]="isAdmin$ | async"
-    (logout)="onLogout($event)"></app-header>
+  <app-header></app-header>
 </header>
 
 <main>
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer" [ngClass]="{'footer-absolute': (isLoggedIn$ | async) || (isLoading$ | async)}">
+<footer class="app-footer" [ngClass]="{'footer-absolute': true}">
   <app-footer></app-footer>
 </footer>

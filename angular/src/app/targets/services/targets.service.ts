@@ -13,7 +13,11 @@ import {Bumper} from '../models/bumper.model';
 import {map} from 'rxjs/operators';
 import {
   IN_COMPUTER_CHANGE_TOLERANCE,
-  IN_COMPUTER_CONNECTED, IN_COMPUTER_ENABLE_BUMPER,
+  IN_COMPUTER_CONNECTED,
+  IN_COMPUTER_DISABLE_BUMPER,
+  IN_COMPUTER_DISABLE_BUMPER_AND_BLINK,
+  IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK,
+  IN_COMPUTER_ENABLE_BUMPER, IN_COMPUTER_ENABLE_BUMPERS,
   IN_COMPUTER_GET_STATE,
   IN_COMPUTER_RESET,
   IN_COMPUTER_START_CALIBRATION,
@@ -71,6 +75,22 @@ export class TargetsService {
     return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_ENABLE_BUMPER, bumperId]).pipe(map(r => r.status === 'ok'));
   }
 
+  private enableBumpers(target: Target) {
+    return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_ENABLE_BUMPERS]).pipe(map(r => r.status === 'ok'));
+  }
+
+  disableBumper(target: Target, bumperId: number) {
+    return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_DISABLE_BUMPER, bumperId]).pipe(map(r => r.status === 'ok'));
+  }
+
+  disableBumperAndBlink(target: Target, bumperId: number) {
+    return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_DISABLE_BUMPER_AND_BLINK, bumperId]).pipe(map(r => r.status === 'ok'));
+  }
+
+  disableBumpersAndBlink(target: Target) {
+    return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK]).pipe(map(r => r.status === 'ok'));
+  }
+
   getState(target: Target): Observable<boolean> {
     return this.webusbService.sendToDevice(target.index, [IN_COMPUTER_GET_STATE]).pipe(map(r => r.status === 'ok'));
   }
@@ -81,6 +101,7 @@ export class TargetsService {
     }
     return this.webusbService.listen(target.device)
         .pipe(map(msg => {
+          console.log("Message!");
           const code = msg.data?.getUint8(0) || -1;
           let state = undefined;
           switch (code) {
@@ -108,6 +129,14 @@ export class TargetsService {
         return this.changeTolerance(target, message.bumperId!, message.tolerance!);
       case IN_COMPUTER_ENABLE_BUMPER:
         return this.enableBumper(target, message.bumperId!);
+      case IN_COMPUTER_ENABLE_BUMPERS:
+        return this.enableBumpers(target);
+      case IN_COMPUTER_DISABLE_BUMPER:
+          return this.disableBumper(target, message.bumperId!);
+      case IN_COMPUTER_DISABLE_BUMPER_AND_BLINK:
+        return this.disableBumperAndBlink(target, message.bumperId!);
+      case IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK:
+        return this.disableBumpersAndBlink(target);
       case IN_COMPUTER_RESET:
         return this.reset(target);
       case IN_COMPUTER_GET_STATE:

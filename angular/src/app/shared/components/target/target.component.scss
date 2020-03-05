@@ -1,0 +1,26 @@
+$bubble-size: 32px;
+
+.card {
+  background-color: #3d4752;
+}
+
+.bubble-group {
+  width: $bubble-size;
+  height: $bubble-size;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  >.bubble {
+    width: $bubble-size;
+    height: $bubble-size;
+  }
+}
+
+.target-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+
+}

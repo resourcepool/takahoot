@@ -1,0 +1,4 @@
+<div class="bumper bumper-{{bumper.id}}" [ngClass]="{connected: bumper.connected, hit: bumper.hit}">
+  <div class="calibrating-wheel" *ngIf="bumper.calibrating">Calibrating</div>
+  <div class="bumper-disabled" *ngIf="!bumper.enabled">Disabled</div>
+</div>

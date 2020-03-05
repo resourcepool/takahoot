@@ -9,16 +9,16 @@ BoardStateHandler::BoardStateHandler(Board* board) {
 }
 
 void BoardStateHandler::init() {
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-  for (int i = 0; i < targetCount; i++) {
-    pinMode(board->targets[i].pin, OUTPUT);
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+  for (int i = 0; i < bumperCount; i++) {
+    pinMode(board->bumpers[i].pin, OUTPUT);
   }
 }
 
 void BoardStateHandler::refreshState(byte id, byte* state) {
-  Target* pT = &(previousBoard->targets[id]);
-  Target* cT = &(board->targets[id]);
-  memcpy(pT, cT, sizeof(struct Target));
+  Bumper* pT = &(previousBoard->bumpers[id]);
+  Bumper* cT = &(board->bumpers[id]);
+  memcpy(pT, cT, sizeof(struct Bumper));
   // State is [0b 0000 HEKC, tolerance]
   // H is hit
   // E is enabled
@@ -33,9 +33,9 @@ void BoardStateHandler::refreshState(byte id, byte* state) {
 
 bool BoardStateHandler::hasHitChanged() {
   bool r = false;
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-  for (int i = 0; i < targetCount; i++) {
-    if (board->targets[i].connected && (board->targets[i].hit != previousBoard->targets[i].hit)) {
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+  for (int i = 0; i < bumperCount; i++) {
+    if (board->bumpers[i].connected && (board->bumpers[i].hit != previousBoard->bumpers[i].hit)) {
       r = true;
     }
   }
@@ -44,9 +44,9 @@ bool BoardStateHandler::hasHitChanged() {
 
 bool BoardStateHandler::hasCalibrationChanged() {
   bool r = false;
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-  for (int i = 0; i < targetCount; i++) {
-    if (board->targets[i].calibrating != previousBoard->targets[i].calibrating) {
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+  for (int i = 0; i < bumperCount; i++) {
+    if (board->bumpers[i].calibrating != previousBoard->bumpers[i].calibrating) {
       r = true;
     }
   }
@@ -55,9 +55,9 @@ bool BoardStateHandler::hasCalibrationChanged() {
 
 bool BoardStateHandler::isCalibrated() {
   bool r = true;
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-  for (int i = 0; i < targetCount; i++) {
-    if (board->targets[i].calibrating) {
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+  for (int i = 0; i < bumperCount; i++) {
+    if (board->bumpers[i].calibrating) {
       r = false;
     }
   }
@@ -66,20 +66,20 @@ bool BoardStateHandler::isCalibrated() {
 
 bool BoardStateHandler::isHit() {
   bool r = false;
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-  for (int i = 0; i < targetCount; i++) {
-    if (board->targets[i].hit) {
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+  for (int i = 0; i < bumperCount; i++) {
+    if (board->bumpers[i].hit) {
       r = true;
     }
   }
   #ifdef DEBUG_MODE
   if (r) {
-    byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
-    for (int i = 0; i < targetCount; i++) {
-      if (board->targets[i].hit) {
+    byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
+    for (int i = 0; i < bumperCount; i++) {
+      if (board->bumpers[i].hit) {
         #ifdef DEBUG_MODE
-        Serial.print("Hit target ");
-        Serial.println(board->targets[i].id);
+        Serial.print("Hit bumper ");
+        Serial.println(board->bumpers[i].id);
         #endif
       }
     }
@@ -89,21 +89,21 @@ bool BoardStateHandler::isHit() {
 }
 
 void BoardStateHandler::prettyPrint() {
-  byte targetCount = (sizeof(board->targets) / sizeof(struct Target));
+  byte bumperCount = (sizeof(board->bumpers) / sizeof(struct Bumper));
   Serial.println("-------------------------------");
-  for (int i = 0; i < targetCount; i++) {
-    Serial.print("Target ");
-    Serial.print(board->targets[i].id);
+  for (int i = 0; i < bumperCount; i++) {
+    Serial.print("Bumper ");
+    Serial.print(board->bumpers[i].id);
     Serial.print(" connected: ");
-    Serial.print(board->targets[i].connected);
+    Serial.print(board->bumpers[i].connected);
     Serial.print(" calibrating: ");
-    Serial.print(board->targets[i].calibrating);
+    Serial.print(board->bumpers[i].calibrating);
     Serial.print(" enabled: ");
-    Serial.print(board->targets[i].enabled);
+    Serial.print(board->bumpers[i].enabled);
     Serial.print(" hit: ");
-    Serial.print(board->targets[i].hit);
+    Serial.print(board->bumpers[i].hit);
     Serial.print(" tolerance: ");
-    Serial.print(board->targets[i].tolerance);
-    
+    Serial.print(board->bumpers[i].tolerance);
+
   }
 }

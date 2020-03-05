@@ -1,13 +1,13 @@
 #include "SerialClient.h"
-#include "TargetController.h"
+#include "BumperController.h"
 #include "configuration.h"
 #include "board.h"
 
 SerialClient::SerialClient() {
 }
 
-void SerialClient::init(TargetController* ctrl) {
-  
+void SerialClient::init(BumperController* ctrl) {
+
   while (!WebUSBSerial) {
     ;
   }
@@ -43,8 +43,8 @@ void SerialClient::sendCalibrationFinished(byte* state) {
   WebUSBSerial.flush();
 }
 
-void SerialClient::sendTargetHit(byte* state) {
-  WebUSBSerial.write(OUT_COMPUTER_TARGET_HIT);
+void SerialClient::sendBumperHit(byte* state) {
+  WebUSBSerial.write(OUT_COMPUTER_BUMPER_HIT);
   WebUSBSerial.write(state, CONTROLLER_STATE_SIZE);
   WebUSBSerial.write(END_MESSAGE, END_MESSAGE_SIZE);
   WebUSBSerial.flush();
@@ -63,7 +63,8 @@ void SerialClient::onRequest(byte cmd) {
       switch (cmd) {
         // 1-byte commands
         case IN_COMPUTER_CONNECTED:
-        case IN_COMPUTER_DISABLE_TARGETS_AND_BLINK:
+        case IN_COMPUTER_ENABLE_BUMPERS:
+        case IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK:
         case IN_COMPUTER_GET_STATE:
         case IN_COMPUTER_RESET:
           buffer[0] = cmd;
@@ -71,9 +72,9 @@ void SerialClient::onRequest(byte cmd) {
           break;
         // 2-byte commands
         case IN_COMPUTER_START_CALIBRATION:
-        case IN_COMPUTER_ENABLE_TARGET:
-        case IN_COMPUTER_DISABLE_TARGET:
-        case IN_COMPUTER_DISABLE_TARGET_AND_BLINK:
+        case IN_COMPUTER_ENABLE_BUMPER:
+        case IN_COMPUTER_DISABLE_BUMPER:
+        case IN_COMPUTER_DISABLE_BUMPER_AND_BLINK:
           buffer[0] = cmd;
           parsing = true;
           total = 1;
@@ -129,48 +130,57 @@ void SerialClient::processCommand() {
       #endif
       ctrl->changeTolerance(buffer[1], buffer[2]);
       #ifdef DEBUG_MODE
-      Serial.print("Tolerance changed for target ");
+      Serial.print("Tolerance changed for bumper ");
       Serial.println(buffer[1]);
       #endif
       break;
-    case IN_COMPUTER_ENABLE_TARGET:
+    case IN_COMPUTER_ENABLE_BUMPER:
       #ifdef DEBUG_MODE
-      Serial.print("Received command IN_COMPUTER_ENABLE_TARGET(");
+      Serial.print("Received command IN_COMPUTER_ENABLE_BUMPER(");
       Serial.print(buffer[1]);
       Serial.println(")");
       #endif
-      ctrl->enableTarget(buffer[1]);
+      ctrl->enableBumper(buffer[1]);
       #ifdef DEBUG_MODE
       Serial.println("Done");
       #endif
       break;
-    case IN_COMPUTER_DISABLE_TARGET:
+    case IN_COMPUTER_DISABLE_BUMPER:
       #ifdef DEBUG_MODE
-      Serial.print("Received command IN_COMPUTER_DISABLE_TARGET(");
+      Serial.print("Received command IN_COMPUTER_DISABLE_BUMPER(");
       Serial.print(buffer[1]);
       Serial.println(")");
       #endif
-      ctrl->disableTarget(buffer[1]);
+      ctrl->disableBumper(buffer[1]);
       #ifdef DEBUG_MODE
       Serial.println("Done");
       #endif
       break;
-    case IN_COMPUTER_DISABLE_TARGET_AND_BLINK:
+    case IN_COMPUTER_DISABLE_BUMPER_AND_BLINK:
       #ifdef DEBUG_MODE
-      Serial.print("Received command IN_COMPUTER_DISABLE_TARGET_AND_BLINK(");
+      Serial.print("Received command IN_COMPUTER_DISABLE_BUMPER_AND_BLINK(");
       Serial.print(buffer[1]);
       Serial.println(")");
       #endif
-      ctrl->disableAndBlinkTarget(buffer[1]);
+      ctrl->disableAndBlinkBumper(buffer[1]);
       #ifdef DEBUG_MODE
       Serial.println("Done");
       #endif
       break;
-    case IN_COMPUTER_DISABLE_TARGETS_AND_BLINK:
+    case IN_COMPUTER_ENABLE_BUMPERS:
       #ifdef DEBUG_MODE
-      Serial.println("Received command IN_COMPUTER_DISABLE_TARGETS_AND_BLINK");
+      Serial.println("Received command IN_COMPUTER_ENABLE_BUMPERS");
       #endif
-      ctrl->disableAndBlinkTargets();
+      ctrl->enableBumpers();
+      #ifdef DEBUG_MODE
+      Serial.println("Done");
+      #endif
+      break;
+    case IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK:
+      #ifdef DEBUG_MODE
+      Serial.println("Received command IN_COMPUTER_DISABLE_BUMPERS_AND_BLINK");
+      #endif
+      ctrl->disableAndBlinkBumpers();
       #ifdef DEBUG_MODE
       Serial.println("Done");
       #endif
@@ -190,8 +200,8 @@ void SerialClient::processCommand() {
       #ifdef DEBUG_MODE
       Serial.println("Received command IN_COMPUTER_RESET");
       #endif
-      ctrl->resetTargets();
-      asm volatile ("  jmp 0"); 
+      ctrl->resetBumpers();
+      asm volatile ("  jmp 0");
       #ifdef DEBUG_MODE
       Serial.println("Done");
       #endif

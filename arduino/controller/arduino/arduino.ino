@@ -2,22 +2,22 @@
 
 #include "configuration.h"
 #include "SerialClient.h"
-#include "TargetController.h"
+#include "BumperController.h"
 #include "SPIClient.h"
 #include "board.h"
 
 Board board = {
   {
-    {TARGET_1_ID, TARGET_1_PIN, CRGB(TARGET_1_COLOR), false, false, false, false, 0},
-    {TARGET_2_ID, TARGET_2_PIN, CRGB(TARGET_2_COLOR), false, false, false, false, 0},
-    {TARGET_3_ID, TARGET_3_PIN, CRGB(TARGET_3_COLOR), false, false, false, false, 0},
-    {TARGET_4_ID, TARGET_4_PIN, CRGB(TARGET_4_COLOR), false, false, false, false, 0}
+    {BUMPER_1_ID, BUMPER_1_PIN, CRGB(BUMPER_1_COLOR), false, false, false, false, 0},
+    {BUMPER_2_ID, BUMPER_2_PIN, CRGB(BUMPER_2_COLOR), false, false, false, false, 0},
+    {BUMPER_3_ID, BUMPER_3_PIN, CRGB(BUMPER_3_COLOR), false, false, false, false, 0},
+    {BUMPER_4_ID, BUMPER_4_PIN, CRGB(BUMPER_4_COLOR), false, false, false, false, 0}
   }
 };
 
 SPIClient spiClient = SPIClient();
 SerialClient serialClient = SerialClient();
-TargetController ctrl = TargetController(&board, &spiClient, &serialClient);
+BumperController ctrl = BumperController(&board, &spiClient, &serialClient);
 
 void setup() {
   ctrl.init();

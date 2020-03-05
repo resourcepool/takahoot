@@ -21,7 +21,6 @@ export function targetsReducer(state = targetsInitialState, action: TargetsActio
     }
 
     case TargetsActionTypes.TARGET_INBOUND_MESSAGE_RECEIVED: {
-      console.log(action.payload.message);
       let messageLog = [...state.messageLog];
       if (messageLog.length > MESSAGE_LOG_MAX_SIZE) {
         messageLog.shift();
@@ -30,7 +29,9 @@ export function targetsReducer(state = targetsInitialState, action: TargetsActio
       let targets: Target[] = [];
       state.targets.forEach((s, i) => {
         if (action.payload.targetIndex === i && action.payload.message.state) {
-          targets.push(Object.assign({}, s, {state: action.payload.message.state}));
+          let t = Object.assign({}, s, {state: action.payload.message.state, connected: true});
+          // Specificity for computer connected
+          targets.push(t);
         } else {
           targets.push(s);
         }
