@@ -3,6 +3,19 @@
 The Takahoot controller is a standard unit which can connect up to 4 triggers with 6-pin JST 2.54mm cables.  
 It is supposed to be connected to a computer via its USB cable.
 
+#### UPLOADING OF THE CONTROLLER
+First you will need to install the [WebUsb](https://github.com/webusb/arduino) library into your [ArduinoIDE](https://www.arduino.cc/en/main/software)
+
+You are normally ready to upload the code into your controller if you still get an error watch the troobleshoot below.
+
+Troobleshoot : 
+On some version of linux you will have to temporarily disable the ModemManager to let arduino do his job.
+Just run ```$ systemctl stop ModemManager.service``` to stop it.
+You can check the status of the modem by ```$ systemctl status ModemManager.service```
+Don't worry the Modem will come back when you restart your computer.
+
+
+
 ## Serial protocol
 
 ### Inbound commands
