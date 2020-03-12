@@ -163,8 +163,6 @@ export class TargetsComponent implements OnInit, OnDestroy {
   }
 
   selectDevices(){
-    console.log("this function should be implemented sorry");
     this.targetsService.selectDevices();
-    //FIXMeimplement
   }
 }
