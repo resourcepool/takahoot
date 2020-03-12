@@ -119,6 +119,11 @@ export class TargetsService {
         }));
   }
 
+  selectDevices(){
+  console.log("this service should be implemented");
+  //FIXME implement
+  }
+
   sendMessage(message: TargetOutboundMessage, target: Target): Observable<boolean> {
     switch (message.code) {
       case IN_COMPUTER_CONNECTED:

@@ -164,11 +164,7 @@ export class TargetsComponent implements OnInit, OnDestroy {
 
   selectDevices(){
     console.log("this function should be implemented sorry");
-    console.log(this.targets);
-    console.log("this function should be implemented sorry");
-    console.log(this.targets[0]);
-    console.log("this function should be implemented sorry");
-
-    this.onConnect(this.targets[0]);
+    this.targetsService.selectDevices();
+    //FIXMeimplement
   }
 }
