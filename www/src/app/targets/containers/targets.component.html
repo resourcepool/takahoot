@@ -1,4 +1,5 @@
 <div class="white px-4 section-header">
+
   <h3>Targets list</h3>
   <p class="grey-text pt-3">Add, edit and delete your targets</p>
 </div>
@@ -8,6 +9,8 @@
     <button mdbBtn color="primary" class="ml-3" (click)="claimAll()">Claim All</button>
     <button *ngIf="!this.autoReset" mdbBtn color="primary" class="ml-3" (click)="setAutoReset(true)">Enable AutoReset</button>
     <button *ngIf="this.autoReset!!" mdbBtn color="primary" class="ml-3" (click)="setAutoReset(false)">Disable AutoReset</button>
+    <button mdbBtn color="primary" class="ml-3" (click)="selectDevices()">Select Devices</button>
+
     <app-targets-list [targets]="targets$ | async"
 
                       (calibrate)="onCalibrate($event)"

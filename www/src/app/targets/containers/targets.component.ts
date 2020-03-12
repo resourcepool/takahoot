@@ -112,7 +112,8 @@ export class TargetsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    console.log("this function should be implemented sorry");
+    //todo implement
   }
 
 
@@ -132,7 +133,8 @@ export class TargetsComponent implements OnInit, OnDestroy {
   }
 
   unclaimAll() {
-
+      console.log("this function should be implemented sorry");
+      //todo implement
   }
 
   setAutoReset(ar: boolean) {
@@ -158,5 +160,15 @@ export class TargetsComponent implements OnInit, OnDestroy {
       this.autoReset = undefined;
     }
 
+  }
+
+  selectDevices(){
+    console.log("this function should be implemented sorry");
+    console.log(this.targets);
+    console.log("this function should be implemented sorry");
+    console.log(this.targets[0]);
+    console.log("this function should be implemented sorry");
+
+    this.onConnect(this.targets[0]);
   }
 }
