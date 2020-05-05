@@ -1,9 +1,11 @@
 # Takahoot - Targets for Kahoot Games
 
-![Takahoot in action](assets/takahoot-on-stand.jpg)
+![Takahoot in action](docs/docs/assets/takahoot-on-stand.jpg)
+
 
 ## What is Kahoot?
-![Kahoot screenshot](assets/kahoot-screenshot.jpg)
+![Kahoot screenshot](docs/docs/assets/kahoot-screenshot.jpg)
+
 Kahoot is this very cool tool to create quizzes and trivia for educational (or any other) purposes.  
 Once the admin has setup all the questions, any player can just join the game and answer using a phone or any device that has a decent browser.
 
@@ -34,7 +36,7 @@ Don't want to bother buying and printing / cutting materials?
 
 ## Contributors
 
-![Logo Takima](assets/takima-logo.png)
+![Logo Takima](docs/docs/assets/takima-logo.png)
 
 A big Thanks to [Takima](https://www.takima.fr) who sponsored us and invested much time and efforts into helping to make this project a reality.  
 
