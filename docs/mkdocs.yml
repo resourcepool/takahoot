@@ -2,7 +2,8 @@ site_name: Takahoot - Targets for Kahoot
 nav:
   - The Project: index.md
   - User Guide: getting-started.md
-  - Maker Guide: maker-guide.md
+  - Target Build Guide: target-build-guide.md
+  - Controller Build Guide: controller-build-guide.md
   - About Us: about.md
 theme:
   name: 'material'
