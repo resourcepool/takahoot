@@ -26,10 +26,10 @@ We are very proud of this project and hope it can be useful to create a more lud
 
 ## Getting started guide
 
-Already have your own targets? [Get started here](https://resourcepool.github.io/takahoot/getting-started).
+Already have your own targets? [Get started here](https://resourcepool.github.io/takahoot).
 
 ## Maker guide
-Want to create your own device from scratch? [Follow the guide](https://resourcepool.github.io/takahoot/maker-guide).
+Want to create your own device from scratch? [Follow the guide](https://resourcepool.github.io/takahoot).
 
 Don't want to bother buying and printing / cutting materials?  
 [Contact-us](mailto:loic@takima.fr) and we will find a way to do that for you and send you the whole kits ready to assemble.
