@@ -46,7 +46,8 @@ Don't want to bother buying and printing / cutting materials?
 
 A big Thanks to [Takima](https://www.takima.fr) who sponsored us and invested much time and efforts into helping to make this project a reality.  
 
-Thanks to [Nicolas Thierion](https://github.com/NicolasThierion) for coming up with the original idea, and to the lead contributors of the project:  
+Thanks to the lead contributors of the project:  
+ * [Loïc Ortola](https://github.com/loicortola) - Original author, target design & making, Hardware & Arduino
  * [Alexandre Nunesse](https://github.com/anunesse) - Kahoot API, Target fixes & Takahoot Client
  * [Logan Lepage](https://github.com/loganlepage) - Takahoot UI & Client
- * [Loïc Ortola](https://github.com/loicortola) - Target design & making, Hardware & Arduino
+ 
